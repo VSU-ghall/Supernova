@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": true,
+      "cwd": "/Users/granthall/Documents/Documents/VSU/Spring 2022/CS4900 - Senior Seminar/Supernova",
+      "environment": [],
+      "program": "/Users/granthall/Documents/Documents/VSU/Spring 2022/CS4900 - Senior Seminar/Supernova/build/Debug/outDebug",
+      "internalConsoleOptions": "openOnSessionStart",
+      "MIMode": "gdb",
+      "externalConsole": true
+    }
+  ]
+}
