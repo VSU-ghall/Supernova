@@ -1,0 +1,6 @@
+To test all of our local repository setups, add your name below, and commit it as a test commit to your branch.
+
+Names:
+ - Grant
+ - Jada
+ - Alyssa
