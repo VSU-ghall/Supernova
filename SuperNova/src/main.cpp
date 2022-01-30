@@ -7,6 +7,7 @@ void init() {
 }
 int main(int argc, char **argv)
 {
+	//starts the window
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
 	glutInitWindowSize(500, 500);
