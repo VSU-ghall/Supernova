@@ -4,3 +4,5 @@ Names:
  - Grant
  - Jada
  - Alyssa
+ - Nicole
+ - Sam
