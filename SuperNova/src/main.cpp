@@ -1,7 +1,7 @@
 #include <GL/glut.h>
 #include <iostream>
 
-#include "../Player.h"
+#include "../src/obj/Player.h"
 
 
 void display_callback();
