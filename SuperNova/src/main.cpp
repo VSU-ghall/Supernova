@@ -6,7 +6,6 @@
 
 void display_callback();
 void reshape_callback(int,int);
-void update();
 
 Player player1;
 
@@ -29,6 +28,9 @@ int main(int argc, char **argv)
 	return 0;
 }
 
+//
+//		Update Method
+//
 void reshape_callback(int w, int h) {
 	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
 
@@ -48,8 +50,4 @@ void display_callback() {
 	player1.draw();
 
 	glutSwapBuffers();
-}
-
-void update() {
-	player1.update();
 }
