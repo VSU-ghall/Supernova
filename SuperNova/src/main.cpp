@@ -1,56 +1,50 @@
 #include <GL/glut.h>
 #include <SFML/Graphics.hpp>
+#include <SFML/window.hpp>
 #include <iostream>
 
 #include "../src/obj/Player.h"
 
+void draw();
+void update();
 
-void display_callback();
-void reshape_callback(int,int);
+Player player;
 
-Player player1;
-
-void init() {
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-}
+// creates global window
+sf::RenderWindow window(sf::VideoMode(800, 600), "SuperNova");
 
 int main(int argc, char **argv)
 {
-	//starts the window
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
-	glutInitWindowSize(800, 600);
-	glutCreateWindow("Helloworld");
-	glutDisplayFunc(display_callback);
-	glutReshapeFunc(reshape_callback);
-	init();
-	glutMainLoop();
+	// main loop --> continues each frame while window is open
+	while (window.isOpen()) {
 
-	//sf::RenderWindow window(sf::VideoMode(800, 600), "SuperNova");
+		// event handling
+		sf::Event event;
+		while (window.pollEvent(event)) {
+
+			// event triggered when window is closed
+			if (event.type == sf::Event::Closed) {
+				window.close();
+			}
+		}
+
+		//update();
+		draw();
+
+	}
 
 	return 0;
 }
 
-//
-//		Update Method
-//
-void reshape_callback(int w, int h) {
-	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
+void draw() {
+	window.clear();
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	//glOrtho(0.0f, 50.0f, 0.0f, 50.0f, -1.0f, 1.0f); //Left, Right, Top, Bottom, zNear, zFar
+	// draw objects here
+	player.draw(window);
 
+	window.display();
 }
 
-//
-//		Draw / Render Method
-//
-void display_callback() {
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	// Drawing goes Here
-	player1.draw();
-
-	glutSwapBuffers();
+void update() {
+	player.update();
 }
