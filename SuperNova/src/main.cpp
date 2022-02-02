@@ -1,28 +1,56 @@
-
 #include <GL/glut.h>
-void display_callback();
-void reshape_callback(int,int);
-void init() {
-	glClearColor(1.0, 1.0, 1.0, 1.0);
-}
+#include <SFML/Graphics.hpp>
+#include <SFML/window.hpp>
+#include <iostream>
+
+#include "../src/obj/Player.h"
+
+void draw();
+void update();
+
+Player player;
+
+// creates global window
+sf::RenderWindow window(sf::VideoMode(800, 600), "SuperNova");
+
 int main(int argc, char **argv)
 {
-	//starts the window
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
-	glutInitWindowSize(500, 500);
-	glutCreateWindow("Helloworld");
-	glutDisplayFunc(display_callback);
-	glutReshapeFunc(reshape_callback);
-	init();
-	glutMainLoop();
-	return 0;
+	// main loop --> continues each frame while window is open
+	while (window.isOpen()) {
 
+		// event handling
+		sf::Event event;
+		while (window.pollEvent(event)) {
+
+			// event triggered when window is closed
+			if (event.type == sf::Event::Closed) {
+				window.close();
+			}
+		}
+
+		update();
+		draw();
+
+	}
+
+	return 0;
 }
-void reshape_callback(int w, int h) {
-	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
+
+//
+// Draws all objects on window
+//
+void draw() {
+	window.clear();
+
+	// draw objects here
+	player.draw(window);
+
+	window.display();
 }
-void display_callback() {
-	glClear(GL_COLOR_BUFFER_BIT);
-	glutSwapBuffers();
+
+//
+// Updates all game objects
+//
+void update() {
+	player.update();
 }
