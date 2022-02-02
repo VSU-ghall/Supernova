@@ -11,10 +11,12 @@ using Entity = std::uint32_t;
 class EntityManager
 {
 private:
-	std::vector<Entity> entites;
+	std::vector<Entity> entities;
 public:
 	EntityManager() {}
 
-	Entity CreateEntity();
+	Entity createEntity();
+
+	void deleteEntity(Entity entity);
 };
 
