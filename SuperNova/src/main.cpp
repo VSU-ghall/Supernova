@@ -28,7 +28,7 @@ int main(int argc, char **argv)
 			}
 		}
 
-		//update();
+		update();
 		draw();
 
 	}
@@ -36,6 +36,9 @@ int main(int argc, char **argv)
 	return 0;
 }
 
+//
+// Draws all objects on window
+//
 void draw() {
 	window.clear();
 
@@ -45,6 +48,9 @@ void draw() {
 	window.display();
 }
 
+//
+// Updates all game objects
+//
 void update() {
 	player.update();
 }
