@@ -147,10 +147,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\obj\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EntityManager.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\obj\Player.h" />
   </ItemGroup>
