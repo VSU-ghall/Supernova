@@ -1,4 +1,5 @@
 #include <GL/glut.h>
+#include <SFML/Graphics.hpp>
 #include <iostream>
 
 #include "../src/obj/Player.h"
@@ -24,6 +25,8 @@ int main(int argc, char **argv)
 	glutReshapeFunc(reshape_callback);
 	init();
 	glutMainLoop();
+
+	//sf::RenderWindow window(sf::VideoMode(800, 600), "SuperNova");
 
 	return 0;
 }
