@@ -1,5 +1,6 @@
 #include <cstdint>
 #include <vector>
+#include <map>
 #pragma once
 
 //Define an entity as an ID
@@ -12,6 +13,7 @@ class EntityManager
 {
 private:
 	std::vector<Entity> entities;
+	std::map<Entity> entityMap;
 public:
 	EntityManager() {}
 
