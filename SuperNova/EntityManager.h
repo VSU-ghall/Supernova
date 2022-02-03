@@ -13,7 +13,7 @@ class EntityManager
 {
 private:
 	std::vector<Entity> entities;
-	std::map<Entity> entityMap;
+//	std::map<Entity> entityMap;
 public:
 	EntityManager() {}
 

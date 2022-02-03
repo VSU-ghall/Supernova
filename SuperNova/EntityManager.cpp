@@ -1,8 +1,8 @@
 #include "EntityManager.h"
 
-EntityManager::EntityManager() {
+//EntityManager::EntityManager() {
 
-}
+//}
 
 Entity EntityManager::createEntity(){
 	Entity id = entities.size();
