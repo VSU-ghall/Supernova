@@ -21,11 +21,11 @@ void Player::init() {
 	
 
 	//this is how fast we want the player. If we want to change there speed this can be changed.
-	playerSpeed = .25f;
-	playerSprite.setPosition(160, 160);
+	playerSpeed = 1.0f;
+	playerSprite.setPosition(192, 256);
 	
 	//this is the Size of the player
-	playerSize = .25f;
+	playerSize = 1.0f;
 
 	//setting the initial size of the player.
 	playerSprite.setScale(playerSize, playerSize);
