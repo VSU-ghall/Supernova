@@ -12,7 +12,7 @@ public:
 	
 	bool getIsActive();
 	std::string& getTag();
-	size_t& getId();
+	size_t getId();
 	void destroy();
 };
 

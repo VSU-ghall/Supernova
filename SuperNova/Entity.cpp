@@ -12,7 +12,7 @@ std::string& Entity::getTag() {
 	return tag;
 }
 
-size_t& Entity::getId() {
+size_t Entity::getId() {
 	return id;
 }
 
