@@ -1,24 +1,34 @@
 #include <cstdint>
 #include <vector>
 #include <map>
+#include <string>
+#include <memory>
+#include "Entity.h"
 #pragma once
 
-//Define an entity as an ID
-using Entity = std::uint32_t;
-//Max number of entities
-//const Entity MAX_ENTITIES = 5000;
+//entityVector holds all entities
+typedef std::vector<std::shared_ptr<Entity>> EntityVector;
 
+//String is tag. Each vector hold entities that share that tag.
+typedef std::map<std::string, EntityVector> EntityMap;
 
 class EntityManager
 {
 private:
-	std::vector<Entity> entities;
-//	std::map<Entity> entityMap;
+
+	EntityVector entities;
+	EntityMap entityMap;
+	size_t numEntities = 0;
+
 public:
 	EntityManager() {}
 
-	Entity createEntity();
+	void update();
 
-	void deleteEntity(Entity entity);
+	std::shared_ptr<Entity> addEntity(const std::string& tag);
+	const EntityVector& getEntities();
+	const EntityVector& getEntites(const std::string& tag);
+	size_t getNumEntities();
+
 };
 
