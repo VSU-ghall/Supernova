@@ -2,19 +2,19 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/window.hpp>
 #include <iostream>
-
 #include "../src/obj/Player.h"
 
 void draw();
 void update();
 
 Player player;
-
+//changes
 // creates global window
 sf::RenderWindow window(sf::VideoMode(800, 600), "SuperNova");
 
 int main(int argc, char **argv)
 {
+	player.init();
 	// main loop --> continues each frame while window is open
 	while (window.isOpen()) {
 
@@ -53,4 +53,5 @@ void draw() {
 //
 void update() {
 	player.update();
+	player.checkMovment();
 }
