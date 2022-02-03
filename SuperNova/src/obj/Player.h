@@ -1,4 +1,5 @@
 #pragma once
+#include <SFML/Graphics.hpp>
 class Player
 {
 	private:
@@ -7,7 +8,7 @@ class Player
 		float getX();
 		float getY();
 
-		void draw();
 		void update();
+		void draw(sf::RenderWindow& window);
 };
 
