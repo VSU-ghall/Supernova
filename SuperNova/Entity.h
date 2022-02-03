@@ -10,9 +10,9 @@ private:
 	Entity(const size_t& id, const std::string& tag);
 public:
 	
-	bool isActive();
-	const std::string& getTag();
-	const size_t& getId();
+	bool getIsActive();
+	std::string& getTag();
+	size_t& getId();
 	void destroy();
 };
 
