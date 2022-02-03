@@ -20,6 +20,8 @@ private:
 	EntityMap entityMap;
 	size_t numEntities = 0;
 
+	void removeDeadEntites(EntityVector& vector);
+
 public:
 	EntityManager() {}
 
