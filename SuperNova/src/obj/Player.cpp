@@ -3,6 +3,9 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+sf::Sprite playerSprite;
+float playerSpeed;
+float playerSize;
 float Player::getX() {
 	return x;
 }
@@ -14,6 +17,19 @@ float Player::getY() {
 void Player::update() {
 
 }
+void Player::init() {
+	
+
+	//this is how fast we want the player. If we want to change there speed this can be changed.
+	playerSpeed = .25f;
+	playerSprite.setPosition(160, 160);
+	
+	//this is the Size of the player
+	playerSize = .25f;
+
+	//setting the initial size of the player.
+	playerSprite.setScale(playerSize, playerSize);
+}
 
 void Player::draw(sf::RenderWindow& window) {
 
@@ -23,11 +39,23 @@ void Player::draw(sf::RenderWindow& window) {
 		//return NULL;
 	}
 
-	sf::Sprite playerSprite;
+	
 	playerSprite.setTexture(texture);
+	//the set Origin will put a "point" in the middle of the sprite and the sprite will now rotate around that point when manipulated.
+	playerSprite.setOrigin((sf::Vector2f)texture.getSize() / 2.f);
+	
 
-	//playerSprite.setPosition(sf::Vector2f(100, 100));
-	//playerSprite.scale(sf::Vector2f(1, 0.5));
 
 	window.draw(playerSprite);
+}
+//the checkMovment Checks if A or D is pressed and if it is the player will move left or right depending on what is pressed
+void Player::checkMovment() {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+		playerSprite.move(playerSpeed, 0);
+		playerSprite.setScale(playerSize, playerSize);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+		playerSprite.move(-playerSpeed, 0);
+		playerSprite.setScale(-playerSize, playerSize);
+	}
 }
