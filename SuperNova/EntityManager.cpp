@@ -29,7 +29,14 @@ const EntityVector& EntityManager::getEntities() {
 }
 
 const EntityVector& EntityManager::getEntites(const std::string& tag) {
-	//Needs to be implemented. Returns correct vector from map.
+	EntityMap::iterator it;
+	it = entityMap.find(tag);
+	if (it == entityMap.end()) {
+		return;
+	}
+	else {
+		return it->second;
+	}
 }
 
 size_t EntityManager::getNumEntities() {
