@@ -1,14 +1,30 @@
 #include "EntityManager.h"
 
-EntityManager::EntityManager() {
+EntityManager::EntityManager() 
+{
 
 }
 
 void EntityManager::update() {
-	//Needs to be implemented.
+	//Add entities to proper location
+		//Add to vector of all entities
+		//Add them to vector inside of map
+	for (auto& e : entitiesToAdd) {
+		entities.push_back(e);
+		entityMap.find(e->getTag())->second.push_back(e);
+
+	}
+		
+	//remove dead entities from entities
+	removeDeadEntities(entities);
+
+	//remove dead entities from vector in map
+	for (auto & v : entityMap) {
+		removeDeadEntities(v.second);
+	}
 }
 
-void EntityManager::removeDeadEntites(EntityVector& vector) {
+void EntityManager::removeDeadEntities(EntityVector& vector) {
 	for (auto iterator = vector.begin(); iterator != vector.end(); iterator++) {
 		auto e = *iterator;
 		if (e->getIsActive() == false) {
@@ -29,7 +45,14 @@ const EntityVector& EntityManager::getEntities() {
 }
 
 const EntityVector& EntityManager::getEntites(const std::string& tag) {
-	//Needs to be implemented. Returns correct vector from map.
+	EntityMap::iterator it;
+	it = entityMap.find(tag);
+	//if (it == entityMap.end()) {
+		//return;
+	//}
+	//else {
+		return it->second;
+	//}
 }
 
 size_t EntityManager::getNumEntities() {

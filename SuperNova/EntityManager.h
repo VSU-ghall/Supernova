@@ -21,10 +21,10 @@ private:
 	EntityMap entityMap;
 	size_t numEntities = 0;
 
-	void removeDeadEntites(EntityVector& vector);
+	void removeDeadEntities(EntityVector& vector);
 
 public:
-	EntityManager() {}
+	EntityManager();
 
 	void update();
 
