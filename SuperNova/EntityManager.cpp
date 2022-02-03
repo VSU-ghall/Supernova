@@ -1,6 +1,7 @@
 #include "EntityManager.h"
 
-EntityManager::EntityManager() {
+EntityManager::EntityManager() 
+{
 
 }
 
@@ -46,12 +47,12 @@ const EntityVector& EntityManager::getEntities() {
 const EntityVector& EntityManager::getEntites(const std::string& tag) {
 	EntityMap::iterator it;
 	it = entityMap.find(tag);
-	if (it == entityMap.end()) {
-		return;
-	}
-	else {
+	//if (it == entityMap.end()) {
+		//return;
+	//}
+	//else {
 		return it->second;
-	}
+	//}
 }
 
 size_t EntityManager::getNumEntities() {

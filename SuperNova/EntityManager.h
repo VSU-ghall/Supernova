@@ -24,7 +24,7 @@ private:
 	void removeDeadEntities(EntityVector& vector);
 
 public:
-	EntityManager() {}
+	EntityManager();
 
 	void update();
 
