@@ -17,6 +17,7 @@ class EntityManager
 private:
 
 	EntityVector entities;
+	EntityVector entitiesToAdd;
 	EntityMap entityMap;
 	size_t numEntities = 0;
 
