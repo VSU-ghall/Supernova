@@ -11,7 +11,7 @@ void drawGrid();
 Player player;
 //changes
 // creates global window
-sf::RenderWindow window(sf::VideoMode(20*128, 12*128), "SuperNova");
+sf::RenderWindow window(sf::VideoMode(20*128, 12*128), "SuperNova", sf::Style::Fullscreen);
 
 int main(int argc, char **argv)
 {
