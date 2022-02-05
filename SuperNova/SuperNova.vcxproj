@@ -163,6 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="src\img\astronaut.png" />
+    <Image Include="src\img\astronaut_walk.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

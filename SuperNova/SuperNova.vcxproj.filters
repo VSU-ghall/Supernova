@@ -39,5 +39,8 @@
     <Image Include="src\img\astronaut.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="src\img\astronaut_walk.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

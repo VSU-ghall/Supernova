@@ -6,6 +6,7 @@
 sf::Sprite playerSprite;
 float playerSpeed;
 float playerSize;
+int walkCount = 0;
 float Player::getX() {
 	return x;
 }
@@ -21,11 +22,12 @@ void Player::init() {
 	
 
 	//this is how fast we want the player. If we want to change there speed this can be changed.
-	playerSpeed = 1.0f;
-	playerSprite.setPosition(192, 256);
+	playerSpeed = 32.0f;
+	playerSprite.move(2560 / 2, 1536 / 2);
+	playerSprite.setTextureRect(sf::IntRect(0, 0, 795, 1595));
 	
 	//this is the Size of the player
-	playerSize = 1.0f;
+	playerSize = 0.08f;
 
 	//setting the initial size of the player.
 	playerSprite.setScale(playerSize, playerSize);
@@ -34,7 +36,7 @@ void Player::init() {
 void Player::draw(sf::RenderWindow& window) {
 
 	sf::Texture texture;
-	if (!texture.loadFromFile("src/img/astronaut.png")) {
+	if (!texture.loadFromFile("src/img/astronaut_walk.png")) {
 		std::cout << "Could not load astronaut texture" << std::endl;
 		//return NULL;
 	}
@@ -50,12 +52,25 @@ void Player::draw(sf::RenderWindow& window) {
 }
 //the checkMovment Checks if A or D is pressed and if it is the player will move left or right depending on what is pressed
 void Player::checkMovment() {
+	//if D is pressed then walking frames are cycled
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
 		playerSprite.move(playerSpeed, 0);
-		playerSprite.setScale(playerSize, playerSize);
+		//the sprite size in sprite sheet is 800x1600. this tells textureRect to start at beginning and every time walkCount is added, then it goes to next frame
+		playerSprite.setTextureRect(sf::IntRect(walkCount * 800, 0, 800, 1600));
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
 		playerSprite.move(-playerSpeed, 0);
-		playerSprite.setScale(-playerSize, playerSize);
+		//the left facing frames are at 800*2 x 1600 so this tells does same as above but lower on the sprite sheet
+		playerSprite.setTextureRect(sf::IntRect(walkCount * 800, 800 * 2, 800, 1600));
+
 	}
+	//walkCount is frame number
+	walkCount++;
+
+	//Since there are only 4 frames atm, this allows the frames to reach the end, then start again
+	if (walkCount == 4) {
+		walkCount = 0;
+	}
+
+	
 }
