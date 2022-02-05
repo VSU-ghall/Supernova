@@ -11,11 +11,7 @@ Player player;
 TileMap map;
 //changes
 // creates global window
-<<<<<<< HEAD
-sf::RenderWindow window(sf::VideoMode(20*128, 12*128), "SuperNova", sf::Style::Fullscreen);
-=======
 sf::RenderWindow window(sf::VideoMode(1280, 768), "SuperNova");
->>>>>>> main
 
 int main(int argc, char **argv)
 {
