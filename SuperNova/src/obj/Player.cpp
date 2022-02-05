@@ -24,7 +24,7 @@ void Player::init() {
 
 	//this is how fast we want the player. If we want to change there speed this can be changed.
 	playerSpeed = 10.0f;
-	playerSprite.move(1, 1536 / 2);
+	playerSprite.move(128,128);
 	playerSprite.setTextureRect(sf::IntRect(0, 0, 795, 1595));
 	
 	//this is the Size of the player
