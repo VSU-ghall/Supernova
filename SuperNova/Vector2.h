@@ -13,14 +13,13 @@ public:
 	Vector2 operator + (Vector2 v);
 	Vector2 operator - (Vector2 v);
 	Vector2 operator * (Vector2 v);
-	Vector2 operator / (Vector2 v);
-	Vector2 operator != (Vector2 v);
-	Vector2 operator == (Vector2 v);
-	Vector2 operator = (Vector2 v);
+	Vector2 operator / (float scale);
+	bool operator != (Vector2 v);
+	bool operator == (Vector2 v);
 	Vector2 operator += (Vector2 v);
 	Vector2 operator *= (Vector2 v);
 	Vector2 operator -= (Vector2 v);
-	Vector2 operator /= (Vector2 v);
+	Vector2 scale(float value);
 
 	double length(Vector2 v);
 };
