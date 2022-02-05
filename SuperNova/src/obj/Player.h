@@ -10,7 +10,7 @@ class Player
 
 		void update();
 		void draw(sf::RenderWindow& window);
-		void checkMovment();
+		void checkMovement();
 		void init();
 };
 
