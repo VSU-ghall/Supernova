@@ -153,16 +153,20 @@
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\obj\Player.cpp" />
+    <ClCompile Include="src\obj\TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\obj\Player.h" />
+    <ClInclude Include="src\obj\TileMap.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SuperNova.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="src\img\astronaut.png" />
+    <Image Include="src\img\astronaut_walk.png" />
+    <Image Include="src\img\testTileSet.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
