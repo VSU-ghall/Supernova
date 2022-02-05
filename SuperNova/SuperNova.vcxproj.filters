@@ -21,7 +21,6 @@
     <ClCompile Include="src\obj\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="src\Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -29,9 +28,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Vector2.cpp">
-=======
-    <ClCompile Include="src\obj\TileMap.cpp">
->>>>>>> main
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -42,7 +38,6 @@
     <ClInclude Include="src\obj\Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="src\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -50,9 +45,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Vector2.h">
-=======
-    <ClInclude Include="src\obj\TileMap.h">
->>>>>>> main
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -63,12 +55,6 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="src\img\astronaut.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="src\img\astronaut_walk.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="src\img\testTileSet.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
