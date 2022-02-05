@@ -16,7 +16,7 @@ float Player::getY() {
 }
 
 void Player::update() {
-
+	checkMovement();
 }
 void Player::init() {
 	
@@ -49,7 +49,7 @@ void Player::draw(sf::RenderWindow& window) {
 	window.draw(playerSprite);
 }
 //the checkMovment Checks if A or D is pressed and if it is the player will move left or right depending on what is pressed
-void Player::checkMovment() {
+void Player::checkMovement() {
 	//if D is pressed then walking frames are cycled
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
 		playerSprite.move(playerSpeed, 0);
