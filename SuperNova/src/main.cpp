@@ -1,14 +1,14 @@
-#include <GL/glut.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/window.hpp>
 #include <iostream>
 #include "../src/obj/Player.h"
-
+#include "../src/obj/TileMap.h"
 void draw();
 void update();
 void drawGrid();
 
 Player player;
+TileMap map;
 //changes
 // creates global window
 sf::RenderWindow window(sf::VideoMode(1280, 768), "SuperNova");
@@ -16,8 +16,29 @@ sf::RenderWindow window(sf::VideoMode(1280, 768), "SuperNova");
 int main(int argc, char **argv)
 {
 	window.setFramerateLimit(60);
+	// define the level with an array of tile indices
+	const int level[] =
+	{
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 1,
+		1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 1,
+		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+
+	};
+
+	// create the tilemap from the level definition
 	
-	sf::Clock clock;
+	if (!map.load("src/img/testTileSet.png", sf::Vector2u(64,64), level, 20, 12))
+		return -1;
+
 	player.init();
 	int frames = 0;
 	// main loop --> continues each frame while window is open
@@ -50,8 +71,11 @@ void draw() {
 	window.clear();
 
 	// draw objects here
-	player.draw(window);
+	
+	
+	window.draw(map);
 	drawGrid();
+	player.draw(window);
 
 	window.display();
 }

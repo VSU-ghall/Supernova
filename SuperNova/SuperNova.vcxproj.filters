@@ -21,12 +21,18 @@
     <ClCompile Include="src\obj\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\obj\TileMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\obj\Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\obj\TileMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -40,6 +46,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="src\img\astronaut_walk.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\img\testTileSet.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
