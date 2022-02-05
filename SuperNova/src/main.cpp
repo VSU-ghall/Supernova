@@ -1,21 +1,46 @@
-#include <GL/glut.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/window.hpp>
 #include <iostream>
 #include "../src/obj/Player.h"
-
+#include "../src/obj/TileMap.h"
 void draw();
 void update();
 void drawGrid();
 
 Player player;
+TileMap map;
 //changes
 // creates global window
-sf::RenderWindow window(sf::VideoMode(20*128, 12*128), "SuperNova");
+sf::RenderWindow window(sf::VideoMode(1280, 768), "SuperNova");
 
 int main(int argc, char **argv)
 {
+	window.setFramerateLimit(60);
+	// define the level with an array of tile indices
+	const int level[] =
+	{
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 1,
+		1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 1,
+		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+
+	};
+
+	// create the tilemap from the level definition
+	
+	if (!map.load("src/img/testTileSet.png", sf::Vector2u(64,64), level, 20, 12))
+		return -1;
+
 	player.init();
+	int frames = 0;
 	// main loop --> continues each frame while window is open
 	while (window.isOpen()) {
 
@@ -27,11 +52,13 @@ int main(int argc, char **argv)
 			if (event.type == sf::Event::Closed) {
 				window.close();
 			}
+
 		}
 
 		update();
 		draw();
-
+		frames++;
+		std::cout << frames<< std::endl;
 	}
 
 	return 0;
@@ -44,8 +71,11 @@ void draw() {
 	window.clear();
 
 	// draw objects here
-	player.draw(window);
+	
+	
+	window.draw(map);
 	drawGrid();
+	player.draw(window);
 
 	window.display();
 }
@@ -59,7 +89,7 @@ void update() {
 }
 
 void drawGrid() {
-	for (int x = 0; x < window.getSize().x; x = x+128) {
+	for (int x = 0; x <= window.getSize().x; x = x+(window.getSize().x / 20)) {
 		sf::VertexArray lines(sf::LinesStrip, 2);
 		lines[0].position = sf::Vector2f(x, 0);
 		lines[0].color = sf::Color::White;
@@ -69,7 +99,7 @@ void drawGrid() {
 		window.draw(lines);
 	}
 
-	for (int y = 0; y < window.getSize().y; y = y + 128) {
+	for (int y = 0; y <= window.getSize().y; y = y + (window.getSize().y / 12)) {
 		sf::VertexArray lines(sf::LinesStrip, 2);
 		lines[0].position = sf::Vector2f(0, y);
 		lines[0].color = sf::Color::White;
