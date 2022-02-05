@@ -151,18 +151,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="EntityManager.cpp" />
+    <ClCompile Include="src\Entity.cpp" />
+    <ClCompile Include="src\EntityManager.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\obj\Player.cpp" />
-    <ClCompile Include="Vector2.cpp" />
+    <ClCompile Include="src\Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Entity.h" />
-    <ClInclude Include="EntityManager.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="src\Entity.h" />
+    <ClInclude Include="src\EntityManager.h" />
     <ClInclude Include="src\obj\Player.h" />
-    <ClInclude Include="Vector2.h" />
+    <ClInclude Include="src\Vector2.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SuperNova.rc" />
