@@ -11,11 +11,15 @@ void drawGrid();
 Player player;
 //changes
 // creates global window
-sf::RenderWindow window(sf::VideoMode(20*128, 12*128), "SuperNova");
+sf::RenderWindow window(sf::VideoMode(1280, 720), "SuperNova");
 
 int main(int argc, char **argv)
 {
+	window.setFramerateLimit(60);
+	
+	sf::Clock clock;
 	player.init();
+	int frames = 0;
 	// main loop --> continues each frame while window is open
 	while (window.isOpen()) {
 
@@ -32,7 +36,8 @@ int main(int argc, char **argv)
 
 		update();
 		draw();
-
+		frames++;
+		std::cout << frames<< std::endl;
 	}
 
 	return 0;
@@ -60,7 +65,7 @@ void update() {
 }
 
 void drawGrid() {
-	for (int x = 0; x < window.getSize().x; x = x+128) {
+	for (int x = 0; x < window.getSize().x; x = x+(window.getSize().x / 20)) {
 		sf::VertexArray lines(sf::LinesStrip, 2);
 		lines[0].position = sf::Vector2f(x, 0);
 		lines[0].color = sf::Color::White;
@@ -70,7 +75,7 @@ void drawGrid() {
 		window.draw(lines);
 	}
 
-	for (int y = 0; y < window.getSize().y; y = y + 128) {
+	for (int y = 0; y < window.getSize().y; y = y + (window.getSize().y / 12)) {
 		sf::VertexArray lines(sf::LinesStrip, 2);
 		lines[0].position = sf::Vector2f(0, y);
 		lines[0].color = sf::Color::White;

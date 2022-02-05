@@ -7,6 +7,7 @@ sf::Sprite playerSprite;
 float playerSpeed;
 float playerSize;
 int walkCount = 0;
+sf::Texture texture;
 float Player::getX() {
 	return x;
 }
@@ -22,8 +23,8 @@ void Player::init() {
 	
 
 	//this is how fast we want the player. If we want to change there speed this can be changed.
-	playerSpeed = 32.0f;
-	playerSprite.move(2560 / 2, 1536 / 2);
+	playerSpeed = 10.0f;
+	playerSprite.move(1, 1536 / 2);
 	playerSprite.setTextureRect(sf::IntRect(0, 0, 795, 1595));
 	
 	//this is the Size of the player
@@ -31,15 +32,13 @@ void Player::init() {
 
 	//setting the initial size of the player.
 	playerSprite.setScale(playerSize, playerSize);
-}
-
-void Player::draw(sf::RenderWindow& window) {
-
-	sf::Texture texture;
 	if (!texture.loadFromFile("src/img/astronaut_walk.png")) {
 		std::cout << "Could not load astronaut texture" << std::endl;
 		//return NULL;
 	}
+}
+
+void Player::draw(sf::RenderWindow& window) {
 
 	
 	playerSprite.setTexture(texture);
