@@ -53,6 +53,7 @@ Vector2 Vector2::scale(float value) {
 	return Vector2(x * value, y * value);
 }
 
-double Vector2::length(Vector2 v) {
+//formula from https://chortle.ccsu.edu/vectorlessons/vch04/vch04_4.html
+double Vector2::length() {
 	return sqrt(pow(x, 2) + pow(y, 2));
 }
