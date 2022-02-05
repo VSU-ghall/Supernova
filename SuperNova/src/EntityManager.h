@@ -6,6 +6,11 @@
 #include "Entity.h"
 #pragma once
 
+/***
+Entity Manager class idea came from the following lecture: https://www.youtube.com/watch?v=6zWCSSybS50&list=PL_xRyXins848jkwC9Coy7B4N5XTOnQZzz&index=8.
+The lecture provided an idea of how to structure the code and methods, but the code in the methods is original.
+***/
+
 //entityVector holds all entities
 typedef std::vector<std::shared_ptr<Entity>> EntityVector;
 
@@ -16,21 +21,21 @@ class EntityManager
 {
 private:
 
-	EntityVector entities;
-	EntityVector entitiesToAdd;
-	EntityMap entityMap;
-	size_t numEntities = 0;
+	EntityVector entities; //all entities currently alive
+	EntityVector entitiesToAdd; //entities that are ready to be added to entities
+	EntityMap entityMap; //map that stores vectors. each vector stores entities that share the same tag
+	size_t numEntities = 0; //unsigned int used to create unique entity ids
 
-	void removeDeadEntities(EntityVector& vector);
+	void removeDeadEntities(EntityVector& vector); //helper method that iterates through a given vector and removes any entities that are not alive
 
 public:
 	EntityManager();
 
-	void update();
+	void update(); //method updates EntityManager to add new entities and remove dead entities
 
-	std::shared_ptr<Entity> addEntity(const std::string& tag);
-	const EntityVector& getEntities();
-	const EntityVector& getEntites(const std::string& tag);
+	std::shared_ptr<Entity> addEntity(const std::string& tag); //creates and returns an entity with the tag provided
+	const EntityVector& getEntities(); //returns a vector containing all entities that are currently alive
+	const EntityVector& getEntities(const std::string& tag); //returns a vector containing all entities that share the tag parameter
 	size_t getNumEntities();
 
 };

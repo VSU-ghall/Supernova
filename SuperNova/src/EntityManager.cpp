@@ -5,15 +5,15 @@ EntityManager::EntityManager()
 
 }
 
+//method updates EntityManager to add new entities and remove dead entities
 void EntityManager::update() {
-	//Add entities to proper location
-		//Add to vector of all entities
-		//Add them to vector inside of map
+	//Add to vector of all entities and Add them to vector inside of map
 	for (auto& e : entitiesToAdd) {
 		entities.push_back(e);
-		entityMap.find(e->getTag())->second.push_back(e);
-
+		entityMap[e->getTag()].push_back(e);
 	}
+
+	entitiesToAdd.clear();
 		
 	//remove dead entities from entities
 	removeDeadEntities(entities);
@@ -24,15 +24,23 @@ void EntityManager::update() {
 	}
 }
 
+//helper method that iterates through a given vector and removes any entities that are not alive
 void EntityManager::removeDeadEntities(EntityVector& vector) {
 	for (auto iterator = vector.begin(); iterator != vector.end(); iterator++) {
 		auto e = *iterator;
 		if (e->getIsActive() == false) {
-			vector.erase(iterator--);
+			vector.erase(iterator);
+			if (!vector.empty()) {
+				iterator--;
+			}
+			else {
+				break;
+			}
 		}
 	}
 }
 
+//creates and returns an entity with the tag provided
 std::shared_ptr<Entity> EntityManager::addEntity(const std::string& tag) {
 	auto entity = std::shared_ptr<Entity>(new Entity(numEntities++, tag));
 	entitiesToAdd.push_back(entity);
@@ -40,19 +48,16 @@ std::shared_ptr<Entity> EntityManager::addEntity(const std::string& tag) {
 
 }
 
+//returns a vector containing all entities that are currently alive
 const EntityVector& EntityManager::getEntities() {
 	return entities;
 }
 
-const EntityVector& EntityManager::getEntites(const std::string& tag) {
+//returns a vector containing all entities that share the tag parameter
+const EntityVector& EntityManager::getEntities(const std::string& tag) {
 	EntityMap::iterator it;
 	it = entityMap.find(tag);
-	//if (it == entityMap.end()) {
-		//return;
-	//}
-	//else {
-		return it->second;
-	//}
+	return it->second;
 }
 
 size_t EntityManager::getNumEntities() {
