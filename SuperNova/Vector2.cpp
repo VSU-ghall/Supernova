@@ -49,8 +49,8 @@ Vector2 Vector2::operator -= (Vector2 v) {
 	return Vector2(x - v.x, y - v.y);
 }
 
-Vector2::Vector2::scale(float value) {
-	return Vector2(x * scale, y * scale);
+Vector2 Vector2::scale(float value) {
+	return Vector2(x * value, y * value);
 }
 
 double Vector2::length(Vector2 v) {
