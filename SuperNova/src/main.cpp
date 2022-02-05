@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 		draw();
 
 		frames++;
-		std::cout << frames<< std::endl;
+		//std::cout << frames<< std::endl;
 	}
 
 	return 0;
