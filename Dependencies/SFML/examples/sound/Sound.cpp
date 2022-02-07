@@ -5,21 +5,22 @@
 #include <SFML/Audio.hpp>
 #include <iostream>
 #include <string>
+#include <Sound.h>
 
 
 ////////////////////////////////////////////////////////////
 /// Play a sound
 ///
 ////////////////////////////////////////////////////////////
-void playSound()
+void Sound::playSound()
 {
-    // Load a sound buffer from a wav file
+    // Load a sound buffer (background music) from a wav file
     sf::SoundBuffer buffer;
-    if (!buffer.loadFromFile("resources/canary.wav"))
+    if (!buffer.loadFromFile("resources/Background_for_sprint_1.wav"))
         return;
 
     // Display sound informations
-    std::cout << "canary.wav:" << std::endl;
+    std::cout << "Background_for_sprint_1.wav:" << std::endl;
     std::cout << " " << buffer.getDuration().asSeconds() << " seconds"       << std::endl;
     std::cout << " " << buffer.getSampleRate()           << " samples / sec" << std::endl;
     std::cout << " " << buffer.getChannelCount()         << " channels"      << std::endl;
@@ -27,6 +28,7 @@ void playSound()
     // Create a sound instance and play it
     sf::Sound sound(buffer);
     sound.play();
+    sound.setLoop(true);
 
     // Loop while the sound is playing
     while (sound.getStatus() == sf::Sound::Playing)
@@ -85,7 +87,7 @@ void playMusic(const std::string& filename)
 int main()
 {
     // Play a sound
-    playSound();
+     // playSound();
 
     // Play music from an ogg file
     playMusic("orchestral.ogg");

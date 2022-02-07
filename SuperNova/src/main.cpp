@@ -3,6 +3,7 @@
 #include <iostream>
 #include "../src/obj/Player.h"
 #include "../src/obj/TileMap.h"
+#include "../examples/sound/Sound.h"
 
 void init();
 void draw();
