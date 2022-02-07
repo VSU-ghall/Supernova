@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/window.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 #include "../src/obj/Player.h"
 #include "../src/obj/TileMap.h"
@@ -163,3 +164,22 @@ sf::View getViewport(float width, float height) {
 
 	return view;
 }
+
+//
+// Adding background sound to the game
+//** Using code from url: https://www.sfml-dev.org/documentation/2.5.1/classsf_1_1Music.php
+//
+//
+void playMusic(const std::string& background_music)
+{
+	// Declare new music
+	sf::Music music;
+	// Open it from an audio file
+	music.openFromFile("resources/background_music.wav");
+	music.setVolume(50);
+
+	music.setLoop(true);         // make it loop
+	// Play it
+	music.play();
+}
+
