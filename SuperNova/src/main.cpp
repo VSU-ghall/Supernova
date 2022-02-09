@@ -2,8 +2,8 @@
 #include <SFML/window.hpp>
 #include <SFML/Audio.hpp>
 #include <iostream>
-#include "../src/obj/Player.h"
-#include "../src/obj/TileMap.h"
+#include "../src/objects/Player.h"
+#include "../src/objects/TileMap.h"
 
 void init();
 void draw();
@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 	};
 	
 	// create the tilemap from the level definition
-	if (!map.load("src/img/testTileSet.png", sf::Vector2u(64,64), level, levelWidth, levelHeight))
+	if (!map.load("src/resources/testTileSet.png", sf::Vector2u(64,64), level, levelWidth, levelHeight))
 		return -1;
 
 	init();

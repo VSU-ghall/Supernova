@@ -28,7 +28,7 @@ void Player::init() {
 
 	//setting the initial size of the player.
 	playerSprite.setScale(playerSize, playerSize);
-	if (!texture.loadFromFile("src/img/astronaut_walk.png")) {
+	if (!texture.loadFromFile("src/resources/astronaut_walk.png")) {
 		std::cout << "Could not load astronaut texture" << std::endl;
 	}
 	playerSprite.setTexture(texture);
