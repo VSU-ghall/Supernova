@@ -1,13 +1,15 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/window.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
-#include "../src/obj/Player.h"
-#include "../src/obj/TileMap.h"
+#include "../src/objects/Player.h"
+#include "../src/objects/TileMap.h"
 
 void init();
 void draw();
 void update();
 void drawGrid();
+void playMusic();
 sf::View getViewport(float width, float height);
 
 Player player;
@@ -19,6 +21,7 @@ float windowWidth = tileSize * levelWidth, windowHeight = tileSize * levelHeight
 // creates global window
 sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "SuperNova");
 sf::View view;
+sf::Music music;
 
 int main(int argc, char **argv)
 {
@@ -41,7 +44,7 @@ int main(int argc, char **argv)
 	};
 	
 	// create the tilemap from the level definition
-	if (!map.load("src/img/testTileSet.png", sf::Vector2u(64,64), level, levelWidth, levelHeight))
+	if (!map.load("src/resources/testTileSet.png", sf::Vector2u(64,64), level, levelWidth, levelHeight))
 		return -1;
 
 	init();
@@ -81,6 +84,7 @@ void init() {
 
 	window.setFramerateLimit(60);
 	player.init();
+	playMusic();
 }
 
 //
@@ -163,3 +167,23 @@ sf::View getViewport(float width, float height) {
 
 	return view;
 }
+
+//
+// Adding background sound to the game
+// ** Using code from url: https://www.sfml-dev.org/documentation/2.5.1/classsf_1_1Music.php
+//
+//
+void playMusic()
+{
+	// Open it from an audio file
+	if (!music.openFromFile("src/resources/background_music.wav")) {
+		std::cout << "Could not load background_music" << std::endl;
+		return;
+	}
+	music.setVolume(25);
+
+	music.setLoop(true);         // make it loop
+	// Play it
+	music.play();
+}
+
