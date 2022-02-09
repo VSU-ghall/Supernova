@@ -1,75 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <ClCompile Include="src\Entity.cpp" />
+    <ClCompile Include="src\EntityManager.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\objects\Player.cpp" />
+    <ClCompile Include="src\Vector2.cpp" />
+    <ClCompile Include="src\objects\TileMap.cpp" />
+    <ClCompile Include="src\GameEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\obj\Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-<<<<<<< HEAD
-    <ClCompile Include="src\Entity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\EntityManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Vector2.cpp">
-=======
-    <ClCompile Include="src\obj\TileMap.cpp">
->>>>>>> main
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="src\Entity.h" />
+    <ClInclude Include="src\EntityManager.h" />
+    <ClInclude Include="src\objects\Player.h" />
+    <ClInclude Include="src\Vector2.h" />
+    <ClInclude Include="src\objects\TileMap.h" />
+    <ClInclude Include="src\GameEngine.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\obj\Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="src\Entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\EntityManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Vector2.h">
-=======
-    <ClInclude Include="src\obj\TileMap.h">
->>>>>>> main
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ResourceCompile Include="SuperNova.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="SuperNova.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="src\img\astronaut.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="src\img\astronaut_walk.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="src\img\testTileSet.png">
-      <Filter>Resource Files</Filter>
-    </Image>
+    <Image Include="src\resources\astronaut.png" />
+    <Image Include="src\resources\astronaut_walk.png" />
+    <Image Include="src\resources\testTileSet.png" />
   </ItemGroup>
 </Project>
