@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/window.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 #include "../src/objects/Player.h"
 #include "../src/objects/TileMap.h"
@@ -16,6 +17,7 @@ private:
 	// creates global window
 	sf::RenderWindow window;
 	sf::View view;
+	sf::Music music;
 
 public:
 	GameEngine();
@@ -24,6 +26,7 @@ public:
 	void draw();
 	void update();
 	void drawGrid();
+	void playMusic();
 	sf::View getViewport(float width, float height);
 };
 

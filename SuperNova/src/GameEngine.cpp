@@ -64,6 +64,7 @@ void GameEngine::init() {
 	view = getViewport(windowWidth, windowHeight);
 	window.setFramerateLimit(60);
 	player.init();
+	playMusic();
 }
 
 //
@@ -147,3 +148,21 @@ sf::View GameEngine::getViewport(float width, float height) {
 	return view;
 }
 
+//
+// Adding background sound to the game
+// ** Using code from url: https://www.sfml-dev.org/documentation/2.5.1/classsf_1_1Music.php
+//
+void GameEngine::playMusic()
+{
+	// Open the Background Music
+	if (!music.openFromFile("src/resources/background_music.wav")) {
+		std::cout << "Could not load background_music" << std::endl;
+		return;
+	}
+
+	music.setVolume(25);
+
+	music.setLoop(true);         // make it loop
+	// Play it
+	music.play();
+}
