@@ -41,12 +41,10 @@ int main(int argc, char **argv)
 	};
 	
 	// create the tilemap from the level definition
-	
 	if (!map.load("src/img/testTileSet.png", sf::Vector2u(64,64), level, levelWidth, levelHeight))
 		return -1;
 
 	init();
-	int frames = 0;
 
 	// main loop --> continues each frame while window is open
 	while (window.isOpen()) {
@@ -68,9 +66,6 @@ int main(int argc, char **argv)
 
 		update();
 		draw();
-
-		frames++;
-		//std::cout << frames<< std::endl;
 	}
 
 	return 0;
