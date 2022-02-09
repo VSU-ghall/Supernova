@@ -7,6 +7,7 @@
     <ClCompile Include="src\objects\Player.cpp" />
     <ClCompile Include="src\Vector2.cpp" />
     <ClCompile Include="src\objects\TileMap.cpp" />
+    <ClCompile Include="src\GameEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -15,6 +16,7 @@
     <ClInclude Include="src\objects\Player.h" />
     <ClInclude Include="src\Vector2.h" />
     <ClInclude Include="src\objects\TileMap.h" />
+    <ClInclude Include="src\GameEngine.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SuperNova.rc" />
