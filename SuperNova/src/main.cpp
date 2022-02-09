@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include <GL/glut.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/window.hpp>
@@ -78,4 +79,13 @@ void drawGrid() {
 
 		window.draw(lines);
 	}
+=======
+#include "GameEngine.h"
+
+int main(int argc, char** argv) {
+	GameEngine game;
+	game.run();
+
+	return 0;
+>>>>>>> db3e313d0918083fdbd5ce186a7397541b574211
 }
