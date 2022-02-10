@@ -17,6 +17,7 @@
     <ClInclude Include="src\Vector2.h" />
     <ClInclude Include="src\objects\TileMap.h" />
     <ClInclude Include="src\GameEngine.h" />
+    <ClInclude Include="src\Components.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SuperNova.rc" />
