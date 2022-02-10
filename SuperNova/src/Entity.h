@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include <vector>
+#include "Components.h"
 
 /*
 	Entiy class idea originated from the following lecture: https://www.youtube.com/watch?v=4_DKdliZv_4&list=PL_xRyXins848jkwC9Coy7B4N5XTOnQZzz&index=5
@@ -17,6 +19,8 @@ private:
 	std::string tag = "default"; //tag to allow similar entities to be gathered
 	bool isActive = true; //true if the entity is alive false if entity is dead
 
+	std::vector<Component> components;
+
 	Entity(const size_t& id, const std::string& tag); //constructor requries a unique unsigned int as id and tag
 
 public:
@@ -25,5 +29,27 @@ public:
 	std::string& getTag();
 	size_t getId();
 	void destroy(); //sets isActive to false
+
+	template <typename T>
+	bool hasComponent() {
+		return getComponent<T>().has;
+	}
+
+	template<typename T> 
+	T & getComponent() {
+		return std::get<T>(components);
+	}
+
+	/*
+	template <typename T, typename...TArgs>
+	T & addComponent(TArgs&&... mArgs){
+	auto & component = getComponent<T>();
+	component = T(std::forward<TArgs>(mArgs)...);
+	component.has = true;
+	return component;
+	}
+	*/
+
+
 };
 
