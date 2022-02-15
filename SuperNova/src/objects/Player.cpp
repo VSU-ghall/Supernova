@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-float playerSpeed, playerSize, animationPerFrame = 1.0f / 5.0f;
+float playerSpeed, playerSize, animationPerFrame = 1.0f / 8.0f;
 int frameCount = 0, offset = 0;
 
 sf::Sprite playerSprite;
@@ -19,15 +19,16 @@ float Player::getY() {
 void Player::init() {
 	
 	//this is how fast we want the player. If we want to change their speed this can be changed.
-	playerSpeed = 10.0f;
-	playerSprite.move(64 * 3,64 * 11);
-	playerSprite.setTextureRect(sf::IntRect(0, 0, 795, 1595));
+	playerSpeed = 5.5f;
+	playerSprite.setPosition(64 * 5, 64 * 11);
+	playerSprite.setTextureRect(sf::IntRect(0, 0, 834, 1666));
 	
 	//this is the Size of the player
-	playerSize = 0.08f;
+	playerSize = 0.077f;
 
 	//setting the initial size of the player.
 	playerSprite.setScale(playerSize, playerSize);
+	
 	if (!texture.loadFromFile("src/resources/astronaut_walk.png")) {
 		std::cout << "Could not load astronaut texture" << std::endl;
 	}
@@ -54,20 +55,20 @@ void Player::checkMovement() {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
 		playerSprite.move(playerSpeed, 0);
 		//the sprite size in sprite sheet is 800x1600. this tells textureRect to start at beginning and every time walkCount is added, then it goes to next frame
-		playerSprite.setTextureRect(sf::IntRect(offset * 800, 0, 800, 1600));
+		playerSprite.setTextureRect(sf::IntRect(offset * 834, 0, 834, 1668));
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
 		playerSprite.move(-playerSpeed, 0);
 		//the left facing frames are at 800*2 x 1600 so this tells does same as above but lower on the sprite sheet
-		playerSprite.setTextureRect(sf::IntRect(offset * 800, 800 * 2, 800, 1600));
+		playerSprite.setTextureRect(sf::IntRect(offset * 834, 834 * 2, 800, 1668));
 
 	}
 
 	frameCount++;
 	if ((int)(frameCount * animationPerFrame) > offset) offset++;
 
-	//Since there are only 4 frames atm, this allows the frames to reach the end, then start again
-	if (offset == 4) {
+	//There are 8 frames for walking now, this allows each frame to cycle and then reset when the last frame is projected onto the screen
+	if (offset == 8) {
 		frameCount = 0;
 		offset = 0;
 	}
