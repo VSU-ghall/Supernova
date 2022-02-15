@@ -19,7 +19,7 @@ float Player::getY() {
 void Player::init() {
 	
 	//this is how fast we want the player. If we want to change their speed this can be changed.
-	playerSpeed = 4.5f;
+	playerSpeed = 5.5f;
 	playerSprite.move(64 * 3,64 * 11);
 	playerSprite.setTextureRect(sf::IntRect(0, 0, 795, 1595));
 	
