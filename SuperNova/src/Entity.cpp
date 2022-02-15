@@ -1,4 +1,4 @@
-#include "Entity.h"
+#include "headers/Entity.h"
 
 Entity::Entity(const size_t& id, const std::string& tag)
 	:id(id), tag(tag)

@@ -3,8 +3,9 @@
 #include <SFML/window.hpp>
 #include <SFML/Audio.hpp>
 #include <iostream>
-#include "../src/objects/Player.h"
-#include "../src/objects/TileMap.h"
+#include "headers/Player.h"
+#include "headers/TileMap.h"
+#include "LevelManager.h"
 
 class GameEngine
 {
@@ -14,6 +15,8 @@ private:
 	const int tileSize = 64;
 	int levelWidth = 20, levelHeight = 12;
 	float windowWidth = tileSize * levelWidth, windowHeight = tileSize * levelHeight;
+	LevelManager levelManager;
+
 	// creates global window
 	sf::RenderWindow window;
 	sf::View view;
