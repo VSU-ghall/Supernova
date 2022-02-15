@@ -88,7 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\SFML\include;$(SolutionDir)Dependencies\GLUT\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Supernova\src;$(SolutionDir)Dependencies\SFML\include;$(SolutionDir)Dependencies\GLUT\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -105,7 +105,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\SFML\include;$(SolutionDir)Dependencies\GLUT\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Supernova\src;$(SolutionDir)Dependencies\SFML\include;$(SolutionDir)Dependencies\GLUT\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -122,7 +122,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\SFML\include;$(SolutionDir)Dependencies\GLUT\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Supernova\src;$(SolutionDir)Dependencies\SFML\include;$(SolutionDir)Dependencies\GLUT\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -139,7 +139,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\SFML\include;$(SolutionDir)Dependencies\GLUT\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Supernova\src;$(SolutionDir)Dependencies\SFML\include;$(SolutionDir)Dependencies\GLUT\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,22 +151,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\GameEngine.cpp" />
-    <ClCompile Include="src\Entity.cpp" />
-    <ClCompile Include="src\EntityManager.cpp" />
+    <ClCompile Include="src\classes\LevelManager.cpp" />
+    <ClCompile Include="src\classes\GameEngine.cpp" />
+    <ClCompile Include="src\classes\Entity.cpp" />
+    <ClCompile Include="src\classes\EntityManager.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\objects\Player.cpp" />
-    <ClCompile Include="src\Vector2.cpp" />
-    <ClCompile Include="src\objects\TileMap.cpp" />
+    <ClCompile Include="src\classes\Player.cpp" />
+    <ClCompile Include="src\classes\Vector2.cpp" />
+    <ClCompile Include="src\classes\TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\GameEngine.h" />
+    <ClInclude Include="src\headers\LevelManager.h" />
+    <ClInclude Include="src\headers\GameEngine.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="src\Entity.h" />
-    <ClInclude Include="src\EntityManager.h" />
-    <ClInclude Include="src\objects\Player.h" />
-    <ClInclude Include="src\Vector2.h" />
-    <ClInclude Include="src\objects\TileMap.h" />
+    <ClInclude Include="src\headers\Entity.h" />
+    <ClInclude Include="src\headers\EntityManager.h" />
+    <ClInclude Include="src\headers\Player.h" />
+    <ClInclude Include="src\headers\Vector2.h" />
+    <ClInclude Include="src\headers\TileMap.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SuperNova.rc" />
