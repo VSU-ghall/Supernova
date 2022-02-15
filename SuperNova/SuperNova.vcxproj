@@ -151,14 +151,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\LevelManager.cpp" />
-    <ClCompile Include="src\GameEngine.cpp" />
-    <ClCompile Include="src\Entity.cpp" />
-    <ClCompile Include="src\EntityManager.cpp" />
+    <ClCompile Include="src\classes\LevelManager.cpp" />
+    <ClCompile Include="src\classes\GameEngine.cpp" />
+    <ClCompile Include="src\classes\Entity.cpp" />
+    <ClCompile Include="src\classes\EntityManager.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\objects\Player.cpp" />
-    <ClCompile Include="src\Vector2.cpp" />
-    <ClCompile Include="src\objects\TileMap.cpp" />
+    <ClCompile Include="src\classes\Player.cpp" />
+    <ClCompile Include="src\classes\Vector2.cpp" />
+    <ClCompile Include="src\classes\TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\headers\LevelManager.h" />
