@@ -20,14 +20,15 @@ void Player::init() {
 	
 	//this is how fast we want the player. If we want to change their speed this can be changed.
 	playerSpeed = 5.5f;
-	playerSprite.move(64 * 3,64 * 11);
-	playerSprite.setTextureRect(sf::IntRect(0, 0, 795, 1595));
+	playerSprite.setPosition(64 * 5, 64 * 11);
+	playerSprite.setTextureRect(sf::IntRect(0, 0, 834, 1666));
 	
 	//this is the Size of the player
-	playerSize = 0.08f;
+	playerSize = 0.077f;
 
 	//setting the initial size of the player.
 	playerSprite.setScale(playerSize, playerSize);
+	
 	if (!texture.loadFromFile("src/resources/astronaut_walk.png")) {
 		std::cout << "Could not load astronaut texture" << std::endl;
 	}
