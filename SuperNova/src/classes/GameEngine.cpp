@@ -8,13 +8,6 @@ GameEngine::GameEngine()
 
 void GameEngine::run() {
 
-	LevelManager::Level level = levelManager.getLevel1();
-	player.startPosition = Vector2(level.startPosition);
-
-	// create the tilemap from the level definition
-	if (!map.load("src/resources/tilemap_v1.png", sf::Vector2u(64, 64), level.map, levelWidth, levelHeight))
-		std::cout << "Error loading TileMap";
-
 	init();
 
 	// main loop --> continues each frame while window is open
@@ -22,18 +15,8 @@ void GameEngine::run() {
 
 		// event handling
 		sf::Event event;
-		while (window.pollEvent(event)) {
-
-			// event triggered when window is closed
-			if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-				window.close();
-			}
-
-			// sets viewport when window is resized
-			if (event.type == sf::Event::Resized)
-				view = getViewport(event.size.width, event.size.height);
-
-		}
+		while (window.pollEvent(event))
+			handleEvent(event);
 
 		update();
 		draw();
@@ -48,7 +31,10 @@ void GameEngine::init() {
 	view.setCenter(view.getSize().x / 2, view.getSize().y / 2);
 	view = getViewport(windowWidth, windowHeight);
 	window.setFramerateLimit(60);
+
+	loadLevel(levelManager.getLevel1());
 	player.init();
+
 	playMusic();
 }
 
@@ -66,13 +52,6 @@ void GameEngine::draw() {
 	player.draw(window);
 
 	window.display();
-}
-
-//
-// Updates all game objects
-//
-void GameEngine::update() {
-	player.update();
 }
 
 //
@@ -134,6 +113,35 @@ sf::View GameEngine::getViewport(float width, float height) {
 }
 
 //
+// Handles all our games' events
+//
+void GameEngine::handleEvent(sf::Event event) {
+	// event triggered when window is closed
+	if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+		window.close();
+
+	// sets viewport when window is resized
+	if (event.type == sf::Event::Resized)
+		view = getViewport(event.size.width, event.size.height);
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+
+	}
+		
+}
+
+//
+// Loads the map for a given level
+//
+void GameEngine::loadLevel(LevelManager::Level level) {
+	player.startPosition = Vector2(level.startPosition);
+
+	// create the tilemap from the level definition
+	if (!map.load("src/resources/tilemap_v1.png", sf::Vector2u(64, 64), level.map, levelWidth, levelHeight))
+		std::cout << "Error loading TileMap";
+}
+
+//
 // Adding background sound to the game
 // ** Using code from url: https://www.sfml-dev.org/documentation/2.5.1/classsf_1_1Music.php
 //
@@ -150,4 +158,11 @@ void GameEngine::playMusic()
 	music.setLoop(true);         // make it loop
 	// Play it
 	music.play();
+}
+
+//
+// Updates all game objects
+//
+void GameEngine::update() {
+	player.update();
 }

@@ -27,10 +27,12 @@ public:
 	void run();
 	void init();
 	void draw();
-	void update();
 	void drawGrid();
-	void playMusic();
 	sf::View getViewport(float width, float height);
+	void handleEvent(sf::Event event);
+	void loadLevel(LevelManager::Level level);
+	void playMusic();
+	void update();
 };
 
 
