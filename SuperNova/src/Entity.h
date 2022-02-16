@@ -30,25 +30,35 @@ public:
 	size_t getId();
 	void destroy(); //sets isActive to false
 
-	template <typename T>
-	bool hasComponent() {
-		return getComponent<T>().has;
-	}
+	//template <typename T>
+	//bool hasComponent() {
+	//	return getComponent<T>().has;
+	//}
 
-	template<typename T> 
+	template<typename T>
 	T & getComponent() {
-		return std::get<T>(components);
+		//return std::get<T>(components);
+		//return std::get<T>(components);
+		for (auto& c : components) {
+			if (c == std::forward<T>) {
+				return c;
+			}
+		}
+		//return nullptr;
 	}
 
-	/*
+	//template<typename T>
 	template <typename T, typename...TArgs>
-	T & addComponent(TArgs&&... mArgs){
-	auto & component = getComponent<T>();
-	component = T(std::forward<TArgs>(mArgs)...);
-	component.has = true;
-	return component;
+//	T & addComponent(TArgs&&... mArgs){
+	void addComponent(TArgs&&...mArgs){
+	//void addComponent(Component c){
+//		auto & component = getComponent<T>();
+//		component = T(std::forward<TArgs>(mArgs)...);
+//		component.has = true;
+		components.push_back(std::forward<TArgs>(mArgs)...);
+//		return TArgs;
 	}
-	*/
+	
 
 
 };
