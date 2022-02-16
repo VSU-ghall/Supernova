@@ -8,10 +8,11 @@ GameEngine::GameEngine()
 
 void GameEngine::run() {
 
-	int* level = levelManager.getTestLevel();
+	LevelManager::Level level = levelManager.getLevel1();
+	player.startPosition = Vector2(level.startPosition);
 
 	// create the tilemap from the level definition
-	if (!map.load("src/resources/testTileSet.png", sf::Vector2u(64, 64), level, levelWidth, levelHeight))
+	if (!map.load("src/resources/tilemap_v1.png", sf::Vector2u(64, 64), level.map, levelWidth, levelHeight))
 		std::cout << "Error loading TileMap";
 
 	init();
@@ -60,7 +61,7 @@ void GameEngine::draw() {
 	window.setView(view);
 	window.draw(map);
 
-	drawGrid();
+	//drawGrid();
 
 	player.draw(window);
 
