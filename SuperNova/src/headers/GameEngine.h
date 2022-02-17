@@ -19,8 +19,9 @@ private:
 	sf::RenderWindow window;
 	sf::View view;
 	sf::Music music;
-	sf::Sprite background;
-	sf::Texture texture;
+	sf::Sprite background, btnLevel1, btnLevel2;
+	sf::Texture backgroundTexture, btnLevel1Texture, btnLevel2Texture;
+	sf::RectangleShape gamebar;
 
 public:
 	GameEngine();

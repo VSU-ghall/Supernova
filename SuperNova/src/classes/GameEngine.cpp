@@ -32,6 +32,16 @@ void GameEngine::init() {
 	loadLevel(levelManager.getLevel1());
 	player.init();
 
+	gamebar.setFillColor(sf::Color(59, 30, 11));
+	
+	if (!btnLevel1Texture.loadFromFile("src/resources/Level1Button.png"))
+		std::cout << "Could not load level 1 background" << std::endl;
+	btnLevel1.setTexture(btnLevel1Texture);
+
+	if (!btnLevel2Texture.loadFromFile("src/resources/Level2Button.png"))
+		std::cout << "Could not load level 1 background" << std::endl;
+	btnLevel2.setTexture(btnLevel2Texture);
+
 	playMusic();
 }
 
@@ -49,6 +59,9 @@ void GameEngine::draw() {
 	//drawGrid();
 
 	player.draw(window);
+
+	window.draw(gamebar);
+	window.draw(btnLevel1); window.draw(btnLevel2);
 
 	window.display();
 }
@@ -120,8 +133,12 @@ void GameEngine::handleEvent(sf::Event event) {
 		window.close();
 
 	// sets viewport when window is resized
-	if (event.type == sf::Event::Resized)
+	if (event.type == sf::Event::Resized) {
 		view = getViewport(event.size.width, event.size.height);
+		gamebar.setSize(sf::Vector2f(event.size.width, 75));
+		btnLevel1.setPosition(gamebar.getPosition().x+10, gamebar.getPosition().y+5);
+		btnLevel2.setPosition(gamebar.getPosition().x + 20 + btnLevel1.getTexture()->getSize().x, gamebar.getPosition().y + 5);
+	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
 		if (levelManager.getCurrentLevel().levelNumber == 1)
@@ -157,8 +174,8 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 		
 	}
 
-	view.setSize(tileSize * level.width, tileSize * level.height);
-	view.setCenter(view.getSize().x / 2, view.getSize().y / 2);
+	view.setSize(tileSize * level.width, tileSize * level.height + gamebar.getSize().y);
+	view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
 	view = getViewport(windowWidth, windowHeight);
 }
 
