@@ -10,9 +10,12 @@ static class LevelManager
 
 		struct Level {
 			LevelManager* levelManager;
-			int levelWidth = 20, levelHeight = 12, levelNumber = (levelManager->numberOfLevels)++;
+			int width = 20, height = 12, levelNumber = (levelManager->numberOfLevels)++;
 			int* map;
 			Vector2 startPosition;
+			sf::Sprite background;
+			sf::Texture texture;
+			bool hasBackground = false;
 		} testLevel = {this}, level1 = {this}, level2 = {this, 25, 17}, currentLevel = {this};
 
 		LevelManager();

@@ -19,6 +19,8 @@ private:
 	sf::RenderWindow window;
 	sf::View view;
 	sf::Music music;
+	sf::Sprite background;
+	sf::Texture texture;
 
 public:
 	GameEngine();
