@@ -29,6 +29,8 @@
     <Image Include="src\resources\testTileSet.png" />
     <Image Include="src\resources\rocket_sprite_sheet.png" />
     <Image Include="src\resources\space_background_sprite_sheet.png" />
+    <Image Include="src\resources\Level1Button.png" />
+    <Image Include="src\resources\Level2Button.png" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="src\resources\background_music.wav" />
