@@ -146,17 +146,18 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 	sf::String title("SuperNova - Level " + std::to_string(level.levelNumber));
 	window.setTitle(title);
 
-	windowWidth = tileSize * level.width;
-	windowHeight = tileSize * level.height;
-
 	auto desktop = sf::VideoMode::getDesktopMode();
 	if (window.getSize().x != desktop.width) {
+		windowWidth = tileSize * level.width;
+		windowHeight = tileSize * level.height;
+
 		window.setSize(sf::Vector2u(windowWidth, windowHeight));
 
 		window.setPosition(sf::Vector2i(desktop.width / 2 - window.getSize().x / 2, desktop.height / 2 - window.getSize().y / 2));
+		
 	}
 
-	view.setSize(windowWidth, windowHeight);
+	view.setSize(tileSize * level.width, tileSize * level.height);
 	view.setCenter(view.getSize().x / 2, view.getSize().y / 2);
 	view = getViewport(windowWidth, windowHeight);
 }
