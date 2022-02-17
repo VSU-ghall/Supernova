@@ -136,18 +136,25 @@ void GameEngine::handleEvent(sf::Event event) {
 	if (event.type == sf::Event::Resized) {
 		view = getViewport(event.size.width, event.size.height);
 		gamebar.setSize(sf::Vector2f(event.size.width, 75));
-		btnLevel1.setPosition(gamebar.getPosition().x+10, gamebar.getPosition().y+5);
+		btnLevel1.setPosition(gamebar.getPosition().x + 10, gamebar.getPosition().y + 5);
 		btnLevel2.setPosition(gamebar.getPosition().x + 20 + btnLevel1.getTexture()->getSize().x, gamebar.getPosition().y + 5);
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-		if (levelManager.getCurrentLevel().levelNumber == 1)
-			loadLevel(levelManager.getLevel2());
+	sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
+	sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+	if (btnLevel1.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+			if (levelManager.getCurrentLevel().levelNumber == 2)
+				loadLevel(levelManager.getLevel1());
+		}
+		if (event.type == sf::Event::MouseButtonReleased) {}
 	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-		if (levelManager.getCurrentLevel().levelNumber == 2)
-			loadLevel(levelManager.getLevel1());
+	if (btnLevel2.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+			if (levelManager.getCurrentLevel().levelNumber == 1)
+				loadLevel(levelManager.getLevel2());
+		}
+		if (event.type == sf::Event::MouseButtonReleased) {}
 	}
 		
 }
