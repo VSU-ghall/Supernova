@@ -1,18 +1,12 @@
 #include "headers/GameEngine.h"
 
 GameEngine::GameEngine() 
-	:window(sf::VideoMode(windowWidth, windowHeight), "SuperNova")
+	:window(sf::VideoMode(), "SuperNova")
 {
 	
 }
 
 void GameEngine::run() {
-
-	int* level = levelManager.getTestLevel();
-
-	// create the tilemap from the level definition
-	if (!map.load("src/resources/testTileSet.png", sf::Vector2u(64, 64), level, levelWidth, levelHeight))
-		std::cout << "Error loading TileMap";
 
 	init();
 
@@ -21,18 +15,8 @@ void GameEngine::run() {
 
 		// event handling
 		sf::Event event;
-		while (window.pollEvent(event)) {
-
-			// event triggered when window is closed
-			if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-				window.close();
-			}
-
-			// sets viewport when window is resized
-			if (event.type == sf::Event::Resized)
-				view = getViewport(event.size.width, event.size.height);
-
-		}
+		while (window.pollEvent(event))
+			handleEvent(event);
 
 		update();
 		draw();
@@ -43,11 +27,11 @@ void GameEngine::run() {
 //	Initializes the game components
 //
 void GameEngine::init() {
-	view.setSize(windowWidth, windowHeight);
-	view.setCenter(view.getSize().x / 2, view.getSize().y / 2);
-	view = getViewport(windowWidth, windowHeight);
 	window.setFramerateLimit(60);
+
+	loadLevel(levelManager.getLevel1());
 	player.init();
+
 	playMusic();
 }
 
@@ -56,22 +40,17 @@ void GameEngine::init() {
 //
 void GameEngine::draw() {
 	window.clear();
-
 	window.setView(view);
-	window.draw(map);
 
-	drawGrid();
+	if (levelManager.currentLevel.hasBackground)
+		window.draw(levelManager.currentLevel.background);
+	window.draw(levelManager.getMap());
+
+	//drawGrid();
 
 	player.draw(window);
 
 	window.display();
-}
-
-//
-// Updates all game objects
-//
-void GameEngine::update() {
-	player.update();
 }
 
 //
@@ -133,6 +112,55 @@ sf::View GameEngine::getViewport(float width, float height) {
 }
 
 //
+// Handles all our games' events
+//
+void GameEngine::handleEvent(sf::Event event) {
+	// event triggered when window is closed
+	if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+		window.close();
+
+	// sets viewport when window is resized
+	if (event.type == sf::Event::Resized)
+		view = getViewport(event.size.width, event.size.height);
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+		if (levelManager.getCurrentLevel().levelNumber == 1)
+			loadLevel(levelManager.getLevel2());
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+		if (levelManager.getCurrentLevel().levelNumber == 2)
+			loadLevel(levelManager.getLevel1());
+	}
+		
+}
+
+//
+// Loads level from LevelManager
+//
+void GameEngine::loadLevel(LevelManager::Level level) {
+	player.startPosition = Vector2(level.startPosition);
+	player.respawn();
+	levelManager.setLevel(level);
+
+	sf::String title("SuperNova - Level " + std::to_string(level.levelNumber));
+	window.setTitle(title);
+
+	auto desktop = sf::VideoMode::getDesktopMode();
+	if (window.getSize().x != desktop.width) {
+		windowWidth = tileSize * level.width;
+		windowHeight = tileSize * level.height;
+		window.setSize(sf::Vector2u(windowWidth, windowHeight));
+
+		window.setPosition(sf::Vector2i(desktop.width / 2 - window.getSize().x / 2, desktop.height / 2 - window.getSize().y / 2));
+	}
+
+	view.setSize(windowWidth, windowHeight);
+	view.setCenter(view.getSize().x / 2, view.getSize().y / 2);
+	view = getViewport(windowWidth, windowHeight);
+}
+
+//
 // Adding background sound to the game
 // ** Using code from url: https://www.sfml-dev.org/documentation/2.5.1/classsf_1_1Music.php
 //
@@ -149,4 +177,11 @@ void GameEngine::playMusic()
 	music.setLoop(true);         // make it loop
 	// Play it
 	music.play();
+}
+
+//
+// Updates all game objects
+//
+void GameEngine::update() {
+	player.update();
 }

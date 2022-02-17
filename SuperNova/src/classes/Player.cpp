@@ -19,8 +19,9 @@ float Player::getY() {
 void Player::init() {
 	
 	//this is how fast we want the player. If we want to change their speed this can be changed.
-	playerSpeed = 5.5f;
-	playerSprite.setPosition(64 * 5, 64 * 11);
+	playerSpeed = 6.0f;
+	//playerSprite.setPosition(64 * 5, 64 * 9);
+	playerSprite.setPosition(64 * startPosition.x, 64 * startPosition.y);
 	playerSprite.setTextureRect(sf::IntRect(0, 0, 834, 1666));
 	
 	//this is the Size of the player
@@ -36,14 +37,6 @@ void Player::init() {
 
 	//the set Origin will put a "point" in the middle of the sprite and the sprite will now rotate around that point when manipulated.
 	playerSprite.setOrigin((sf::Vector2f)texture.getSize() / 2.f);
-}
-
-void Player::update() {
-	checkMovement();
-}
-
-void Player::draw(sf::RenderWindow& window) {
-	window.draw(playerSprite);
 }
 
 // 
@@ -74,4 +67,16 @@ void Player::checkMovement() {
 	}
 
 	
+}
+
+void Player::draw(sf::RenderWindow& window) {
+	window.draw(playerSprite);
+}
+
+void Player::respawn() {
+	playerSprite.setPosition(64 * startPosition.x, 64 * startPosition.y);
+}
+
+void Player::update() {
+	checkMovement();
 }
