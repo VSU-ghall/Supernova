@@ -45,7 +45,7 @@ void GameEngine::draw() {
 	window.clear();
 
 	window.setView(view);
-	window.draw(map);
+	window.draw(levelManager.getMap());
 
 	//drawGrid();
 
@@ -124,21 +124,29 @@ void GameEngine::handleEvent(sf::Event event) {
 	if (event.type == sf::Event::Resized)
 		view = getViewport(event.size.width, event.size.height);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+		if (levelManager.getCurrentLevel().levelNumber == 1) {
+			loadLevel(levelManager.getLevel2());
+			std::cout << "LEVEL 2" << std::endl;
+		}
+	}
 
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+		if (levelManager.getCurrentLevel().levelNumber == 2) {
+			loadLevel(levelManager.getLevel1());
+			std::cout << "LEVEL 1" << std::endl;
+		}
 	}
 		
 }
 
 //
-// Loads the map for a given level
+// Loads level from LevelManager
 //
 void GameEngine::loadLevel(LevelManager::Level level) {
 	player.startPosition = Vector2(level.startPosition);
-
-	// create the tilemap from the level definition
-	if (!map.load("src/resources/tilemap_v1.png", sf::Vector2u(64, 64), level.map, levelWidth, levelHeight))
-		std::cout << "Error loading TileMap";
+	player.respawn();
+	levelManager.setLevel(level);
 }
 
 //

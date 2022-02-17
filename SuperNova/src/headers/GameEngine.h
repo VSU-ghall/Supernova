@@ -11,11 +11,10 @@ class GameEngine
 {
 private:
 	Player player;
-	TileMap map;
-	const int tileSize = 64;
-	int levelWidth = 20, levelHeight = 12;
-	float windowWidth = tileSize * levelWidth, windowHeight = tileSize * levelHeight;
 	LevelManager levelManager;
+	const int tileSize = 64;
+	float windowWidth = tileSize * levelManager.getLevel1().levelWidth, 
+		  windowHeight = tileSize * levelManager.getLevel1().levelHeight;
 
 	// creates global window
 	sf::RenderWindow window;

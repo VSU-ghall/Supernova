@@ -5,7 +5,7 @@ struct Level {
 	Vector2 startPosition;
 };
 
-LevelManager::LevelManager() {
+LevelManager::LevelManager(){
 	init();
 }
 
@@ -43,12 +43,24 @@ void LevelManager::init() {
 	LevelManager::level1.startPosition = Vector2(5, 9);
 
 	LevelManager::level2.map = new int[levelSize] {
-		
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+			1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+			1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 1,
+			1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1,
+			1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1,
+			1, 0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1,
+			1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1,
+			1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1,
+			1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1,
+			1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 1,
+			1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 	};
+	LevelManager::level2.startPosition = Vector2(5, 11);
 }
 
-LevelManager::Level LevelManager::getTestLevel() {
-	return LevelManager::testLevel;
+LevelManager::Level LevelManager::getCurrentLevel() {
+	return currentLevel;
 }
 
 LevelManager::Level LevelManager::getLevel1() {
@@ -57,4 +69,23 @@ LevelManager::Level LevelManager::getLevel1() {
 
 LevelManager::Level LevelManager::getLevel2() {
 	return LevelManager::level2;
+}
+
+LevelManager::Level LevelManager::getTestLevel() {
+	return LevelManager::testLevel;
+}
+
+TileMap LevelManager::getMap() {
+	return map;
+}
+
+void LevelManager::loadLevel(Level level) {
+	// create the tilemap from the level definition
+	if (!map.load("src/resources/tilemap_v1.png", sf::Vector2u(64, 64), level.map, level.levelWidth, level.levelHeight))
+		std::cout << "Error loading TileMap";
+}
+
+void LevelManager::setLevel(Level level) {
+	currentLevel = level;
+	loadLevel(level);
 }

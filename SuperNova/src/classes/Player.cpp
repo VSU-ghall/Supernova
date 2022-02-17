@@ -39,14 +39,6 @@ void Player::init() {
 	playerSprite.setOrigin((sf::Vector2f)texture.getSize() / 2.f);
 }
 
-void Player::update() {
-	checkMovement();
-}
-
-void Player::draw(sf::RenderWindow& window) {
-	window.draw(playerSprite);
-}
-
 // 
 // Checks if A or D is pressed and moves left or right respectively
 // ( Movement is animated on a ratio (set by the variable animationPerFrame) )
@@ -75,4 +67,16 @@ void Player::checkMovement() {
 	}
 
 	
+}
+
+void Player::draw(sf::RenderWindow& window) {
+	window.draw(playerSprite);
+}
+
+void Player::respawn() {
+	playerSprite.setPosition(64 * startPosition.x, 64 * startPosition.y);
+}
+
+void Player::update() {
+	checkMovement();
 }

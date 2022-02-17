@@ -12,9 +12,10 @@ class Player
 		float getX();
 		float getY();
 
-		void update();
 		void draw(sf::RenderWindow& window);
 		void checkMovement();
 		void init();
+		void respawn();
+		void update();
 };
 
