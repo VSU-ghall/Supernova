@@ -37,14 +37,14 @@ void LevelManager::init() {
 		12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12,
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 	};
-	LevelManager::level1.startPosition = Vector2(5, 9);
+		LevelManager::level1.startPosition = Vector2(5, 9);
 
-	sf::Texture *level1Texture = &LevelManager::level1.texture;
-	if (!level1Texture->loadFromFile("src/resources/space_background_sprite_sheet.png"))
-		std::cout << "Could not load level 1 background" << std::endl;
-	LevelManager::level1.background.setTexture(*level1Texture);
+		sf::Texture *level1Texture = &LevelManager::level1.texture;
+		if (!level1Texture->loadFromFile("src/resources/space_background_sprite_sheet.png"))
+			std::cout << "Could not load level 1 background" << std::endl;
+		LevelManager::level1.background.setTexture(*level1Texture);
 
-	LevelManager::level1.hasBackground = true;
+		LevelManager::level1.hasBackground = true;
 
 
 	LevelManager::level2.map = new int[level2.width * level2.height] {
