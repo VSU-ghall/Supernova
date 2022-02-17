@@ -1,16 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="src\Entity.cpp" />
-    <ClCompile Include="src\EntityManager.cpp" />
+    <ClCompile Include="src\classes\Entity.cpp" />
+    <ClCompile Include="src\classes\EntityManager.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\objects\Player.cpp" />
-    <ClCompile Include="src\Vector2.cpp" />
-    <ClCompile Include="src\objects\TileMap.cpp" />
-    <ClCompile Include="src\GameEngine.cpp" />
+    <ClCompile Include="src\classes\Player.cpp" />
+    <ClCompile Include="src\classes\Vector2.cpp" />
+    <ClCompile Include="src\classes\TileMap.cpp" />
+    <ClCompile Include="src\classes\GameEngine.cpp" />
+    <ClCompile Include="src\classes\LevelManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
+<<<<<<< HEAD
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\EntityManager.h" />
     <ClInclude Include="src\objects\Player.h" />
@@ -18,6 +20,15 @@
     <ClInclude Include="src\objects\TileMap.h" />
     <ClInclude Include="src\GameEngine.h" />
     <ClInclude Include="src\Components.h" />
+=======
+    <ClInclude Include="src\headers\Entity.h" />
+    <ClInclude Include="src\headers\EntityManager.h" />
+    <ClInclude Include="src\headers\Player.h" />
+    <ClInclude Include="src\headers\Vector2.h" />
+    <ClInclude Include="src\headers\TileMap.h" />
+    <ClInclude Include="src\headers\GameEngine.h" />
+    <ClInclude Include="src\headers\LevelManager.h" />
+>>>>>>> main
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SuperNova.rc" />
@@ -26,6 +37,8 @@
     <Image Include="src\resources\astronaut.png" />
     <Image Include="src\resources\astronaut_walk.png" />
     <Image Include="src\resources\testTileSet.png" />
+    <Image Include="src\resources\rocket_sprite_sheet.png" />
+    <Image Include="src\resources\space_background_sprite_sheet.png" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="src\resources\background_music.wav" />

@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include <GL/glut.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/window.hpp>
@@ -84,6 +85,9 @@ void drawGrid() {
 #include "Entity.h"
 #include "EntityManager.h"
 #include "Components.h"
+=======
+#include "headers/GameEngine.h"
+>>>>>>> main
 
 int main(int argc, char** argv) {
 	GameEngine game;
@@ -97,5 +101,4 @@ int main(int argc, char** argv) {
 	CMovement m2 = m.getEntities("enemy").front().get()->getComponent<CMovement>();
 
 	return 0;
->>>>>>> db3e313d0918083fdbd5ce186a7397541b574211
 }
