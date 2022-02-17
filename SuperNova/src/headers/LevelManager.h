@@ -10,11 +10,10 @@ static class LevelManager
 
 		struct Level {
 			LevelManager* levelManager;
+			int levelWidth = 20, levelHeight = 12, levelNumber = (levelManager->numberOfLevels)++;
 			int* map;
 			Vector2 startPosition;
-			int levelNumber = (levelManager->numberOfLevels)++;
-			int levelWidth = 20, levelHeight = 12;
-		} testLevel = {this}, level1 = {this}, level2 = {this}, currentLevel = {this};
+		} testLevel = {this}, level1 = {this}, level2 = {this, 25, 17}, currentLevel = {this};
 
 		LevelManager();
 		Level getCurrentLevel();
@@ -25,8 +24,6 @@ static class LevelManager
 		void setLevel(Level level);
 
 	private:
-		static const int levelSize = 240;
-		
 		TileMap map;
 
 		void init();

@@ -13,8 +13,7 @@ private:
 	Player player;
 	LevelManager levelManager;
 	const int tileSize = 64;
-	float windowWidth = tileSize * levelManager.getLevel1().levelWidth, 
-		  windowHeight = tileSize * levelManager.getLevel1().levelHeight;
+	float windowWidth, windowHeight;
 
 	// creates global window
 	sf::RenderWindow window;

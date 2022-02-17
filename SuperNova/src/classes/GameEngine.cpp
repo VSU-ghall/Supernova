@@ -1,7 +1,7 @@
 #include "headers/GameEngine.h"
 
 GameEngine::GameEngine() 
-	:window(sf::VideoMode(windowWidth, windowHeight), "SuperNova")
+	:window(sf::VideoMode(), "SuperNova")
 {
 	
 }
@@ -27,9 +27,6 @@ void GameEngine::run() {
 //	Initializes the game components
 //
 void GameEngine::init() {
-	view.setSize(windowWidth, windowHeight);
-	view.setCenter(view.getSize().x / 2, view.getSize().y / 2);
-	view = getViewport(windowWidth, windowHeight);
 	window.setFramerateLimit(60);
 
 	loadLevel(levelManager.getLevel1());
@@ -125,17 +122,13 @@ void GameEngine::handleEvent(sf::Event event) {
 		view = getViewport(event.size.width, event.size.height);
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-		if (levelManager.getCurrentLevel().levelNumber == 1) {
+		if (levelManager.getCurrentLevel().levelNumber == 1)
 			loadLevel(levelManager.getLevel2());
-			std::cout << "LEVEL 2" << std::endl;
-		}
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-		if (levelManager.getCurrentLevel().levelNumber == 2) {
+		if (levelManager.getCurrentLevel().levelNumber == 2)
 			loadLevel(levelManager.getLevel1());
-			std::cout << "LEVEL 1" << std::endl;
-		}
 	}
 		
 }
@@ -147,6 +140,22 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 	player.startPosition = Vector2(level.startPosition);
 	player.respawn();
 	levelManager.setLevel(level);
+
+	sf::String title("SuperNova - Level " + std::to_string(level.levelNumber));
+	window.setTitle(title);
+
+	auto desktop = sf::VideoMode::getDesktopMode();
+	if (window.getSize().x != desktop.width) {
+		windowWidth = tileSize * level.levelWidth;
+		windowHeight = tileSize * level.levelHeight;
+		window.setSize(sf::Vector2u(windowWidth, windowHeight));
+
+		window.setPosition(sf::Vector2i(desktop.width / 2 - window.getSize().x / 2, desktop.height / 2 - window.getSize().y / 2));
+	}
+
+	view.setSize(windowWidth, windowHeight);
+	view.setCenter(view.getSize().x / 2, view.getSize().y / 2);
+	view = getViewport(windowWidth, windowHeight);
 }
 
 //

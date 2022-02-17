@@ -10,7 +10,7 @@ LevelManager::LevelManager(){
 }
 
 void LevelManager::init() {
-	LevelManager::testLevel.map = new int[levelSize] {
+	LevelManager::testLevel.map = new int[testLevel.levelWidth * testLevel.levelHeight] {
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
 		1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 1,
@@ -26,7 +26,7 @@ void LevelManager::init() {
 	};
 	LevelManager::testLevel.startPosition = Vector2(5, 11);
 
-	LevelManager::level1.map = new int[levelSize] {
+	LevelManager::level1.map = new int[level1.levelWidth * level1.levelHeight] {
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 		 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,
@@ -42,8 +42,8 @@ void LevelManager::init() {
 	};
 	LevelManager::level1.startPosition = Vector2(5, 9);
 
-	LevelManager::level2.map = new int[levelSize] {
-		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+	LevelManager::level2.map = new int[level2.levelWidth * level2.levelHeight] {
+			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 			1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
 			1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 1,
 			1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1,
