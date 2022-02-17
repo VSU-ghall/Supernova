@@ -27,6 +27,8 @@
     <Image Include="src\resources\astronaut.png" />
     <Image Include="src\resources\astronaut_walk.png" />
     <Image Include="src\resources\testTileSet.png" />
+    <Image Include="src\resources\rocket_sprite_sheet.png" />
+    <Image Include="src\resources\space_background_sprite_sheet.png" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="src\resources\background_music.wav" />

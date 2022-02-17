@@ -1,19 +1,35 @@
 #pragma once
-
+#include "Vector2.h"
+#include "iostream"
+#include <headers/TileMap.h>
 
 static class LevelManager
 {
-	private:
-		static const int levelSize = 240;
-		int* testLevel;
-		int* level1;
-		int* level2;
-		void init();
-
 	public:
+		int numberOfLevels = 0;
+
+		struct Level {
+			LevelManager* levelManager;
+			int width = 20, height = 12, levelNumber = (levelManager->numberOfLevels)++;
+			int* map;
+			Vector2 startPosition;
+			sf::Sprite background;
+			sf::Texture texture;
+			bool hasBackground = false;
+		} testLevel = {this}, level1 = {this}, level2 = {this, 25, 17}, currentLevel = {this};
+
 		LevelManager();
-		int* getTestLevel();
-		int* getLevel1();
-		int* getLevel2();
+		Level getCurrentLevel();
+		Level getLevel1();
+		Level getLevel2();
+		Level getTestLevel();
+		TileMap getMap();
+		void setLevel(Level level);
+
+	private:
+		TileMap map;
+
+		void init();
+		void loadLevel(Level level);
 };
 
