@@ -155,6 +155,7 @@
     <ClCompile Include="src\classes\GameEngine.cpp" />
     <ClCompile Include="src\classes\Entity.cpp" />
     <ClCompile Include="src\classes\EntityManager.cpp" />
+    <ClCompile Include="src\classes\SpriteManager.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\classes\Player.cpp" />
     <ClCompile Include="src\classes\Vector2.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="src\headers\Entity.h" />
     <ClInclude Include="src\headers\EntityManager.h" />
     <ClInclude Include="src\headers\Player.h" />
+    <ClInclude Include="src\headers\SpriteManager.h" />
     <ClInclude Include="src\headers\Vector2.h" />
     <ClInclude Include="src\headers\TileMap.h" />
   </ItemGroup>

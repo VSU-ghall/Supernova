@@ -11,7 +11,8 @@ class GameEngine
 {
 private:
 	Player player;
-	LevelManager levelManager;
+	SpriteManager spriteManager;
+	LevelManager levelManager = LevelManager(spriteManager);
 	const int tileSize = 64;
 	float windowWidth, windowHeight;
 

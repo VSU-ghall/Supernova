@@ -2,6 +2,8 @@
 #include "Vector2.h"
 #include "iostream"
 #include <headers/TileMap.h>
+#include <headers/SpriteManager.h>
+
 
 static class LevelManager
 {
@@ -18,7 +20,7 @@ static class LevelManager
 			bool hasBackground = false;
 		} testLevel = {this}, level1 = {this}, level2 = {this, 25, 17}, currentLevel = {this};
 
-		LevelManager();
+		LevelManager(SpriteManager spriteManager);
 		Level getCurrentLevel();
 		Level getLevel1();
 		Level getLevel2();
@@ -28,6 +30,7 @@ static class LevelManager
 
 	private:
 		TileMap map;
+		SpriteManager spriteManager;
 
 		void init();
 		void loadLevel(Level level);
