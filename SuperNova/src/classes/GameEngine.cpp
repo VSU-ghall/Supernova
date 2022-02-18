@@ -210,4 +210,5 @@ void GameEngine::playMusic()
 //
 void GameEngine::update() {
 	player.update();
+	spriteManager.animate();
 }

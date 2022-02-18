@@ -1,7 +1,8 @@
 #include "headers/LevelManager.h"
 
 
-LevelManager::LevelManager(){
+LevelManager::LevelManager(SpriteManager spriteManager){
+	this->spriteManager = spriteManager;
 	init();
 }
 
@@ -39,11 +40,7 @@ void LevelManager::init() {
 	};
 		LevelManager::level1.startPosition = Vector2(5, 9);
 
-		sf::Texture *level1Texture = &LevelManager::level1.texture;
-		if (!level1Texture->loadFromFile("src/resources/space_background_sprite_sheet.png"))
-			std::cout << "Could not load level 1 background" << std::endl;
-		LevelManager::level1.background.setTexture(*level1Texture);
-
+		LevelManager::level1.background = spriteManager.loadSprite("src/resources/space_background_sprite_sheet.png", true, 4, 1280, 768, 1000);
 		LevelManager::level1.hasBackground = true;
 
 
