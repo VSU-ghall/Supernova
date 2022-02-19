@@ -163,6 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\headers\Sprite.h" />
+    <ClInclude Include="src\headers\Components.h" />
     <ClInclude Include="src\headers\LevelManager.h" />
     <ClInclude Include="src\headers\GameEngine.h" />
     <ClInclude Include="resource.h" />

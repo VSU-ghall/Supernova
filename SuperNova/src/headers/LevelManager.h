@@ -3,7 +3,7 @@
 #include "iostream"
 #include <headers/TileMap.h>
 #include <headers/Sprite.h>
-
+#include <vector>
 
 static class LevelManager
 {
@@ -30,6 +30,7 @@ static class LevelManager
 		Level getTestLevel();
 		TileMap getMap();
 		void setLevel(Level level);
+		std::vector<Vector2> getLevelVector();
 
 	private:
 		TileMap map;
