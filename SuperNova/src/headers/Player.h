@@ -14,10 +14,10 @@ class Player
 		float getY();
 
 		void draw(sf::RenderWindow& window);
-		void checkMovement();
+		void checkMovement(std::vector<Vector2> vectors);
 		void init();
 		void respawn();
-		void update();
-		bool checkCollision(float velo);
+		void update(std::vector<Vector2> vectors);
+		bool checkCollision(float velo, std::vector<Vector2> vectors);
 };
 
