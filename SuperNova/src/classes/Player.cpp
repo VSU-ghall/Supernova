@@ -45,10 +45,10 @@ void Player::init() {
 // Checks if A or D is pressed and moves left or right respectively
 // ( Movement is animated on a ratio (set by the variable animationPerFrame) )
 //
-void Player::checkMovement(std::vector<Vector2> vectors) {
+void Player::checkMovement(std::vector<Vector2> vectors, LevelManager::Level currentLevel) {
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-		if (checkCollision(playerSpeed, vectors)) {
+		if (checkCollision(playerSpeed, vectors, currentLevel)) {
 			x += playerSpeed;
 			playerSprite.move(playerSpeed, 0);
 			//the sprite size in sprite sheet is 800x1600. this tells textureRect to start at beginning and every time walkCount is added, then it goes to next frame
@@ -58,7 +58,7 @@ void Player::checkMovement(std::vector<Vector2> vectors) {
 		
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-		if(checkCollision(-playerSpeed, vectors)){
+		if(checkCollision(-playerSpeed, vectors, currentLevel)){
 			x -= playerSpeed;
 			playerSprite.move(-playerSpeed, 0);
 			//the left facing frames are at 800*2 x 1600 so this tells does same as above but lower on the sprite sheet
@@ -90,17 +90,17 @@ void Player::respawn() {
 	y = startPosition.y * 64;
 }
 
-void Player::update(std::vector<Vector2> vectors) {
-	checkMovement(vectors);
+void Player::update(std::vector<Vector2> vectors, LevelManager::Level currentLevel) {
+	checkMovement(vectors, currentLevel);
 }
 
 //returns false if movement will cause collision. returns true otherwise
-bool Player::checkCollision(float velo, std::vector<Vector2> vectors) {
+bool Player::checkCollision(float velo, std::vector<Vector2> vectors, LevelManager::Level currentLevel) {
 	std::cout << "Current Position " << playerSprite.getPosition().x << " " << playerSprite.getPosition().y << "\n";
 	float nx = x + velo;
 	float ny = y;
 	std::cout << "Future position " << nx << "\n";
-	if (nx > 1472 || nx < 256) {
+	if (nx > (currentLevel.width + 3) * 64 || nx < 256) {
 		return false;
 	}
 	if (velo > 0) {//moving right
