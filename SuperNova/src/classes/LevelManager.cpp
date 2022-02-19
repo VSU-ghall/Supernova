@@ -103,3 +103,20 @@ void LevelManager::setLevel(Level level) {
 	currentLevel = level;
 	loadLevel(currentLevel);
 }
+
+//Iterates down the columns of the TileMap. IF there is a tile at the index, add the coordinates of the tile to vector.
+std::vector<Vector2> LevelManager::getLevelVector() {
+	std::vector<Vector2> vectors;
+	int current = 0;
+	for (int i = 0; i < currentLevel.width; i++) {
+		for (int j = 0; j < currentLevel.height; j++) {
+			if (currentLevel.map[current] != 0) {
+				float y = (j + 1) * 64;
+				vectors.push_back(Vector2(((i + 4) * 64), y));
+			}
+			current += currentLevel.width;
+		}
+		current = i + 1;
+	}
+	return vectors;
+}

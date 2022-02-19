@@ -1,4 +1,5 @@
 #include "headers/GameEngine.h"
+#include <vector>
 
 GameEngine::GameEngine() 
 	:window(sf::VideoMode(), "SuperNova")
@@ -29,7 +30,6 @@ void GameEngine::init() {
 	window.setFramerateLimit(60);
 
 	loadLevel(levelManager.getLevel1());
-	background = *levelManager.getLevel1().background;
 	player.init();
 
 	gamebar.setFillColor(sf::Color(59, 30, 11));
@@ -168,6 +168,7 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 	player.startPosition = Vector2(level.startPosition);
 	player.respawn();
 	levelManager.setLevel(level);
+	//levelVector = levelManager.getLevelVector();
 
 
 	sf::String title("SuperNova - Level " + std::to_string(level.levelNumber));
@@ -218,7 +219,7 @@ void GameEngine::playMusic()
 // Updates all game objects
 //
 void GameEngine::update() {
-	player.update();
+	player.update(levelVector);
 
 	Sprite sprite; sprite.animateAll();
 }

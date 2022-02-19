@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Vector2.h"
+#include <stdlib.h>
 
 class Player
 {
@@ -13,9 +14,10 @@ class Player
 		float getY();
 
 		void draw(sf::RenderWindow& window);
-		void checkMovement();
+		void checkMovement(std::vector<Vector2> vectors);
 		void init();
 		void respawn();
-		void update();
+		void update(std::vector<Vector2> vectors);
+		bool checkCollision(float velo, std::vector<Vector2> vectors);
 };
 
