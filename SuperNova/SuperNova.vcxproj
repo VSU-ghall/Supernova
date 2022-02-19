@@ -161,13 +161,9 @@
     <ClCompile Include="src\classes\TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
-    <ClInclude Include="src\Components.h" />
-    <ClInclude Include="src\GameEngine.h" />
-=======
+    <ClInclude Include="src\headers\Components.h" />
     <ClInclude Include="src\headers\LevelManager.h" />
     <ClInclude Include="src\headers\GameEngine.h" />
->>>>>>> main
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\headers\Entity.h" />
     <ClInclude Include="src\headers\EntityManager.h" />
