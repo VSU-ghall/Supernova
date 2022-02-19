@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\classes\Sprite.cpp" />
     <ClCompile Include="src\classes\LevelManager.cpp" />
     <ClCompile Include="src\classes\GameEngine.cpp" />
     <ClCompile Include="src\classes\Entity.cpp" />
@@ -161,6 +162,7 @@
     <ClCompile Include="src\classes\TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\headers\Sprite.h" />
     <ClInclude Include="src\headers\LevelManager.h" />
     <ClInclude Include="src\headers\GameEngine.h" />
     <ClInclude Include="resource.h" />
@@ -176,9 +178,13 @@
   <ItemGroup>
     <Image Include="src\resources\astronaut.png" />
     <Image Include="src\resources\astronaut_walk.png" />
+    <Image Include="src\resources\Level1Button.png" />
+    <Image Include="src\resources\Level2Button.png" />
     <Image Include="src\resources\rocket_sprite_sheet.png" />
     <Image Include="src\resources\space_background_sprite_sheet.png" />
     <Image Include="src\resources\testTileSet.png" />
+    <Image Include="src\resources\tilemap_v2.png" />
+    <Image Include="src\resources\waterfall_background.png" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="src\resources\background_music.wav" />

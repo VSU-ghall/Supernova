@@ -3,7 +3,6 @@
 GameEngine::GameEngine() 
 	:window(sf::VideoMode(), "SuperNova")
 {
-	
 }
 
 void GameEngine::run() {
@@ -30,7 +29,18 @@ void GameEngine::init() {
 	window.setFramerateLimit(60);
 
 	loadLevel(levelManager.getLevel1());
+	background = *levelManager.getLevel1().background;
 	player.init();
+
+	gamebar.setFillColor(sf::Color(59, 30, 11));
+	
+	if (!btnLevel1Texture.loadFromFile("src/resources/Level1Button.png"))
+		std::cout << "Could not load level 1 button" << std::endl;
+	btnLevel1.setTexture(btnLevel1Texture);
+
+	if (!btnLevel2Texture.loadFromFile("src/resources/Level2Button.png"))
+		std::cout << "Could not load level 2 button" << std::endl;
+	btnLevel2.setTexture(btnLevel2Texture);
 
 	playMusic();
 }
@@ -42,13 +52,18 @@ void GameEngine::draw() {
 	window.clear();
 	window.setView(view);
 
-	if (levelManager.currentLevel.hasBackground)
-		window.draw(levelManager.currentLevel.background);
+	if (levelManager.currentLevel.hasBackground) {
+		window.draw(levelManager.getCurrentBackground().getSprite());
+	}
+
 	window.draw(levelManager.getMap());
 
 	//drawGrid();
 
 	player.draw(window);
+
+	window.draw(gamebar);
+	window.draw(btnLevel1); window.draw(btnLevel2);
 
 	window.display();
 }
@@ -84,7 +99,7 @@ void GameEngine::drawGrid() {
 //
 sf::View GameEngine::getViewport(float width, float height) {
 	float windowRatio = width / height;
-	float viewRatio = windowWidth / windowHeight;
+	float viewRatio = viewWidth / viewHeight;
 	float sizeX = 1;
 	float sizeY = 1;
 	float posX = 0;
@@ -120,17 +135,28 @@ void GameEngine::handleEvent(sf::Event event) {
 		window.close();
 
 	// sets viewport when window is resized
-	if (event.type == sf::Event::Resized)
+	if (event.type == sf::Event::Resized) {
 		view = getViewport(event.size.width, event.size.height);
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-		if (levelManager.getCurrentLevel().levelNumber == 1)
-			loadLevel(levelManager.getLevel2());
+		gamebar.setSize(sf::Vector2f(event.size.width, 75));
+		btnLevel1.setPosition(gamebar.getPosition().x + 10, gamebar.getPosition().y + 5);
+		btnLevel2.setPosition(gamebar.getPosition().x + 20 + btnLevel1.getTexture()->getSize().x, gamebar.getPosition().y + 5);
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-		if (levelManager.getCurrentLevel().levelNumber == 2)
-			loadLevel(levelManager.getLevel1());
+	sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
+	sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+	if (btnLevel1.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+			if (levelManager.getCurrentLevel().levelNumber == 2)
+				loadLevel(levelManager.getLevel1());
+		}
+		if (event.type == sf::Event::MouseButtonReleased) {}
+	}
+	if (btnLevel2.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+			if (levelManager.getCurrentLevel().levelNumber == 1)
+				loadLevel(levelManager.getLevel2());
+		}
+		if (event.type == sf::Event::MouseButtonReleased) {}
 	}
 		
 }
@@ -143,23 +169,30 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 	player.respawn();
 	levelManager.setLevel(level);
 
+
 	sf::String title("SuperNova - Level " + std::to_string(level.levelNumber));
 	window.setTitle(title);
 
 	auto desktop = sf::VideoMode::getDesktopMode();
-	if (window.getSize().x != desktop.width) {
-		windowWidth = tileSize * level.width;
-		windowHeight = tileSize * level.height;
+	viewWidth = tileSize * level.width;
+	viewHeight = tileSize * level.height;
 
-		window.setSize(sf::Vector2u(windowWidth, windowHeight));
+	if (window.getSize().x != desktop.width) { // if window is not full screen
 
+		window.setSize(sf::Vector2u(viewWidth, viewHeight));
 		window.setPosition(sf::Vector2i(desktop.width / 2 - window.getSize().x / 2, desktop.height / 2 - window.getSize().y / 2));
-		
+	
+		view.setSize(tileSize * level.width, tileSize * level.height + gamebar.getSize().y);
+		view = getViewport(viewWidth, viewHeight);
+		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
 	}
+	else {
 
-	view.setSize(tileSize * level.width, tileSize * level.height);
-	view.setCenter(view.getSize().x / 2, view.getSize().y / 2);
-	view = getViewport(windowWidth, windowHeight);
+		view = getViewport(window.getSize().x, window.getSize().y);
+		view.setSize(viewWidth, viewHeight);
+		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
+
+	}
 }
 
 //
@@ -186,4 +219,6 @@ void GameEngine::playMusic()
 //
 void GameEngine::update() {
 	player.update();
+
+	Sprite sprite; sprite.animateAll();
 }

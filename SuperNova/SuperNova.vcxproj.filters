@@ -9,6 +9,7 @@
     <ClCompile Include="src\classes\TileMap.cpp" />
     <ClCompile Include="src\classes\GameEngine.cpp" />
     <ClCompile Include="src\classes\LevelManager.cpp" />
+    <ClCompile Include="src\classes\Sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -19,6 +20,7 @@
     <ClInclude Include="src\headers\TileMap.h" />
     <ClInclude Include="src\headers\GameEngine.h" />
     <ClInclude Include="src\headers\LevelManager.h" />
+    <ClInclude Include="src\headers\Sprite.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SuperNova.rc" />
@@ -29,6 +31,10 @@
     <Image Include="src\resources\testTileSet.png" />
     <Image Include="src\resources\rocket_sprite_sheet.png" />
     <Image Include="src\resources\space_background_sprite_sheet.png" />
+    <Image Include="src\resources\Level1Button.png" />
+    <Image Include="src\resources\Level2Button.png" />
+    <Image Include="src\resources\tilemap_v2.png" />
+    <Image Include="src\resources\waterfall_background.png" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="src\resources\background_music.wav" />
