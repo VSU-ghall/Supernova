@@ -98,6 +98,7 @@ void Player::update(std::vector<Vector2> vectors) {
 bool Player::checkCollision(float velo, std::vector<Vector2> vectors) {
 	std::cout << "Current Position " << playerSprite.getPosition().x << " " << playerSprite.getPosition().y << "\n";
 	float nx = x + velo;
+	float ny = y;
 	std::cout << "Future position " << nx << "\n";
 	if (nx > 1472 || nx < 256) {
 		return false;
@@ -107,7 +108,7 @@ bool Player::checkCollision(float velo, std::vector<Vector2> vectors) {
 			if (vec.x < x) {
 				continue;
 			}
-			if ((vec.x == nx || vec.x <= nx + 64 ) && vec.y == y) {
+			if ((vec.x == nx || vec.x <= nx + 64) && (vec.y == ny || ny - 64 == vec.y)) {
 				return false;
 			}
 		}
@@ -117,7 +118,7 @@ bool Player::checkCollision(float velo, std::vector<Vector2> vectors) {
 			if (vec.x > x) {
 				continue;
 			}
-			if ((vec.x == nx || vec.x >= nx - 64) && vec.y == y) {
+			if ((vec.x == nx || vec.x >= nx - 64) && (vec.y == y || ny -64 == vec.y)) {
 				return false;
 			}
 		}
