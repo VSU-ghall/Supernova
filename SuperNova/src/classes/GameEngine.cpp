@@ -99,7 +99,7 @@ void GameEngine::drawGrid() {
 //
 sf::View GameEngine::getViewport(float width, float height) {
 	float windowRatio = width / height;
-	float viewRatio = windowWidth / windowHeight;
+	float viewRatio = viewWidth / viewHeight;
 	float sizeX = 1;
 	float sizeY = 1;
 	float posX = 0;
@@ -173,20 +173,26 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 	sf::String title("SuperNova - Level " + std::to_string(level.levelNumber));
 	window.setTitle(title);
 
-	windowWidth = tileSize * level.width;
-	windowHeight = tileSize * level.height;
-
 	auto desktop = sf::VideoMode::getDesktopMode();
+	viewWidth = tileSize * level.width;
+	viewHeight = tileSize * level.height;
+
 	if (window.getSize().x != desktop.width) { // if window is not full screen
-		window.setSize(sf::Vector2u(windowWidth, windowHeight));
 
+		window.setSize(sf::Vector2u(viewWidth, viewHeight));
 		window.setPosition(sf::Vector2i(desktop.width / 2 - window.getSize().x / 2, desktop.height / 2 - window.getSize().y / 2));
-		
+	
+		view.setSize(tileSize * level.width, tileSize * level.height + gamebar.getSize().y);
+		view = getViewport(viewWidth, viewHeight);
+		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
 	}
+	else {
 
-	view.setSize(tileSize * level.width, tileSize * level.height + gamebar.getSize().y);
-	view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
-	view = getViewport(windowWidth, windowHeight);
+		view = getViewport(window.getSize().x, window.getSize().y);
+		view.setSize(viewWidth, viewHeight);
+		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
+
+	}
 }
 
 //

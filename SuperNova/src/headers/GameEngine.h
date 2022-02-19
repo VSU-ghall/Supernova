@@ -15,7 +15,7 @@ private:
 	Player player;
 	LevelManager levelManager;
 	const int tileSize = 64;
-	float windowWidth, windowHeight;
+	float viewWidth, viewHeight;
 
 	// creates global window
 	sf::RenderWindow window;
