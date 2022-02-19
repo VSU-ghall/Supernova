@@ -1,8 +1,7 @@
 #include "headers/LevelManager.h"
 
 
-LevelManager::LevelManager(){//}(SpriteManager* spriteManager) {
-	//this->spriteManager = spriteManager;
+LevelManager::LevelManager(){
 	init();
 }
 
