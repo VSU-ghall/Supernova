@@ -21,6 +21,7 @@ private:
 	sf::Music music;
 	sf::Sprite background;
 	sf::Texture texture;
+	std::vector<Vector2> levelVector;
 
 public:
 	GameEngine();

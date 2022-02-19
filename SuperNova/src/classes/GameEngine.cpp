@@ -1,4 +1,5 @@
 #include "headers/GameEngine.h"
+#include <vector>
 
 GameEngine::GameEngine() 
 	:window(sf::VideoMode(), "SuperNova")
@@ -142,6 +143,8 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 	player.startPosition = Vector2(level.startPosition);
 	player.respawn();
 	levelManager.setLevel(level);
+	levelVector = levelManager.getLevelVector();
+
 
 	sf::String title("SuperNova - Level " + std::to_string(level.levelNumber));
 	window.setTitle(title);
@@ -160,6 +163,7 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 	view.setSize(tileSize * level.width, tileSize * level.height);
 	view.setCenter(view.getSize().x / 2, view.getSize().y / 2);
 	view = getViewport(windowWidth, windowHeight);
+
 }
 
 //
@@ -185,5 +189,5 @@ void GameEngine::playMusic()
 // Updates all game objects
 //
 void GameEngine::update() {
-	player.update();
+	player.update(levelVector);
 }
