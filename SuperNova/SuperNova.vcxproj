@@ -184,6 +184,7 @@
     <Image Include="src\resources\space_background_sprite_sheet.png" />
     <Image Include="src\resources\testTileSet.png" />
     <Image Include="src\resources\tilemap_v2.png" />
+    <Image Include="src\resources\waterfall_background.png" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="src\resources\background_music.wav" />
