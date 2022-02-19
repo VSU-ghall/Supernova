@@ -11,7 +11,7 @@ extern class Sprite
 
 		Sprite();
 		Sprite(const std::string& filePath);
-		Sprite(const std::string& filePath, bool animated, bool random, int numFrames, int width, int height, int frequency);
+		Sprite(const std::string& filePath, bool animated, bool random, int numFrames, int width, int height, float scale, int frequency);
 
 		void animate();
 		void animateAll();
@@ -22,6 +22,7 @@ extern class Sprite
 
 	private:
 		int width, height, frequency, numFrames, offset = 0;
+		float scale;
 		bool animated = false, random = false;
 		sf::Clock timer;
 };

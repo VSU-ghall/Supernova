@@ -13,7 +13,7 @@ Sprite::Sprite(const std::string& filePath) {
 	sprites.push_back(this);
 }
 
-Sprite::Sprite(const std::string& filePath, bool animated, bool random, int numFrames, int width, int height, int frequency)
+Sprite::Sprite(const std::string& filePath, bool animated, bool random, int numFrames, int width, int height, float scale, int frequency)
 	:Sprite(filePath)
 {
 	this->animated = animated;
@@ -21,7 +21,10 @@ Sprite::Sprite(const std::string& filePath, bool animated, bool random, int numF
 	this->numFrames = numFrames;
 	this->width = width;
 	this->height = height;
+	this->scale = scale;
 	this->frequency = frequency;
+
+	sprite.setScale(sf::Vector2f(scale, scale));
 }
 
 void Sprite::animate() {
