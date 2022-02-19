@@ -36,8 +36,6 @@ void Sprite::animate() {
 			if (offset == numFrames) offset = 0;
 		}
 
-		sprite.setTexture(texture);
-
 		//std::cout << "offset: " << offset << std::endl;
 
 		timer.restart();
