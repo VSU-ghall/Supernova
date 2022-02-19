@@ -33,6 +33,7 @@
     <Image Include="src\resources\space_background_sprite_sheet.png" />
     <Image Include="src\resources\Level1Button.png" />
     <Image Include="src\resources\Level2Button.png" />
+    <Image Include="src\resources\tilemap_v2.png" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="src\resources\background_music.wav" />
