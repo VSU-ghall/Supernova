@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Vector2.h"
+#include <stdlib.h>
 
 class Player
 {
@@ -17,5 +18,6 @@ class Player
 		void init();
 		void respawn();
 		void update();
+		bool checkCollision(float velo);
 };
 

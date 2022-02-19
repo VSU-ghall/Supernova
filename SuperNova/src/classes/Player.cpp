@@ -23,6 +23,8 @@ void Player::init() {
 	//playerSprite.setPosition(64 * 5, 64 * 9);
 	playerSprite.setPosition(64 * startPosition.x, 64 * startPosition.y);
 	playerSprite.setTextureRect(sf::IntRect(0, 0, 834, 1666));
+	x = startPosition.x * 64;
+	y = startPosition.y * 64;
 	
 	//this is the Size of the player
 	playerSize = 0.077f;
@@ -46,14 +48,23 @@ void Player::init() {
 void Player::checkMovement() {
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-		playerSprite.move(playerSpeed, 0);
-		//the sprite size in sprite sheet is 800x1600. this tells textureRect to start at beginning and every time walkCount is added, then it goes to next frame
-		playerSprite.setTextureRect(sf::IntRect(offset * 834, 0, 834, 1668));
+		if (checkCollision(playerSpeed)) {
+			x += playerSpeed;
+			playerSprite.move(playerSpeed, 0);
+			//the sprite size in sprite sheet is 800x1600. this tells textureRect to start at beginning and every time walkCount is added, then it goes to next frame
+			playerSprite.setTextureRect(sf::IntRect(offset * 834, 0, 834, 1668));
+		}
+		
+		
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-		playerSprite.move(-playerSpeed, 0);
-		//the left facing frames are at 800*2 x 1600 so this tells does same as above but lower on the sprite sheet
-		playerSprite.setTextureRect(sf::IntRect(offset * 834, 834 * 2, 800, 1668));
+		if(checkCollision(-playerSpeed)){
+			x -= playerSpeed;
+			playerSprite.move(-playerSpeed, 0);
+			//the left facing frames are at 800*2 x 1600 so this tells does same as above but lower on the sprite sheet
+			playerSprite.setTextureRect(sf::IntRect(offset * 834, 834 * 2, 800, 1668));
+		}
+		
 
 	}
 
@@ -79,4 +90,17 @@ void Player::respawn() {
 
 void Player::update() {
 	checkMovement();
+}
+
+bool Player::checkCollision(float velo) {
+	//playerSprite.move(playerSpeed, 0);
+	//std::cout << "Global bounds " << playerSprite.getGlobalBounds().height << " " << playerSprite.getGlobalBounds().width;;
+	//std::cout << "Local bounds " << playerSprite.getLocalBounds().height << playerSprite.getLocalBounds().width;
+	std::cout << "Current Position " << playerSprite.getPosition().x << " " << playerSprite.getPosition().y << "\n";
+	float nx = x + velo;
+	std::cout << "Future position " << nx << "\n";
+	if (nx >= 448 || nx < 256) {
+		return false;
+	}
+	return true;
 }
