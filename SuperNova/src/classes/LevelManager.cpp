@@ -109,7 +109,7 @@ std::vector<Vector2> LevelManager::getLevelVector() {
 				float y = (j+1) * 64;
 				vectors.push_back(Vector2(((i + 4) * 64), y));
 			}
-			current+=20;
+			current+= currentLevel.width;
 		}
 		current = 0 + i + 1;
 	}
