@@ -6,6 +6,8 @@
 #include "headers/Player.h"
 #include "headers/TileMap.h"
 #include "headers/LevelManager.h"
+#include "headers/Sprite.h"
+
 
 class GameEngine
 {

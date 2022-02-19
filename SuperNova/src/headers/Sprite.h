@@ -2,26 +2,26 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
-class Sprite
+extern class Sprite
 {
 	public:
 		sf::Sprite sprite;
 		sf::Texture texture;
+		bool animated = false, random = false;
 
-		bool isAnimating();
-		void isAnimating(bool boolean);
-		bool isAnimated();
+		Sprite();
+		Sprite(const std::string& filePath);
+		Sprite(const std::string& filePath, bool animated, bool random, int numFrames, int width, int height, int frequency);
+
+		void animate();
+		void animateAll();
 		sf::Sprite getSprite();
 		sf::Texture getTexture();
 		sf::Clock getTimer();
 		int getWidth();
 
-		Sprite();
-		Sprite(const std::string& filePath);
-		Sprite(const std::string& filePath, bool isAnimated, int numFrames, int width, int height, int frequency);
-
 	private:
-		int id, width, height, frequency, numFrames;
+		int width, height, frequency, numFrames, offset = 0;
 		sf::Clock timer;
-		bool animated = false, animating = false;
 };
+static std::vector<Sprite*> sprites;// = new std::vector<Sprite>;

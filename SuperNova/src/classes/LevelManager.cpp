@@ -64,7 +64,7 @@ void LevelManager::init() {
 }
 
 Sprite LevelManager::getCurrentBackground() {
-	return currentLevel.background;
+	return *currentLevel.background;
 }
 
 LevelManager::Level LevelManager::getCurrentLevel() {
@@ -93,7 +93,12 @@ void LevelManager::loadLevel(Level level) {
 		std::cout << "Error loading TileMap";
 }
 
+void LevelManager::refreshLevel() {
+	//if (currentLevel->hasBackground)
+		//std::cout << "\toffset: " << currentLevel->background->offset << std::endl;
+}
+
 void LevelManager::setLevel(Level level) {
-	loadLevel(level);
 	currentLevel = level;
+	loadLevel(currentLevel);
 }

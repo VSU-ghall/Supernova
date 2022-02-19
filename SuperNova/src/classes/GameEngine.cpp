@@ -29,6 +29,7 @@ void GameEngine::init() {
 	window.setFramerateLimit(60);
 
 	loadLevel(levelManager.getLevel1());
+	background = *levelManager.getLevel1().background;
 	player.init();
 
 	gamebar.setFillColor(sf::Color(59, 30, 11));
@@ -52,8 +53,11 @@ void GameEngine::draw() {
 	window.setView(view);
 
 	if (levelManager.currentLevel.hasBackground) {
-		window.draw(background.getSprite());
+		if (levelManager.currentLevel.background->animated)
+			//std::cout << "seconds: " << levelManager.getCurrentBackground().getTimer().getElapsedTime().asMicroseconds() << std::endl;
+		window.draw(levelManager.getCurrentBackground().getSprite());
 	}
+
 	window.draw(levelManager.getMap());
 
 	//drawGrid();
@@ -166,8 +170,6 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 	player.startPosition = Vector2(level.startPosition);
 	player.respawn();
 	levelManager.setLevel(level);
-	if (level.hasBackground)
-		background = level.background;
 
 
 	sf::String title("SuperNova - Level " + std::to_string(level.levelNumber));
@@ -213,5 +215,8 @@ void GameEngine::playMusic()
 //
 void GameEngine::update() {
 	player.update();
-	//spriteManager.animate();
+
+	Sprite sprite; sprite.animateAll();
+
+	levelManager.refreshLevel();
 }

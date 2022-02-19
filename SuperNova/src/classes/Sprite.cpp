@@ -1,60 +1,64 @@
 #include "headers/Sprite.h"
 
 Sprite::Sprite() {
-
+	animated = false;
 }
 
-Sprite::Sprite(const std::string& filePath){
+Sprite::Sprite(const std::string& filePath) {
 	if (!texture.loadFromFile(filePath))
 		std::cout << "Could not load sprite at: " << filePath << std::endl;
-	
+
 	sprite.setTexture(texture);
+
+	sprites.push_back(this);
 }
 
-Sprite::Sprite(const std::string& filePath, bool isAnimated, int numFrames, int width, int height, int frequency) {
-	Sprite::Sprite(filePath);
-
-	this->animated = isAnimated;
+Sprite::Sprite(const std::string& filePath, bool animated, bool random, int numFrames, int width, int height, int frequency)
+	:Sprite(filePath)
+{
+	this->animated = animated;
+	this->random = random;
 	this->numFrames = numFrames;
 	this->width = width;
 	this->height = height;
 	this->frequency = frequency;
+
+	//sprites.back() = this;
 }
 
-/*void SpriteManager::animate() {
-	for (int i = 0; i < numSprites; i++) {
-		Sprite sprite = sprites[i];
+void Sprite::animate() {
+	if (timer.getElapsedTime().asMilliseconds() >= frequency) {
 
-		int width = sprite.getWidth();
-		//sf::IntRect rectSourceSprite(0, 0, object.width, object.height);
-		sprite.getSprite().setTextureRect(sf::IntRect(0, 0, width, object.height));
-		if (object.animating && object.timer.getElapsedTime().asMilliseconds() >= object.frequency) {
-			//next frame
-			width += object.width;
-
-			if (width >= object.width * object.numFrames){
-				width = object.width;
-				object.timer.restart();
-			}
-			else
-				object.sprite.setTextureRect(sf::IntRect(0, 0, object.width, object.height));
+		if (random) {
+			offset = std::rand() % 4;
+			sprite.setTextureRect(sf::IntRect(offset * width, 0, width, height));
 		}
+		else {
+			sprite.setTextureRect(sf::IntRect(offset++ * width, 0, width, height));
+			if (offset == numFrames) offset = 0;
+		}
+
+		//texture.loadFromFile("src/resources/Background.jpg");
+		sprite.setTexture(texture);
+
+		std::cout << "offset: " << offset << std::endl;
+
+		timer.restart();
 	}
-}*/
-
-bool Sprite::isAnimating()
-{
-	return animating;
 }
 
-void Sprite::isAnimating(bool boolean) {
-	animating = boolean;
+void Sprite::animateAll() {
+	std::vector<Sprite> newSprites;
+	for (Sprite* s : sprites) {
+		if (s->animated) {
+			s->animate();
+		}
+		//newSprites.push_back(s);
+	}
+	//delete sprites;
+	//sprites = std::vector<Sprite>(newSprites);
 }
 
-bool Sprite::isAnimated()
-{
-	return animated;
-}
 
 sf::Sprite Sprite::getSprite()
 {
