@@ -29,7 +29,6 @@ static class LevelManager
 		Level getLevel2();
 		Level getTestLevel();
 		TileMap getMap();
-		void refreshLevel();
 		void setLevel(Level level);
 
 	private:

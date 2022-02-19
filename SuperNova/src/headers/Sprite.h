@@ -7,7 +7,7 @@ extern class Sprite
 	public:
 		sf::Sprite sprite;
 		sf::Texture texture;
-		bool animated = false, random = false;
+		bool animating = false;
 
 		Sprite();
 		Sprite(const std::string& filePath);
@@ -22,6 +22,7 @@ extern class Sprite
 
 	private:
 		int width, height, frequency, numFrames, offset = 0;
+		bool animated = false, random = false;
 		sf::Clock timer;
 };
-static std::vector<Sprite*> sprites;// = new std::vector<Sprite>;
+static std::vector<Sprite*> sprites;

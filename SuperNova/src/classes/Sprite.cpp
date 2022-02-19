@@ -22,8 +22,6 @@ Sprite::Sprite(const std::string& filePath, bool animated, bool random, int numF
 	this->width = width;
 	this->height = height;
 	this->frequency = frequency;
-
-	//sprites.back() = this;
 }
 
 void Sprite::animate() {
@@ -38,10 +36,9 @@ void Sprite::animate() {
 			if (offset == numFrames) offset = 0;
 		}
 
-		//texture.loadFromFile("src/resources/Background.jpg");
 		sprite.setTexture(texture);
 
-		std::cout << "offset: " << offset << std::endl;
+		//std::cout << "offset: " << offset << std::endl;
 
 		timer.restart();
 	}
@@ -50,13 +47,10 @@ void Sprite::animate() {
 void Sprite::animateAll() {
 	std::vector<Sprite> newSprites;
 	for (Sprite* s : sprites) {
-		if (s->animated) {
+		if (s->animated && s->animating) {
 			s->animate();
 		}
-		//newSprites.push_back(s);
 	}
-	//delete sprites;
-	//sprites = std::vector<Sprite>(newSprites);
 }
 
 

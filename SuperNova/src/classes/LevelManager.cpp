@@ -91,14 +91,15 @@ void LevelManager::loadLevel(Level level) {
 	// create the tilemap from the level definition
 	if (!map.load("src/resources/tilemap_v1.png", sf::Vector2u(64, 64), level.map, level.width, level.height))
 		std::cout << "Error loading TileMap";
-}
 
-void LevelManager::refreshLevel() {
-	//if (currentLevel->hasBackground)
-		//std::cout << "\toffset: " << currentLevel->background->offset << std::endl;
+	if (level.hasBackground)
+		level.background->animating = true;
 }
 
 void LevelManager::setLevel(Level level) {
+	if (currentLevel.hasBackground && currentLevel.background->animating)
+		currentLevel.background->animating = false;
+
 	currentLevel = level;
 	loadLevel(currentLevel);
 }

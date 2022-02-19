@@ -53,8 +53,6 @@ void GameEngine::draw() {
 	window.setView(view);
 
 	if (levelManager.currentLevel.hasBackground) {
-		if (levelManager.currentLevel.background->animated)
-			//std::cout << "seconds: " << levelManager.getCurrentBackground().getTimer().getElapsedTime().asMicroseconds() << std::endl;
 		window.draw(levelManager.getCurrentBackground().getSprite());
 	}
 
@@ -217,6 +215,4 @@ void GameEngine::update() {
 	player.update();
 
 	Sprite sprite; sprite.animateAll();
-
-	levelManager.refreshLevel();
 }
