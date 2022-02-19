@@ -24,7 +24,8 @@ private:
 	sf::Sprite btnLevel1, btnLevel2;
 	sf::Texture backgroundTexture, btnLevel1Texture, btnLevel2Texture;
 	sf::RectangleShape gamebar;
-	Sprite background;
+	sf::Texture texture;
+	std::vector<Vector2> levelVector;
 
 public:
 
