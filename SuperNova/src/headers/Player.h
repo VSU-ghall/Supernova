@@ -1,7 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Vector2.h"
-#include <headers/SpriteManager.h>
 
 class Player
 {

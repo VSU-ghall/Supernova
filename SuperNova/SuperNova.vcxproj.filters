@@ -9,7 +9,7 @@
     <ClCompile Include="src\classes\TileMap.cpp" />
     <ClCompile Include="src\classes\GameEngine.cpp" />
     <ClCompile Include="src\classes\LevelManager.cpp" />
-    <ClCompile Include="src\classes\SpriteManager.cpp" />
+    <ClCompile Include="src\classes\Sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -20,7 +20,7 @@
     <ClInclude Include="src\headers\TileMap.h" />
     <ClInclude Include="src\headers\GameEngine.h" />
     <ClInclude Include="src\headers\LevelManager.h" />
-    <ClInclude Include="src\headers\SpriteManager.h" />
+    <ClInclude Include="src\headers\Sprite.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SuperNova.rc" />

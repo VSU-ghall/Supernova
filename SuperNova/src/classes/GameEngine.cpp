@@ -3,7 +3,6 @@
 GameEngine::GameEngine() 
 	:window(sf::VideoMode(), "SuperNova")
 {
-	
 }
 
 void GameEngine::run() {
@@ -35,11 +34,11 @@ void GameEngine::init() {
 	gamebar.setFillColor(sf::Color(59, 30, 11));
 	
 	if (!btnLevel1Texture.loadFromFile("src/resources/Level1Button.png"))
-		std::cout << "Could not load level 1 background" << std::endl;
+		std::cout << "Could not load level 1 button" << std::endl;
 	btnLevel1.setTexture(btnLevel1Texture);
 
 	if (!btnLevel2Texture.loadFromFile("src/resources/Level2Button.png"))
-		std::cout << "Could not load level 1 background" << std::endl;
+		std::cout << "Could not load level 2 button" << std::endl;
 	btnLevel2.setTexture(btnLevel2Texture);
 
 	playMusic();
@@ -52,8 +51,9 @@ void GameEngine::draw() {
 	window.clear();
 	window.setView(view);
 
-	if (levelManager.currentLevel.hasBackground)
-		window.draw(levelManager.currentLevel.background);
+	if (levelManager.currentLevel.hasBackground) {
+		window.draw(background.getSprite());
+	}
 	window.draw(levelManager.getMap());
 
 	//drawGrid();
@@ -166,6 +166,9 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 	player.startPosition = Vector2(level.startPosition);
 	player.respawn();
 	levelManager.setLevel(level);
+	if (level.hasBackground)
+		background = level.background;
+
 
 	sf::String title("SuperNova - Level " + std::to_string(level.levelNumber));
 	window.setTitle(title);
@@ -210,5 +213,5 @@ void GameEngine::playMusic()
 //
 void GameEngine::update() {
 	player.update();
-	spriteManager.animate();
+	//spriteManager.animate();
 }

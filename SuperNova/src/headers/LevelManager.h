@@ -2,7 +2,7 @@
 #include "Vector2.h"
 #include "iostream"
 #include <headers/TileMap.h>
-#include <headers/SpriteManager.h>
+#include <headers/Sprite.h>
 
 
 static class LevelManager
@@ -12,15 +12,18 @@ static class LevelManager
 
 		struct Level {
 			LevelManager* levelManager;
+			Sprite background;
+			bool hasBackground = false;
 			int width = 20, height = 12, levelNumber = (levelManager->numberOfLevels)++;
 			int* map;
 			Vector2 startPosition;
-			sf::Sprite background;
-			sf::Texture texture;
-			bool hasBackground = false;
-		} testLevel = {this}, level1 = {this}, level2 = {this, 25, 17}, currentLevel = {this};
+		} testLevel = {this}, 
+			level1 = {this, Sprite("src/resources/space_background_sprite_sheet.png"), true}, 
+			level2 = {this, Sprite("src/resources/Background.jpg"), true, 25, 17}, 
+			currentLevel = {this};
 
-		LevelManager(SpriteManager spriteManager);
+		LevelManager();// (SpriteManager* spriteManager);
+		Sprite getCurrentBackground();
 		Level getCurrentLevel();
 		Level getLevel1();
 		Level getLevel2();
@@ -30,9 +33,7 @@ static class LevelManager
 
 	private:
 		TileMap map;
-		SpriteManager spriteManager;
 
 		void init();
 		void loadLevel(Level level);
 };
-

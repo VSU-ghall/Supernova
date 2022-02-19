@@ -1,13 +1,13 @@
 #include "headers/LevelManager.h"
 
 
-LevelManager::LevelManager(SpriteManager spriteManager){
-	this->spriteManager = spriteManager;
+LevelManager::LevelManager(){//}(SpriteManager* spriteManager) {
+	//this->spriteManager = spriteManager;
 	init();
 }
 
 void LevelManager::init() {
-	LevelManager::testLevel.map = new int[testLevel.width * testLevel.height] {
+	testLevel.map = new int[testLevel.width * testLevel.height] {
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
 		1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 1,
@@ -21,10 +21,10 @@ void LevelManager::init() {
 		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 	};
-	LevelManager::testLevel.startPosition = Vector2(5, 11);
+		testLevel.startPosition = Vector2(5, 11);
 
 
-	LevelManager::level1.map = new int[level1.width * level1.height] {
+	level1.map = new int[level1.width * level1.height] {
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 		 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,
@@ -38,13 +38,10 @@ void LevelManager::init() {
 		12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12,
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 	};
-		LevelManager::level1.startPosition = Vector2(5, 9);
-
-		LevelManager::level1.background = spriteManager.loadSprite("src/resources/space_background_sprite_sheet.png", true, 4, 1280, 768, 1000);
-		LevelManager::level1.hasBackground = true;
+		level1.startPosition = Vector2(5, 9);
 
 
-	LevelManager::level2.map = new int[level2.width * level2.height] {
+	level2.map = new int[level2.width * level2.height] {
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 		 1,  1,  1,  1,  1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  1,  1,  1,  1,  1,
@@ -63,7 +60,11 @@ void LevelManager::init() {
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 	};
-	LevelManager::level2.startPosition = Vector2(5, 11);
+		level2.startPosition = Vector2(5, 11);
+}
+
+Sprite LevelManager::getCurrentBackground() {
+	return currentLevel.background;
 }
 
 LevelManager::Level LevelManager::getCurrentLevel() {
