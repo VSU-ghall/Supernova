@@ -6,7 +6,7 @@ LevelManager::LevelManager(){
 }
 
 void LevelManager::init() {
-	LevelManager::testLevel.map = new int[testLevel.width * testLevel.height] {
+	testLevel.map = new int[testLevel.width * testLevel.height] {
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
 		1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 1,
@@ -20,53 +20,51 @@ void LevelManager::init() {
 		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 	};
-	LevelManager::testLevel.startPosition = Vector2(5, 11);
+		testLevel.startPosition = Vector2(5, 11);
 
 
-	LevelManager::level1.map = new int[level1.width * level1.height] {
+	level1.map = new int[level1.width * level1.height] {
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
-		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
+		 3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,	 3,  3,  3,  3,  3,  3,  3,
+		17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17,
+		19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
+		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		 6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,
+		 4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,
 		 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,
-		 9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,
-		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-		 3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,	 3,  3,  3,  3,  3,
-		12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12,
-		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 	};
-		LevelManager::level1.startPosition = Vector2(5, 9);
-
-		sf::Texture *level1Texture = &LevelManager::level1.texture;
-		if (!level1Texture->loadFromFile("src/resources/space_background_sprite_sheet.png"))
-			std::cout << "Could not load level 1 background" << std::endl;
-		LevelManager::level1.background.setTexture(*level1Texture);
-
-		LevelManager::level1.hasBackground = true;
+		level1.startPosition = Vector2(5, 9);
 
 
-	LevelManager::level2.map = new int[level2.width * level2.height] {
+	level2.map = new int[level2.width * level2.height] {
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
-		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
-		 1,  1,  1,  1,  1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  1,  1,  1,  1,  1,
-		 1,  1,  1,  1,  2,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  2,  1,  1,  1,  1,
-		 1,  1,  1,  2, 10,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,  2,  1,  1,  1,
-		 1,  1,  2, 10,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,  2,  1,  1,
-		 1,  2, 10,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,  2,  1,
-		 2, 10,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,  2,
-		10,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
+		 3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,
+		17, 17, 17, 17, 27, 23, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 22, 26, 17, 17, 17, 17,
+		17, 17, 17, 27, 28, 29,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 24, 25, 26, 17, 17, 17,
+		17, 17, 27, 28, 29,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 24, 25, 26, 17, 17,
+		17, 27, 28, 29,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 24, 25, 26, 17,
+		27, 28, 29,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 24, 25, 26,
+		28, 29,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 24, 25,
+		29,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 24,
 		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-		 0,  0,  0,  0,  0,  0,  0,  0,  6,  3,  3,  3,  3,  3,  3,  3,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-		 3,  3,  3,  3,  3,  3,  3,  3,  3, 12, 12, 12, 12, 12, 12, 12,  3,  3,  3,  3,	 3,  3,  3,  3,  3,
-		12, 12, 12, 12, 12, 12, 12, 12, 12,  1,  1,  1,  1,  1,  1,  1, 12, 12, 12, 12, 12, 12, 12, 12, 12,
-		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
+		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		 8,  8,  8,  8,  8,  8,  8,  8,  5,  6,  6,  6,  6,  6,  6,  6,  7,  8,  8,  8,  8,  8,  8,  8,  8,
+		 4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,
+		 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 	};
-	LevelManager::level2.startPosition = Vector2(5, 11);
+		level2.startPosition = Vector2(15, 11);
+		level2.background->sprite.setTextureRect(sf::IntRect(0, 0, 64*level2.width, 64*level2.height));
+}
+
+Sprite LevelManager::getCurrentBackground() {
+	return *currentLevel.background;
 }
 
 LevelManager::Level LevelManager::getCurrentLevel() {
@@ -91,13 +89,19 @@ TileMap LevelManager::getMap() {
 
 void LevelManager::loadLevel(Level level) {
 	// create the tilemap from the level definition
-	if (!map.load("src/resources/tilemap_v1.png", sf::Vector2u(64, 64), level.map, level.width, level.height))
+	if (!map.load("src/resources/tilemap_v2.png", sf::Vector2u(64, 64), level.map, level.width, level.height))
 		std::cout << "Error loading TileMap";
+
+	if (level.hasBackground)
+		level.background->animating = true;
 }
 
 void LevelManager::setLevel(Level level) {
-	loadLevel(level);
+	if (currentLevel.hasBackground && currentLevel.background->animating)
+		currentLevel.background->animating = false;
+
 	currentLevel = level;
+	loadLevel(currentLevel);
 }
 
 //Iterates down the columns of the TileMap. IF there is a tile at the index, add the coordinates of the tile to vector.
@@ -107,10 +111,10 @@ std::vector<Vector2> LevelManager::getLevelVector() {
 	for (int i = 0; i < currentLevel.width; i++) {
 		for (int j = 0; j < currentLevel.height; j++) {
 			if (currentLevel.map[current] != 0) {
-				float y = (j+1) * 64;
+				float y = (j + 1) * 64;
 				vectors.push_back(Vector2(((i + 4) * 64), y));
 			}
-			current+= currentLevel.width;
+			current += currentLevel.width;
 		}
 		current = i + 1;
 	}
