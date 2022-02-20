@@ -10,6 +10,7 @@ class Player
 		float x, y;
 
 	public:
+		std::vector<int> colMap;
 		Vector2 startPosition;
 		float getX();
 		float getY();
@@ -20,5 +21,6 @@ class Player
 		void respawn();
 		void update(std::vector<Vector2> vectors, LevelManager::Level currentLevel);
 		bool checkCollision(float velo, std::vector<Vector2> vectors, LevelManager::Level currentLevel);
+		void setColMap(std::vector<int> colMap);
 };
 

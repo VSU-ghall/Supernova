@@ -58,7 +58,7 @@ void GameEngine::draw() {
 
 	window.draw(levelManager.getMap());
 
-	//drawGrid();
+	drawGrid();
 
 	player.draw(window);
 
