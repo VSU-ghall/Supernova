@@ -136,6 +136,12 @@ void GameEngine::handleEvent(sf::Event event) {
 		btnLevel2->getSprite()->setPosition(gamebar.getPosition().x + 20 + btnLevel1->getTexture().getSize().x, gamebar.getPosition().y + 5);
 	}
 
+	if (event.type == sf::Event::KeyReleased) {
+		if (sf::Keyboard::D || sf::Keyboard::A)
+			if (player.stoppedLeft || player.stoppedRight)
+				player.moving = false;
+	}
+
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
 	sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
 	if (btnLevel1->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
