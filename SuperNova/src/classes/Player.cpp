@@ -5,9 +5,6 @@
 float playerSpeed, playerSize, animationPerFrame = 1.0f / 8.0f;
 int frameCount = 0, offset = 0;
 
-sf::Sprite playerSprite;
-sf::Texture texture;
-
 float Player::getX() {
 	return x;
 }
@@ -96,10 +93,10 @@ void Player::update(std::vector<Vector2> vectors, LevelManager::Level currentLev
 
 //returns false if movement will cause collision. returns true otherwise
 bool Player::checkCollision(float velo, std::vector<Vector2> vectors, LevelManager::Level currentLevel) {
-	std::cout << "Current Position " << playerSprite.getPosition().x << " " << playerSprite.getPosition().y << "\n";
+	//std::cout << "Current Position " << playerSprite.getPosition().x << " " << playerSprite.getPosition().y << "\n";
 	float nx = x + velo;
 	float ny = y;
-	std::cout << "Future position " << nx << "\n";
+	//std::cout << "Future position " << nx << "\n";
 	if (nx > (currentLevel.width + 3) * 64 || nx < 256) {
 		return false;
 	}
