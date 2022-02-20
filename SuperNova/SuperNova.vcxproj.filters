@@ -42,9 +42,10 @@
     <Image Include="src\resources\Level2Button.png" />
     <Image Include="src\resources\tilemap_v2.png" />
     <Image Include="src\resources\waterfall_background.png" />
+    <Image Include="src\resources\pixiguide.png" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="src\resources\background_music.wav" />
-<Image Include="src\resources\testTileSet.png" />
+    <Image Include="src\resources\testTileSet.png" />
   </ItemGroup>
 </Project>
