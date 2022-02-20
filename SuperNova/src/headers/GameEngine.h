@@ -31,8 +31,12 @@ private:
 	std::vector<Vector2> levelVector;
 
 public:
-
 	GameEngine();
+
+	LevelManager* getLevelManager() { return &levelManager; }
+	Player* getPlayer() { return &player; };
+	sf::RenderWindow* getWindow() { return &window; }
+
 	void run();
 	void init();
 	void draw();
