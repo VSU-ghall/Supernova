@@ -160,6 +160,7 @@
     <ClCompile Include="src\classes\Player.cpp" />
     <ClCompile Include="src\classes\Vector2.cpp" />
     <ClCompile Include="src\classes\TileMap.cpp" />
+    <ClCompile Include="src\classes\StoryManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\headers\Sprite.h" />
@@ -172,6 +173,7 @@
     <ClInclude Include="src\headers\Player.h" />
     <ClInclude Include="src\headers\Vector2.h" />
     <ClInclude Include="src\headers\TileMap.h" />
+    <ClInclude Include="src\headers\StoryManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SuperNova.rc" />
