@@ -11,6 +11,10 @@ class Player
 
 	public:
 		Vector2 startPosition;
+		sf::Sprite playerSprite;
+		sf::Texture texture;
+		bool stoppedLeft = false, stoppedRight = true, moving = false;
+
 		float getX();
 		float getY();
 

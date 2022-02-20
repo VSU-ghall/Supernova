@@ -46,7 +46,6 @@ void Sprite::animate() {
 }
 
 void Sprite::animateAll() {
-	std::vector<Sprite> newSprites;
 	for (Sprite* s : sprites) {
 		if (s->animated && s->animating) {
 			s->animate();
@@ -55,9 +54,9 @@ void Sprite::animateAll() {
 }
 
 
-sf::Sprite Sprite::getSprite()
+sf::Sprite* Sprite::getSprite()
 {
-	return sprite;
+	return &sprite;
 }
 
 sf::Texture Sprite::getTexture()
