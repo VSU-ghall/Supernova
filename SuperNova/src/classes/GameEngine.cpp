@@ -221,7 +221,7 @@ void GameEngine::playMusic()
 void GameEngine::update() {
 	player.update(levelVector, levelManager.getCurrentLevel());
 
-	Sprite sprite; sprite.animateAll();
+	Sprite::animateAll();
 
 	sf::Vector2i pixelPos(player.getX(), player.getY());
 	sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
