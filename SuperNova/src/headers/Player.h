@@ -11,6 +11,8 @@ class Player
 
 	public:
 		Vector2 startPosition;
+		sf::Sprite playerSprite;
+		sf::Texture texture;
 		float getX();
 		float getY();
 

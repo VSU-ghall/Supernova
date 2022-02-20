@@ -15,7 +15,7 @@ extern class Sprite
 
 		void animate();
 		void animateAll();
-		sf::Sprite getSprite();
+		sf::Sprite* getSprite();
 		sf::Texture getTexture();
 		sf::Clock getTimer();
 		int getWidth();
