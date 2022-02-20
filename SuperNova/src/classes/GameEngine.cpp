@@ -219,7 +219,7 @@ void GameEngine::playMusic()
 // Updates all game objects
 //
 void GameEngine::update() {
-	player.update(levelVector);
+	player.update(levelVector, levelManager.getCurrentLevel());
 
 	Sprite sprite; sprite.animateAll();
 }
