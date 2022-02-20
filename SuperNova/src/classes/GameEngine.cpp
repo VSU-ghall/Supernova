@@ -203,7 +203,7 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 void GameEngine::playMusic()
 {
 	// Open the Background Music
-	if (!music.openFromFile("src/resources/background_music.wav")) {
+	if (!music.openFromFile("src/resources/sounds/background_sound.wav")) {
 		std::cout << "Could not load background_music" << std::endl;
 		return;
 	}
