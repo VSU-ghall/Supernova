@@ -7,6 +7,7 @@
 #include "headers/TileMap.h"
 #include "headers/LevelManager.h"
 #include "headers/Sprite.h"
+#include "headers/EntityManager.h"
 
 
 class GameEngine
@@ -21,15 +22,21 @@ private:
 	sf::RenderWindow window;
 	sf::View view;
 	sf::Music music;
-	sf::Sprite btnLevel1, btnLevel2;
-	sf::Texture backgroundTexture, btnLevel1Texture, btnLevel2Texture;
+	Sprite *btnLevel1 = new Sprite("src/resources/Level1Button.png"), 
+		*btnLevel2 = new Sprite("src/resources/Level2Button.png"),
+		*pixiguide = new Sprite("src/resources/pixiguide.png", true, false, 6, 32, 48, 1.0f, 150);
+	sf::Texture backgroundTexture;
 	sf::RectangleShape gamebar;
 	sf::Texture texture;
 	std::vector<Vector2> levelVector;
 
 public:
-
 	GameEngine();
+
+	LevelManager* getLevelManager() { return &levelManager; }
+	Player* getPlayer() { return &player; };
+	sf::RenderWindow* getWindow() { return &window; }
+
 	void run();
 	void init();
 	void draw();
