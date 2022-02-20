@@ -48,10 +48,12 @@ void Player::init() {
 // ( Movement is animated on a ratio (set by the variable animationPerFrame) )
 //
 void Player::checkMovement(std::vector<Vector2> vectors, LevelManager::Level currentLevel) {
-	
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
 
 		if (checkCollision(playerSpeed, vectors, currentLevel)) {
+			stoppedLeft = false; stoppedRight = true;
+			moving = true;
 			x += playerSpeed;
 			velocity.x = playerSpeed;
 			//the sprite size in sprite sheet is 800x1600. this tells textureRect to start at beginning and every time walkCount is added, then it goes to next frame
@@ -63,6 +65,8 @@ void Player::checkMovement(std::vector<Vector2> vectors, LevelManager::Level cur
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
 		if(checkCollision(-playerSpeed, vectors, currentLevel)){
+			stoppedLeft = true;  stoppedRight = false;
+			moving = true;
 			x -= playerSpeed;
 			velocity.x = -playerSpeed;
 			//the left facing frames are at 800*2 x 1600 so this tells does same as above but lower on the sprite sheet
@@ -85,6 +89,11 @@ void Player::checkMovement(std::vector<Vector2> vectors, LevelManager::Level cur
 	}
 	if(checkCollision(-playerSpeed, vectors, currentLevel)|| checkCollision(playerSpeed, vectors, currentLevel))
 	playerSprite.move(velocity.x, velocity.y);
+
+	if (stoppedRight && !moving)
+		playerSprite.setTextureRect(sf::IntRect(0, 0, 800, 1668));
+	else if (stoppedLeft && !moving)
+		playerSprite.setTextureRect(sf::IntRect(0, 834 * 2, 800, 1668));
 
 	frameCount++;
 	if ((int)(frameCount * animationPerFrame) > offset) offset++;
