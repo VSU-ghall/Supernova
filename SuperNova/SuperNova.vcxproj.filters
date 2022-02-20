@@ -1,6 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <ClCompile Include="src\classes\LevelManager.cpp" />
+    <ClCompile Include="src\classes\GameEngine.cpp" />
     <ClCompile Include="src\classes\Entity.cpp" />
     <ClCompile Include="src\classes\EntityManager.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -9,9 +11,11 @@
     <ClCompile Include="src\classes\TileMap.cpp" />
     <ClCompile Include="src\classes\GameEngine.cpp" />
     <ClCompile Include="src\classes\LevelManager.cpp" />
-    <ClCompile Include="src\classes\SpriteManager.cpp" />
+    <ClCompile Include="src\classes\Sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\headers\LevelManager.h" />
+    <ClInclude Include="src\headers\GameEngine.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\headers\Entity.h" />
     <ClInclude Include="src\headers\EntityManager.h" />
@@ -20,19 +24,27 @@
     <ClInclude Include="src\headers\TileMap.h" />
     <ClInclude Include="src\headers\GameEngine.h" />
     <ClInclude Include="src\headers\LevelManager.h" />
-    <ClInclude Include="src\headers\SpriteManager.h" />
+    <ClInclude Include="src\headers\Sprite.h" />
+    <ClInclude Include="src\headers\Components.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SuperNova.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Media Include="src\resources\background_music.wav" />
+  </ItemGroup>
+  <ItemGroup>
     <Image Include="src\resources\astronaut.png" />
     <Image Include="src\resources\astronaut_walk.png" />
-    <Image Include="src\resources\testTileSet.png" />
     <Image Include="src\resources\rocket_sprite_sheet.png" />
     <Image Include="src\resources\space_background_sprite_sheet.png" />
+    <Image Include="src\resources\Level1Button.png" />
+    <Image Include="src\resources\Level2Button.png" />
+    <Image Include="src\resources\tilemap_v2.png" />
+    <Image Include="src\resources\waterfall_background.png" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="src\resources\background_music.wav" />
+<Image Include="src\resources\testTileSet.png" />
   </ItemGroup>
 </Project>
