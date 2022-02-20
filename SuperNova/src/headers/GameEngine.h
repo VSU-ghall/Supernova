@@ -24,7 +24,7 @@ private:
 	sf::Music music;
 	Sprite *btnLevel1 = new Sprite("src/resources/Level1Button.png"), 
 		*btnLevel2 = new Sprite("src/resources/Level2Button.png"),
-		*pixiguide = new Sprite("src/resources/pixiguide.png", true, false, 6, 32, 32, 1.0f, 150);
+		*pixiguide = new Sprite("src/resources/pixiguide.png", true, false, 6, 32, 48, 1.0f, 150);
 	sf::Texture backgroundTexture;
 	sf::RectangleShape gamebar;
 	sf::Texture texture;
