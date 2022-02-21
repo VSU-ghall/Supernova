@@ -24,5 +24,6 @@ class Player
 		void respawn();
 		void update(std::vector<Vector2> vectors, LevelManager::Level currentLevel);
 		bool checkCollision(float velo, std::vector<Vector2> vectors, LevelManager::Level currentLevel);
+		bool checkAllNonGrounded(sf::Vector2f botRightHigh, sf::Vector2f botLeftHigh, sf::Vector2f topRight, sf::Vector2f topLeft, LevelManager::Level currentLevel);
 };
 
