@@ -45,6 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <Media Include="src\resources\background_music.wav" />
-<Image Include="src\resources\testTileSet.png" />
+    <Image Include="src\resources\testTileSet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\Downloads\openal32.dll" />
   </ItemGroup>
 </Project>

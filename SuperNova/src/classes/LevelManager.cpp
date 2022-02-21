@@ -33,12 +33,11 @@ void LevelManager::init() {
 		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-		 6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,
+		 6,  6,  6,  6,  6,  6,  6,  6,  0,  0,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,
 		 4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,
 		 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,
 	};
 		level1.startPosition = Vector2(5, 9);
-
 
 	level2.map = new int[level2.width * level2.height] {
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
@@ -102,6 +101,7 @@ void LevelManager::setLevel(Level level) {
 
 	currentLevel = level;
 	loadLevel(currentLevel);
+	currentLevel.colMap = map.loadColMap(level.map, level.width, level.height);
 }
 
 //Iterates down the columns of the TileMap. IF there is a tile at the index, add the coordinates of the tile to vector.
