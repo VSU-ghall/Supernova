@@ -51,15 +51,14 @@ void TileMap::draw(sf::RenderTarget & target, sf::RenderStates states) const
 }
 std::vector<std::vector<int>> TileMap::loadColMap( const int* tiles, unsigned int width, unsigned int height)
 {
-    // load the tileset texture
+
     colMap.clear();
-    // populate the vertex array, with one quad per tile
-    int count = 0;
+    
     for (int i = 0; i < height; i++) {
         std::vector<int> row;
         for (int j = 0; j < width; j++) {
             // get the current tile number
-            int tileNumber = tiles[(i*20)+j];
+            int tileNumber = tiles[(i*width)+j];
             if (tileNumber > 0) {
                 row.push_back(1);
             }
@@ -69,12 +68,15 @@ std::vector<std::vector<int>> TileMap::loadColMap( const int* tiles, unsigned in
         }
         colMap.push_back(row);
     }
-    for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
-            std::cout << colMap.at(i).at(j);
-        }
-        std::cout << std::endl;
-    }
     return colMap;
+
+    //print out the colMap for debug purposes
+    //for (int i = 0; i < height; i++) {
+    //    for (int j = 0; j < width; j++) {
+    //        std::cout << colMap.at(i).at(j);
+    //    }
+    //    std::cout << std::endl;
+    //}
+
 
 }
