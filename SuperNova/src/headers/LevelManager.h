@@ -36,5 +36,5 @@ static class LevelManager
 		TileMap map;
 
 		void init();
-		void loadLevel(Level level);
+		void loadLevel(Level* level);
 };

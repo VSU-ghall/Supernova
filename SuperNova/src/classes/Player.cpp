@@ -66,17 +66,15 @@ void Player::animate() {
 // Checks if A or D is pressed and moves left or right respectively
 // ( Movement is animated on a ratio (set by the variable animationPerFrame) )
 //
-void Player::checkMovement(std::vector<Vector2> vectors, LevelManager::Level currentLevel) {
-	animate();
-
+void Player::checkMovement(LevelManager::Level currentLevel) {
 	if (grounded && 
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::D) && 
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::A) &&
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		return;
 
-	bool checkLeft = checkCollision(-playerSpeed, vectors, currentLevel),
-		checkRight = checkCollision(playerSpeed, vectors, currentLevel);
+	bool checkLeft = checkCollision(-playerSpeed, currentLevel),
+		checkRight = checkCollision(playerSpeed, currentLevel);
 
 	if (checkRight && sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
 		stoppedLeft = false; stoppedRight = true;
@@ -143,12 +141,13 @@ void Player::respawn() {
 	y = startPosition.y * 64;
 }
 
-void Player::update(std::vector<Vector2> vectors, LevelManager::Level currentLevel) {
-	checkMovement(vectors, currentLevel);
+void Player::update(LevelManager::Level currentLevel) {
+	animate();
+	checkMovement(currentLevel);
 }
 
 //returns false if movement will cause collision. returns true otherwise
-bool Player::checkCollision(float velo, std::vector<Vector2> vectors, LevelManager::Level currentLevel) {
+bool Player::checkCollision(float velo, LevelManager::Level currentLevel) {
 
 	float bot = ceil(playerSprite.getGlobalBounds().top + 128);
 	float top = ceil(playerSprite.getGlobalBounds().top);
@@ -156,47 +155,69 @@ bool Player::checkCollision(float velo, std::vector<Vector2> vectors, LevelManag
 	float mid = ceil(playerSprite.getGlobalBounds().left + 32);
 	float right = ceil(playerSprite.getGlobalBounds().left + 64);
 
+	int dir = 1;
+
+	if (velo > 0)
+		dir = -1;
+	else if (velo < 0)
+		dir = 1;
+	else
+		return false;
+
 	sf::Vector2f topLeft(left, top);
 	sf::Vector2f topRight(right, top);
 
-	sf::Vector2f topLeftHigh(left + velo, top + 32);
-	sf::Vector2f botLeftHigh(left + velo, bot-32);
-	sf::Vector2f botLeft(left + velo, bot);
+	sf::Vector2f topLeftHigh(left + (velo*dir), top + 32);
+	sf::Vector2f botLeftHigh(left + (velo*dir), bot-32);
+	sf::Vector2f botLeft(left + (velo*dir), bot);
+
+	sf::Vector2f botMidLeft(left + 5, bot);
+	sf::Vector2f botMid(mid, bot);
+	sf::Vector2f botMidRight(right - 5, bot);
 
 	sf::Vector2f topRightHigh(right + velo, top + 32);
-	sf::Vector2f botRightHigh(right+velo, bot-32);
+	sf::Vector2f botRightHigh(right + velo, bot-32);
 	sf::Vector2f botRight(right + velo, bot);
 
 	//If out of level bounds
-	if (left + velo <= 0 || right+velo >= (currentLevel.width * 64)) return false;
+	if (left + velo <= 6 || right+velo >= (currentLevel.width * 64)-6) return false;
 	
-	checkTopBotCollision(topRight, botRight, topLeft, botLeft, currentLevel);
+	checkTopBotCollision(topRight, botRight, botMidRight, botMid, botMidLeft, topLeft, botLeft, currentLevel);
 
-	return checkSideCollision(botRightHigh, botLeftHigh, topRightHigh, topLeftHigh, currentLevel);
+	return checkSideCollision(velo, botRightHigh, botLeftHigh, topRightHigh, topLeftHigh, currentLevel);
 }
 
-bool Player::checkSideCollision(sf::Vector2f botRightHigh, sf::Vector2f botLeftHigh, sf::Vector2f topRightHigh, sf::Vector2f topLeftHigh, LevelManager::Level currentLevel) {
+bool Player::checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vector2f botLeftHigh, sf::Vector2f topRightHigh, sf::Vector2f topLeftHigh, LevelManager::Level currentLevel) {
 
 	bool blockTopLeftHigh = currentLevel.colMap.at(floor(topLeftHigh.y / 64)).at(floor(topLeftHigh.x / 64)) == 1,
 		blockBotLeftHigh = currentLevel.colMap.at(floor(botLeftHigh.y / 64)).at(floor(botLeftHigh.x / 64)) == 1,
 		blockTopRightHigh = currentLevel.colMap.at(floor(topRightHigh.y / 64)).at(floor(topRightHigh.x / 64)) == 1,
 		blockBotRightHigh = currentLevel.colMap.at(floor(botRightHigh.y / 64)).at(floor(botRightHigh.x / 64)) == 1;
 
-	if (blockTopLeftHigh || blockBotLeftHigh || blockTopRightHigh || blockBotRightHigh)
+	if (((blockTopLeftHigh || blockBotLeftHigh) && velo < 0) ||
+		((blockTopRightHigh || blockBotRightHigh)) && velo > 0)
 		return false;
 
 	return true;
 }
 
-void Player::checkTopBotCollision(sf::Vector2f topRight, sf::Vector2f botRight, sf::Vector2f topLeft, sf::Vector2f botLeft, LevelManager::Level currentLevel) {
-	
+void Player::checkTopBotCollision(sf::Vector2f topRight, sf::Vector2f botRight, sf::Vector2f botMidRight, sf::Vector2f botMid, sf::Vector2f botMidLeft, sf::Vector2f topLeft, sf::Vector2f botLeft, LevelManager::Level currentLevel) {
+
 	bool blockTopLeft = currentLevel.colMap.at(floor(topLeft.y / 64)).at(floor(topLeft.x / 64)) == 1,
 		blockBottomLeft = currentLevel.colMap.at(floor(botLeft.y / 64)).at(floor(botLeft.x / 64)) == 1,
+		blockBotMidLeft = currentLevel.colMap.at(floor(botMidLeft.y / 64)).at(floor(botMidLeft.x / 64)) == 1,
+		blockBotMid = currentLevel.colMap.at(floor(botMid.y / 64)).at(floor(botMid.x / 64)) == 1,
+		blockBotMidRight = currentLevel.colMap.at(floor(botMidRight.y / 64)).at(floor(botMidRight.x / 64)) == 1,
 		blockTopRight = currentLevel.colMap.at(floor(topRight.y / 64)).at(floor(topRight.x / 64)) == 1,
 		blockBottomRight = currentLevel.colMap.at(floor(botRight.y / 64)).at(floor(botRight.x / 64)) == 1;
 
-	if (blockBottomRight || blockBottomLeft) grounded = true;
-	else grounded = false;
+	if ((blockBottomLeft && !blockBotMidLeft) ||
+		(blockBottomRight && !blockBotMidRight))
+		grounded = false;
+	else if (blockBottomLeft || blockBottomRight)
+		grounded = true;
+	else
+		grounded = false;
 
 	if (blockTopRight || blockTopLeft) ceilingBump = true;
 	else ceilingBump = false;
