@@ -168,7 +168,6 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 	player.startPosition = Vector2(level.startPosition);
 	player.respawn();
 	levelManager.setLevel(level);
-	//levelVector = levelManager.getLevelVector();
 
 
 	sf::String title("SuperNova - Level " + std::to_string(level.levelNumber));
