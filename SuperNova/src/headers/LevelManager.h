@@ -31,7 +31,6 @@ static class LevelManager
 		Level getTestLevel();
 		TileMap getMap();
 		void setLevel(Level level);
-		std::vector<Vector2> getLevelVector();
 
 	private:
 		TileMap map;
