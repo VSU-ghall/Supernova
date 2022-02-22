@@ -32,8 +32,8 @@ void LevelManager::init() {
 		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		 0,  0,  0,  0,  0,  0,  0,  0,  6,  6,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-		 6,  6,  6,  6,  6,  6,  6,  6,  0,  0,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,
+		 0,  0,  0,  0,  0,  0,  0,  6,  4,  4,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		 6,  6,  6,  6,  6,  6,  6,  4,  4,  4,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,
 		 4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,
 		 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,
 	};
@@ -86,13 +86,15 @@ TileMap LevelManager::getMap() {
 	return map;
 }
 
-void LevelManager::loadLevel(Level level) {
+void LevelManager::loadLevel(Level* level) {
 	// create the tilemap from the level definition
-	if (!map.load("src/resources/tilemap_v2.png", sf::Vector2u(64, 64), level.map, level.width, level.height))
+	if (!map.load("src/resources/tilemap_v2.png", sf::Vector2u(64, 64), level->map, level->width, level->height))
 		std::cout << "Error loading TileMap";
 
-	if (level.hasBackground)
-		level.background->animating = true;
+	level->colMap = map.loadColMap(level->map, level->width, level->height);
+
+	if (level->hasBackground)
+		level->background->animating = true;
 }
 
 void LevelManager::setLevel(Level level) {
@@ -100,6 +102,5 @@ void LevelManager::setLevel(Level level) {
 		currentLevel.background->animating = false;
 
 	currentLevel = level;
-	loadLevel(currentLevel);
-	currentLevel.colMap = map.loadColMap(level.map, level.width, level.height);
+	loadLevel(&currentLevel);
 }
