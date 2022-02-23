@@ -5,7 +5,7 @@ bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize, const int*
     // load the tileset texture
     if (!m_tileset.loadFromFile(tileset))
         return false;
-
+    colMap.clear();
     // resize the vertex array to fit the level size
     m_vertices.setPrimitiveType(sf::Quads);
     m_vertices.resize(width * height * 4);
@@ -16,7 +16,6 @@ bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize, const int*
         {
             // get the current tile number
             int tileNumber = tiles[i + j * width];
-
             // find its position in the tileset texture
             int tu = tileNumber % (m_tileset.getSize().x / tileSize.x);
             int tv = tileNumber / (m_tileset.getSize().x / tileSize.x);
@@ -49,4 +48,35 @@ void TileMap::draw(sf::RenderTarget & target, sf::RenderStates states) const
 
     // draw the vertex array
     target.draw(m_vertices, states);
+}
+std::vector<std::vector<int>> TileMap::loadColMap( const int* tiles, unsigned int width, unsigned int height)
+{
+
+    colMap.clear();
+    
+    for (int i = 0; i < height; i++) {
+        std::vector<int> row;
+        for (int j = 0; j < width; j++) {
+            // get the current tile number
+            int tileNumber = tiles[(i*width)+j];
+            if (tileNumber > 0) {
+                row.push_back(1);
+            }
+            else {
+                row.push_back(0);
+            }
+        }
+        colMap.push_back(row);
+    }
+    return colMap;
+
+    //print out the colMap for debug purposes
+    //for (int i = 0; i < height; i++) {
+    //    for (int j = 0; j < width; j++) {
+    //        std::cout << colMap.at(i).at(j);
+    //    }
+    //    std::cout << std::endl;
+    //}
+
+
 }

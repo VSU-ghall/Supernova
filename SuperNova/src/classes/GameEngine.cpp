@@ -168,7 +168,6 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 	player.startPosition = Vector2(level.startPosition);
 	player.respawn();
 	levelManager.setLevel(level);
-	//levelVector = levelManager.getLevelVector();
 
 
 	sf::String title("SuperNova - Level " + std::to_string(level.levelNumber));
@@ -219,11 +218,11 @@ void GameEngine::playMusic()
 // Updates all game objects
 //
 void GameEngine::update() {
-	player.update(levelVector, levelManager.getCurrentLevel());
+	player.update(levelManager.getCurrentLevel());
 
 	Sprite::animateAll();
 
 	sf::Vector2i pixelPos(player.getX(), player.getY());
 	sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
-	pixiguide->getSprite()->setPosition(sf::Vector2f((pixelPos.x - (4.5 * 64)) * 1.1, pixelPos.y / 1.5));
+	pixiguide->getSprite()->setPosition(sf::Vector2f((pixelPos.x - (4.5 * 64)) * 1.1, (pixelPos.y - (2*64))/1.2));
 }
