@@ -12,6 +12,9 @@ bool grounded = true;
 bool jumping = false;
 bool ceilingBump = false;
 int jumpFrames = 0;
+bool isLeft = false;
+bool isRight = true;
+
 float Player::getX() {
 	return x;
 }
@@ -70,12 +73,14 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 	if (grounded && 
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::D) && 
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::A) &&
-		!sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+		!sf::Keyboard::isKeyPressed(sf::Keyboard::W) &&
+		!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		return;
 
 	bool checkLeft = checkCollision(-playerSpeed, currentLevel),
 		checkRight = checkCollision(playerSpeed, currentLevel);
 
+	// move left & right
 	if (checkRight && sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
 		stoppedLeft = false; stoppedRight = true;
 		moving = true;
@@ -83,7 +88,6 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 		velocity.x = playerSpeed;
 		//the sprite size in sprite sheet is 800x1600. this tells textureRect to start at beginning and every time walkCount is added, then it goes to next frame
 		playerSprite.setTextureRect(sf::IntRect(offset * 834, 0, 834, 1668));
-		
 	}
 	else if (checkLeft && sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
 		stoppedLeft = true;  stoppedRight = false;
@@ -97,13 +101,27 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 		velocity.x = 0;
 	}
 
+	// crouch
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && stoppedRight) {
+		playerSprite.setTextureRect(sf::IntRect(0, 4973, 1146, 1668));
+		velocity.x = 0;
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && stoppedLeft) {
+		playerSprite.setTextureRect(sf::IntRect(1146, 4973, 1146 * 2, 1668));
+		velocity.x = 0;
+	}
+
+	// jump
 	if (!jumping) {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && grounded) {
+
 			velocity.y = -playerJumpSpeed;
 			jumping = true;
 			jumpFrames = 0;
+			
 		}
 		else if (!grounded || velocity.y < 0) {
+			//if player is suspended in air, then the jumping animation is set depending on direction astronaut is facing
 			velocity.y = velocity.y * .9f + gravity;
 		}
 		else {
@@ -123,6 +141,15 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 		else {
 			jumping = false;
 			jumpFrames = 0;
+		}
+	}
+
+	if (!grounded && velocity.y < 0) {
+		if (stoppedRight) {
+			playerSprite.setTextureRect(sf::IntRect(0, 3334, 1146, 1668));
+		}
+		else if (stoppedLeft) {
+			playerSprite.setTextureRect(sf::IntRect(1146, 3334, 1146 * 2, 1668));
 		}
 	}
 
