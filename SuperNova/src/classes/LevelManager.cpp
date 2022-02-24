@@ -37,7 +37,7 @@ void LevelManager::init() {
 		 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,
 		 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
 	};
-		level1.startPosition = Vector2(5, 9);
+		level1.startPosition = Vector2(5, 11);
 
 	level2.map = new int[level2.width * level2.height] {
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
