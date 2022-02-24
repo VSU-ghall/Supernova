@@ -160,6 +160,7 @@
     <ClCompile Include="src\classes\Player.cpp" />
     <ClCompile Include="src\classes\Vector2.cpp" />
     <ClCompile Include="src\classes\TileMap.cpp" />
+    <ClCompile Include="src\classes\StoryManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\headers\Sprite.h" />
@@ -172,6 +173,7 @@
     <ClInclude Include="src\headers\Player.h" />
     <ClInclude Include="src\headers\Vector2.h" />
     <ClInclude Include="src\headers\TileMap.h" />
+    <ClInclude Include="src\headers\StoryManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SuperNova.rc" />
@@ -181,14 +183,19 @@
     <Image Include="src\resources\astronaut_walk.png" />
     <Image Include="src\resources\Level1Button.png" />
     <Image Include="src\resources\Level2Button.png" />
+    <Image Include="src\resources\pixiguide.png" />
     <Image Include="src\resources\rocket_sprite_sheet.png" />
     <Image Include="src\resources\space_background_sprite_sheet.png" />
     <Image Include="src\resources\testTileSet.png" />
     <Image Include="src\resources\tilemap_v2.png" />
+    <Image Include="src\resources\tilemap_v3.png" />
     <Image Include="src\resources\waterfall_background.png" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="src\resources\background_music.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\Downloads\openal32.dll" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

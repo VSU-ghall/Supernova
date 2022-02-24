@@ -14,8 +14,8 @@ extern class Sprite
 		Sprite(const std::string& filePath, bool animated, bool random, int numFrames, int width, int height, float scale, int frequency);
 
 		void animate();
-		void animateAll();
-		sf::Sprite getSprite();
+		static void animateAll();
+		sf::Sprite* getSprite();
 		sf::Texture getTexture();
 		sf::Clock getTimer();
 		int getWidth();

@@ -1,5 +1,4 @@
 #include "headers/GameEngine.h"
-#include <vector>
 
 GameEngine::GameEngine() 
 	:window(sf::VideoMode(), "SuperNova")
@@ -33,14 +32,7 @@ void GameEngine::init() {
 	player.init();
 
 	gamebar.setFillColor(sf::Color(59, 30, 11));
-	
-	if (!btnLevel1Texture.loadFromFile("src/resources/Level1Button.png"))
-		std::cout << "Could not load level 1 button" << std::endl;
-	btnLevel1.setTexture(btnLevel1Texture);
-
-	if (!btnLevel2Texture.loadFromFile("src/resources/Level2Button.png"))
-		std::cout << "Could not load level 2 button" << std::endl;
-	btnLevel2.setTexture(btnLevel2Texture);
+	pixiguide->animating = true;
 
 	playMusic();
 }
@@ -53,7 +45,7 @@ void GameEngine::draw() {
 	window.setView(view);
 
 	if (levelManager.currentLevel.hasBackground) {
-		window.draw(levelManager.getCurrentBackground().getSprite());
+		window.draw(*levelManager.getCurrentBackground().getSprite());
 	}
 
 	window.draw(levelManager.getMap());
@@ -62,8 +54,10 @@ void GameEngine::draw() {
 
 	player.draw(window);
 
+	window.draw(*pixiguide->getSprite());
+
 	window.draw(gamebar);
-	window.draw(btnLevel1); window.draw(btnLevel2);
+	window.draw(*btnLevel1->getSprite()); window.draw(*btnLevel2->getSprite());
 
 	window.display();
 }
@@ -138,20 +132,26 @@ void GameEngine::handleEvent(sf::Event event) {
 	if (event.type == sf::Event::Resized) {
 		view = getViewport(event.size.width, event.size.height);
 		gamebar.setSize(sf::Vector2f(event.size.width, 75));
-		btnLevel1.setPosition(gamebar.getPosition().x + 10, gamebar.getPosition().y + 5);
-		btnLevel2.setPosition(gamebar.getPosition().x + 20 + btnLevel1.getTexture()->getSize().x, gamebar.getPosition().y + 5);
+		btnLevel1->getSprite()->setPosition(gamebar.getPosition().x + 10, gamebar.getPosition().y + 5);
+		btnLevel2->getSprite()->setPosition(gamebar.getPosition().x + 20 + btnLevel1->getTexture().getSize().x, gamebar.getPosition().y + 5);
+	}
+
+	if (event.type == sf::Event::KeyReleased) {
+		if (sf::Keyboard::D || sf::Keyboard::A)
+			if (player.stoppedLeft || player.stoppedRight)
+				player.moving = false;
 	}
 
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
 	sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
-	if (btnLevel1.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+	if (btnLevel1->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 			if (levelManager.getCurrentLevel().levelNumber == 2)
 				loadLevel(levelManager.getLevel1());
 		}
 		if (event.type == sf::Event::MouseButtonReleased) {}
 	}
-	if (btnLevel2.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+	if (btnLevel2->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 			if (levelManager.getCurrentLevel().levelNumber == 1)
 				loadLevel(levelManager.getLevel2());
@@ -168,7 +168,6 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 	player.startPosition = Vector2(level.startPosition);
 	player.respawn();
 	levelManager.setLevel(level);
-	//levelVector = levelManager.getLevelVector();
 
 
 	sf::String title("SuperNova - Level " + std::to_string(level.levelNumber));
@@ -219,7 +218,11 @@ void GameEngine::playMusic()
 // Updates all game objects
 //
 void GameEngine::update() {
-	player.update(levelVector, levelManager.getCurrentLevel());
+	player.update(levelManager.getCurrentLevel());
 
-	Sprite sprite; sprite.animateAll();
+	Sprite::animateAll();
+
+	sf::Vector2i pixelPos(player.getX(), player.getY());
+	sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+	pixiguide->getSprite()->setPosition(sf::Vector2f((pixelPos.x - (4.5 * 64)) * 1.1, (pixelPos.y - (2*64))/1.2));
 }

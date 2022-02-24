@@ -17,6 +17,7 @@ static class LevelManager
 			int width = 20, height = 12, levelNumber = (levelManager->numberOfLevels)++;
 			int* map;
 			Vector2 startPosition;
+			std::vector<std::vector<int>> colMap;
 		} testLevel = {this}, 
 			level1 = { this, new Sprite("src/resources/space_background_sprite_sheet.png", true, true, 4, 1280, 768, 1.0f, 1000), true },
 			level2 = {this, new Sprite("src/resources/waterfall_background.png", true, false, 16, 350, 210, 4.57f, 500), true, 25, 17 },
@@ -30,11 +31,10 @@ static class LevelManager
 		Level getTestLevel();
 		TileMap getMap();
 		void setLevel(Level level);
-		std::vector<Vector2> getLevelVector();
 
 	private:
 		TileMap map;
 
 		void init();
-		void loadLevel(Level level);
+		void loadLevel(Level* level);
 };
