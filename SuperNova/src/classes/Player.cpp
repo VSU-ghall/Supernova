@@ -30,12 +30,13 @@ void Player::init() {
 	playerJumpSpeed = 9.0f;
 	//playerSprite.setPosition(64 * 5, 64 * 9);
 	playerSprite.setPosition(64 * startPosition.x, 64 * startPosition.y);
-	playerSprite.setTextureRect(sf::IntRect(0, 0, 834, 1666));
+	playerSprite.setTextureRect(sf::IntRect(0, 0, 32, 64));
 	x = startPosition.x * 64;
 	y = startPosition.y * 64;
 	
 	//this is the Size of the player
-	playerSize = 64/834.f;
+	//playerSize = 64/834.f;
+	playerSize = 2.f;
 
 	//setting the initial size of the player.
 	playerSprite.setScale(playerSize, playerSize);
@@ -51,9 +52,9 @@ void Player::init() {
 
 void Player::animate() {
 	if (stoppedRight && !moving)
-		playerSprite.setTextureRect(sf::IntRect(0, 0, 800, 1668));
+		playerSprite.setTextureRect(sf::IntRect(0, 0, 32, 64));
 	else if (stoppedLeft && !moving)
-		playerSprite.setTextureRect(sf::IntRect(0, 834 * 2, 800, 1668));
+		playerSprite.setTextureRect(sf::IntRect(0, 32 * 2, 32, 64));
 
 	frameCount++;
 	if ((int)(frameCount * animationPerFrame) > offset) offset++;
@@ -86,16 +87,16 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 		moving = true;
 
 		velocity.x = playerSpeed;
-		//the sprite size in sprite sheet is 800x1600. this tells textureRect to start at beginning and every time walkCount is added, then it goes to next frame
-		playerSprite.setTextureRect(sf::IntRect(offset * 834, 0, 834, 1668));
+		//the sprite size in sprite sheet is 32x64. this tells textureRect to start at beginning and every time walkCount is added, then it goes to next frame
+		playerSprite.setTextureRect(sf::IntRect(offset * 32, 0, 32, 64));
 	}
 	else if (checkLeft && sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
 		stoppedLeft = true;  stoppedRight = false;
 		moving = true;
 
 		velocity.x = -playerSpeed;
-		//the left facing frames are at 800*2 x 1600 so this tells does same as above but lower on the sprite sheet
-		playerSprite.setTextureRect(sf::IntRect(offset * 834, 834 * 2, 800, 1668));
+		//the left facing frames are at 32*2 x 64 so this tells does same as above but lower on the sprite sheet
+		playerSprite.setTextureRect(sf::IntRect(offset * 32, 32 * 2, 32, 64));
 	}
 	else{
 		velocity.x = 0;
@@ -113,21 +114,21 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 			//if player is suspended in air, then the jumping animation is set depending on direction astronaut is facing
 			velocity.y = velocity.y * .9f + gravity;
 			if (stoppedRight) {
-				playerSprite.setTextureRect(sf::IntRect(0, 3334, 1146, 1668));
+				playerSprite.setTextureRect(sf::IntRect(0, 128, 44, 64));
 			}
 			else if(stoppedLeft) {
-				playerSprite.setTextureRect(sf::IntRect(1146, 3334, 1146 * 2, 1668));
+				playerSprite.setTextureRect(sf::IntRect(44, 128, 44 * 2, 64));
 			}
 			
 		}
 		else {
 			//if s key is pressed, the astronaut crouches and cannot move along the x-axis 
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && stoppedRight) {
-				playerSprite.setTextureRect(sf::IntRect(0, 4973, 1146, 1668));
+				playerSprite.setTextureRect(sf::IntRect(0, 192, 44, 64));
 				velocity.x = 0;
 			}
 			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && stoppedLeft) {
-				playerSprite.setTextureRect(sf::IntRect(1146, 4973, 1146 * 2, 1668));
+				playerSprite.setTextureRect(sf::IntRect(44, 192, 44 * 2, 64));
 				velocity.x = 0;
 			}
 			velocity.y = 0;
