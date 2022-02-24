@@ -25,24 +25,23 @@ void LevelManager::init() {
 
 	level1.map = new int[level1.width * level1.height] {
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
-		 3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,	 3,  3,  3,  3,  3,  3,  3,
+		16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,
 		17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17,
 		19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
 		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-		 6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,
-		 4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,
+		 0,  0,  0,  0,  0,  0,  0,  0,  4,  4,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		 0,  0,  0,  0,  0,  0,  0,  4,  2,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		 4,  4,  4,  4,  4,  4,  4,  2,  2,  2,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,
 		 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,
+		 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
 	};
-		level1.startPosition = Vector2(5, 9);
-
+		level1.startPosition = Vector2(5, 11);
 
 	level2.map = new int[level2.width * level2.height] {
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
-		 3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,
+		16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,
 		17, 17, 17, 17, 27, 23, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 22, 26, 17, 17, 17, 17,
 		17, 17, 17, 27, 28, 29,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 24, 25, 26, 17, 17, 17,
 		17, 17, 27, 28, 29,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 24, 25, 26, 17, 17,
@@ -52,9 +51,9 @@ void LevelManager::init() {
 		29,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 24,
 		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-		 8,  8,  8,  8,  8,  8,  8,  8,  5,  6,  6,  6,  6,  6,  6,  6,  7,  8,  8,  8,  8,  8,  8,  8,  8,
-		 4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,
+		 6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  3,  4,  4,  4,  5,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,
 		 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,
+		15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
@@ -87,13 +86,15 @@ TileMap LevelManager::getMap() {
 	return map;
 }
 
-void LevelManager::loadLevel(Level level) {
+void LevelManager::loadLevel(Level* level) {
 	// create the tilemap from the level definition
-	if (!map.load("src/resources/tilemap_v2.png", sf::Vector2u(64, 64), level.map, level.width, level.height))
+	if (!map.load("src/resources/tilemap_v3.5.png", sf::Vector2u(64, 64), level->map, level->width, level->height))
 		std::cout << "Error loading TileMap";
 
-	if (level.hasBackground)
-		level.background->animating = true;
+	level->colMap = map.loadColMap(level->map, level->width, level->height);
+
+	if (level->hasBackground)
+		level->background->animating = true;
 }
 
 void LevelManager::setLevel(Level level) {
@@ -101,22 +102,5 @@ void LevelManager::setLevel(Level level) {
 		currentLevel.background->animating = false;
 
 	currentLevel = level;
-	loadLevel(currentLevel);
-}
-
-//Iterates down the columns of the TileMap. IF there is a tile at the index, add the coordinates of the tile to vector.
-std::vector<Vector2> LevelManager::getLevelVector() {
-	std::vector<Vector2> vectors;
-	int current = 0;
-	for (int i = 0; i < currentLevel.width; i++) {
-		for (int j = 0; j < currentLevel.height; j++) {
-			if (currentLevel.map[current] != 0) {
-				float y = (j + 1) * 64;
-				vectors.push_back(Vector2(((i + 4) * 64), y));
-			}
-			current += currentLevel.width;
-		}
-		current = i + 1;
-	}
-	return vectors;
+	loadLevel(&currentLevel);
 }
