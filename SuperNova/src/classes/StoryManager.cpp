@@ -3,7 +3,7 @@
 void StoryManager::draw() {
 	if (playingIntro) {
 
-		if (timer.getElapsedTime().asSeconds() <= 5) window->draw(blackRect);
+		if (timer.getElapsedTime().asSeconds() <= 7) window->draw(blackRect);
 		window->draw(logoImg);
 	}
 }
