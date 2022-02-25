@@ -25,6 +25,7 @@ Sprite::Sprite(const std::string& filePath, bool animated, bool random, int numF
 	this->frequency = frequency;
 
 	sprite.setScale(sf::Vector2f(scale, scale));
+	animating = true;
 }
 
 void Sprite::animate() {

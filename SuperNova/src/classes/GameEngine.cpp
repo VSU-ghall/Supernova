@@ -25,15 +25,15 @@ void GameEngine::run() {
 void GameEngine::init() {
 	window.setFramerateLimit(60);
 
+
 	loadLevel(levelManager.getLevel1());
 	player.init();
 
 	gamebar.setFillColor(sf::Color(59, 30, 11));
-	pixiguide->animating = true;
 
 	playMusic();
 
-	storyManager.playIntroduction();
+	storyManager.playLogoIntro();
 }
 
 //
