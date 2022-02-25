@@ -58,7 +58,7 @@ void LevelManager::init() {
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 	};
-		level2.startPosition = Vector2(15, 11);
+		level2.startPosition = Vector2(15, 13);
 		level2.background->sprite.setTextureRect(sf::IntRect(0, 0, 64*level2.width, 64*level2.height));
 }
 

@@ -1,17 +1,14 @@
 #include "headers/GameEngine.h"
 
 GameEngine::GameEngine() 
-	:window(sf::VideoMode(), "SuperNova")
-{
-}
+	:window(sf::VideoMode(), "SuperNova"), storyManager(&window, &scenePlaying)
+{}
 
 void GameEngine::run() {
-
 	init();
 
 	// main loop --> continues each frame while window is open
 	while (window.isOpen()) {
-
 		// event handling
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -35,6 +32,8 @@ void GameEngine::init() {
 	pixiguide->animating = true;
 
 	playMusic();
+
+	storyManager.playIntroduction();
 }
 
 //
@@ -42,6 +41,7 @@ void GameEngine::init() {
 //
 void GameEngine::draw() {
 	window.clear();
+
 	window.setView(view);
 
 	if (levelManager.currentLevel.hasBackground) {
@@ -58,6 +58,8 @@ void GameEngine::draw() {
 
 	window.draw(gamebar);
 	window.draw(*btnLevel1->getSprite()); window.draw(*btnLevel2->getSprite());
+
+	if (scenePlaying) storyManager.draw();
 
 	window.display();
 }
@@ -218,6 +220,8 @@ void GameEngine::playMusic()
 // Updates all game objects
 //
 void GameEngine::update() {
+	if (scenePlaying) storyManager.update();
+
 	player.update(levelManager.getCurrentLevel());
 
 	Sprite::animateAll();

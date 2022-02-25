@@ -46,6 +46,7 @@
     <Image Include="src\resources\waterfall_background.png" />
     <Image Include="src\resources\pixiguide.png" />
     <Image Include="src\resources\tilemap_v3.png" />
+    <Image Include="src\resources\logo_screen.png" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="src\resources\background_music.wav" />
