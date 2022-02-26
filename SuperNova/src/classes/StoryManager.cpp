@@ -8,7 +8,8 @@ void StoryManager::draw() {
 		window->draw(logoImg);
 	}
 	if (playingIntro) {
-		window->draw(*astronaut->getSprite());
+		if (rocket->getSprite()->getPosition().y >= 3 * 64)
+			window->draw(*astronaut->getSprite());
 		window->draw(*rocket->getSprite());
 	}
 }
@@ -23,6 +24,7 @@ void StoryManager::update() {
 		if (seconds >= 7 && logoImg.getFillColor().a <= 0) {
 			*scenePlaying = false;
 			playingLogo = false;
+			//playIntroScene();
 		}
 	}
 	if (playingIntro) {
@@ -48,11 +50,12 @@ void StoryManager::update() {
 						astronaut->animating = false;
 						astronaut->getSprite()->setTextureRect(sf::IntRect(0, 0, 32, 64));
 					}
-					// drop down animation goes here
+					else {
+						*scenePlaying = false;
+						playingIntro = false;
+					}
 				}
 			}
-			//*scenePlaying = false;
-			//playingIntro = false;
 		}
 	}
 }
