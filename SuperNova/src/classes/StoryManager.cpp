@@ -31,9 +31,26 @@ void StoryManager::update() {
 
 		if (rocketPos.y <= 6 * 64) {
 			rocket->getSprite()->setPosition(rocketPos);
-			astronaut->getSprite()->setPosition(64, rocket->getSprite()->getPosition().y - 100);
+			astronaut->getSprite()->setPosition(192, (rocket->getSprite()->getPosition().y + (1535*0.25)) - 220);
 		}
 		else {
+			if (rocket->animating) rocket->animating = false;
+
+			sf::Vector2f astronautPos = astronaut->getSprite()->getPosition();
+
+			if (astronautPos.y <= 6 * 64 + (1535 * 0.25) - 128)
+				astronaut->getSprite()->setPosition(astronautPos.x+1, astronautPos.y+1);
+			else {
+				if (astronautPos.x <= 500)
+					astronaut->getSprite()->setPosition(astronautPos.x + 1, astronautPos.y);
+				else {
+					if (astronaut->animating) {
+						astronaut->animating = false;
+						astronaut->getSprite()->setTextureRect(sf::IntRect(0, 0, 32, 64));
+					}
+					// drop down animation goes here
+				}
+			}
 			//*scenePlaying = false;
 			//playingIntro = false;
 		}
@@ -67,11 +84,9 @@ void StoryManager::playIntroScene() {
 	//const std::string& filePath, bool animated, bool random, int numFrames, 
 	//		int width, int height, float scale, int frequency
 	rocket = new Sprite("src/resources/rocket_sprite_sheet.png", true, false, 3, 1024, 1535, 0.25, 100);
-	astronaut = new Sprite("src/resources/astronaut_walk.png", false, false, 8, 800, 1668, 1.0f, 100);
+	astronaut = new Sprite("src/resources/astronaut_walk.png", true, false, 8, 32, 64, 1.7f, 150);
 
-	//800, 1668
-
-	rocket->getSprite()->setPosition(64,-1535*0.125+50);
+	rocket->getSprite()->setPosition(64, -1535*0.125+50);
 }
 
 /**************************************************************************/
