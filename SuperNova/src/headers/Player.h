@@ -3,6 +3,7 @@
 #include "Vector2.h"
 #include <stdlib.h>
 #include <headers/LevelManager.h>
+#include <SFML/Audio.hpp>
 
 class Player
 {
@@ -13,6 +14,7 @@ class Player
 		Vector2 startPosition;
 		sf::Sprite playerSprite;
 		sf::Texture texture;
+		sf::Music music;
 		bool stoppedLeft = false, stoppedRight = true, moving = false;
 
 		float getX();
@@ -27,5 +29,7 @@ class Player
 		void checkMovement(LevelManager::Level currentLevel);
 		void respawn();
 		void update(LevelManager::Level currentLevel);
+		void playCrouchSound();
+		void playJumpSound();
 };
 

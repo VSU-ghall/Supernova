@@ -1,22 +1,41 @@
 #pragma once
-#include "headers/GameEngine.h"
 #include "iostream"
+#include <SFML/Graphics.hpp>
+#include "headers/Sprite.h"
 
-class StoryManager
+extern class StoryManager
 {
 public:
-	StoryManager(GameEngine* game) {
-		this->game = game;
-		this->levelManager = game->getLevelManager();
-		this->player = game->getPlayer();
+	StoryManager(sf::RenderWindow* window, bool* scenePlaying) {
+		this->window = window;
+		this->scenePlaying = scenePlaying;
+
+		blackRect.setFillColor(sf::Color(0, 0, 0, 255));
 	}
 
-	static void startIntroduction();
+	void draw();
+	void update();
+
+	/*** Scene Methods ***/
+	void playLogoIntro();
+	void playIntroScene();
 
 private:
-	GameEngine* game = NULL;
-	LevelManager* levelManager = NULL;
-	Player* player = NULL;
+	sf::RenderWindow* window;
+	sf::Clock timer;
+	bool* scenePlaying;
 
+	/*** Sprites and Textures ***/
+	sf::RectangleShape blackRect, logoImg;
+	Sprite* rocket, *astronaut;
+	sf::Texture logoImgText;
+
+	/*** Booleans ***/
+	bool playingLogo = false, playingIntro = false;
+
+
+	/*** Helper Methods ***/
+	void fadeIn(sf::RectangleShape& rect);
+	void fadeOut(sf::RectangleShape& rect);
 };
 
