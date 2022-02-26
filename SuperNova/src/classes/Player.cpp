@@ -7,7 +7,7 @@ int frameCount = 0, offset = 0;
 const float gravity = 1.f;
 sf::Sprite playerSprite;
 sf::Texture texture;
-sf::Vector2f velocity(0,0);
+sf::Vector2f velocity(0, 0);
 bool grounded = true;
 bool jumping = false;
 bool ceilingBump = false;
@@ -24,7 +24,7 @@ float Player::getY() {
 }
 
 void Player::init() {
-	
+
 	//this is how fast we want the player. If we want to change their speed this can be changed.
 	playerSpeed = 6.0f;
 	playerJumpSpeed = 9.0f;
@@ -33,14 +33,14 @@ void Player::init() {
 	playerSprite.setTextureRect(sf::IntRect(0, 0, 32, 64));
 	x = startPosition.x * 64;
 	y = startPosition.y * 64;
-	
+
 	//this is the Size of the player
 	//playerSize = 64/834.f;
 	playerSize = 2.f;
 
 	//setting the initial size of the player.
 	playerSprite.setScale(playerSize, playerSize);
-	
+
 	if (!texture.loadFromFile("src/resources/astronaut_walk.png")) {
 		std::cout << "Could not load astronaut texture" << std::endl;
 	}
@@ -71,8 +71,8 @@ void Player::animate() {
 // ( Movement is animated on a ratio (set by the variable animationPerFrame) )
 //
 void Player::checkMovement(LevelManager::Level currentLevel) {
-	if (grounded && 
-		!sf::Keyboard::isKeyPressed(sf::Keyboard::D) && 
+	if (grounded &&
+		!sf::Keyboard::isKeyPressed(sf::Keyboard::D) &&
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::A) &&
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::W) &&
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
@@ -81,7 +81,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 	bool checkLeft = checkCollision(-playerSpeed, currentLevel),
 		checkRight = checkCollision(playerSpeed, currentLevel);
 
-	// move left & right
+
 	if (checkRight && sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
 		stoppedLeft = false; stoppedRight = true;
 		moving = true;
@@ -98,34 +98,38 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 		//the left facing frames are at 32*2 x 64 so this tells does same as above but lower on the sprite sheet
 		playerSprite.setTextureRect(sf::IntRect(offset * 32, 32 * 2, 32, 64));
 	}
-	else{
+	else {
 		velocity.x = 0;
 	}
 
-	// crouch
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && stoppedRight) {
-		playerSprite.setTextureRect(sf::IntRect(0, 4973, 1146, 1668));
-		velocity.x = 0;
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && stoppedLeft) {
-		playerSprite.setTextureRect(sf::IntRect(1146, 4973, 1146 * 2, 1668));
-		velocity.x = 0;
-	}
-
-	// jump
 	if (!jumping) {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && grounded) {
-
 			velocity.y = -playerJumpSpeed;
 			jumping = true;
 			jumpFrames = 0;
-			
+
 		}
 		else if (!grounded || velocity.y < 0) {
 			//if player is suspended in air, then the jumping animation is set depending on direction astronaut is facing
 			velocity.y = velocity.y * .9f + gravity;
+			if (stoppedRight) {
+				playerSprite.setTextureRect(sf::IntRect(0, 128, 44, 64));
+			}
+			else if (stoppedLeft) {
+				playerSprite.setTextureRect(sf::IntRect(44, 128, 44 * 2, 64));
+			}
+
 		}
 		else {
+			//if s key is pressed, the astronaut crouches and cannot move along the x-axis 
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && stoppedRight) {
+				playerSprite.setTextureRect(sf::IntRect(0, 192, 44, 64));
+				velocity.x = 0;
+			}
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && stoppedLeft) {
+				playerSprite.setTextureRect(sf::IntRect(44, 192, 44 * 2, 64));
+				velocity.x = 0;
+			}
 			velocity.y = 0;
 		}
 	}
@@ -142,15 +146,6 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 		else {
 			jumping = false;
 			jumpFrames = 0;
-		}
-	}
-
-	if (!grounded && velocity.y < 0) {
-		if (stoppedRight) {
-			playerSprite.setTextureRect(sf::IntRect(0, 3334, 1146, 1668));
-		}
-		else if (stoppedLeft) {
-			playerSprite.setTextureRect(sf::IntRect(1146, 3334, 1146 * 2, 1668));
 		}
 	}
 
@@ -195,21 +190,21 @@ bool Player::checkCollision(float velo, LevelManager::Level currentLevel) {
 	sf::Vector2f topLeft(left, top);
 	sf::Vector2f topRight(right, top);
 
-	sf::Vector2f topLeftHigh(left + (velo*dir), top + 32);
-	sf::Vector2f botLeftHigh(left + (velo*dir), bot-32);
-	sf::Vector2f botLeft(left + (velo*dir), bot);
+	sf::Vector2f topLeftHigh(left + (velo * dir), top + 32);
+	sf::Vector2f botLeftHigh(left + (velo * dir), bot - 32);
+	sf::Vector2f botLeft(left + (velo * dir), bot);
 
 	sf::Vector2f botMidLeft(left + 5, bot);
 	sf::Vector2f botMid(mid, bot);
 	sf::Vector2f botMidRight(right - 5, bot);
 
 	sf::Vector2f topRightHigh(right + velo, top + 32);
-	sf::Vector2f botRightHigh(right + velo, bot-32);
+	sf::Vector2f botRightHigh(right + velo, bot - 32);
 	sf::Vector2f botRight(right + velo, bot);
 
 	//If out of level bounds
-	if (left + velo <= 6 || right+velo >= (currentLevel.width * 64)-6) return false;
-	
+	if (left + velo <= 6 || right + velo >= (currentLevel.width * 64) - 6) return false;
+
 	checkTopBotCollision(topRight, botRight, botMidRight, botMid, botMidLeft, topLeft, botLeft, currentLevel);
 
 	return checkSideCollision(velo, botRightHigh, botLeftHigh, topRightHigh, topLeftHigh, currentLevel);
