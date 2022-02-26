@@ -171,6 +171,7 @@ void Player::respawn() {
 void Player::update(LevelManager::Level currentLevel) {
 	animate();
 	checkMovement(currentLevel);
+	controlsSound();
 }
 
 //returns false if movement will cause collision. returns true otherwise
@@ -248,4 +249,34 @@ void Player::checkTopBotCollision(sf::Vector2f topRight, sf::Vector2f botRight, 
 
 	if (blockTopRight || blockTopLeft) ceilingBump = true;
 	else ceilingBump = false;
+}
+
+void Player::controlsSound()
+{
+	//sound for jump
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	{
+		if (!music.openFromFile("src/resources/sounds/astronaut_jump.wav")) 
+		{
+			std::cout << "Could not load astronaut jump sound" << std::endl;
+				return;
+		}
+
+		music.setVolume(25);
+
+		music.play();
+	}
+	//sound for crouch
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	{
+		if (!music.openFromFile("src/resources/sounds/astronaut_crouch.wav")) 
+		{
+			std::cout << "Could not load astronaut crouch sound" << std::endl;
+			return;
+		}
+
+		music.setVolume(25);
+
+		music.play();
+	}
 }

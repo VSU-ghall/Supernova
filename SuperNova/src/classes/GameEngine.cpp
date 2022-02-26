@@ -207,7 +207,7 @@ void GameEngine::playMusic()
 		return;
 	}
 
-	music.setVolume(25);
+	music.setVolume(10);
 
 	music.setLoop(true);         // make it loop
 	// Play it
