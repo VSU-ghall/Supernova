@@ -2,18 +2,13 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-float playerJumpSpeed, playerSpeed, playerSize, animationPerFrame = 1.0f / 8.0f;
+float playerJumpSpeed, playerSpeed, playerSize, animationPerFrame = 1.0f / 8.0f, jumpHeight = 0;
 int frameCount = 0, offset = 0;
 const float gravity = 1.f;
-float jumpHeight = 0;
 sf::Sprite playerSprite;
 sf::Texture texture;
 sf::Vector2f velocity(0, 0);
-bool grounded = true;
-bool jumping = false;
-bool ceilingBump = false;
-bool isLeft = false;
-bool isRight = true;
+bool grounded = true, jumping = false, ceilingBump = false;
 
 float Player::getX() {
 	return x;
@@ -137,7 +132,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 			ceilingBump = false;
 			jumping = false;
 		}
-		else if (jumpHeight < 128) {
+		else if (jumpHeight < 100) {
 			velocity.y = -playerJumpSpeed;
 			jumpHeight -= velocity.y;
 

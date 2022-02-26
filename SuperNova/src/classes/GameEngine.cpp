@@ -50,7 +50,7 @@ void GameEngine::draw() {
 
 	window.draw(levelManager.getMap());
 
-	drawGrid();
+	//drawGrid();
 
 	player.draw(window);
 
@@ -163,7 +163,7 @@ void GameEngine::handleEvent(sf::Event event) {
 	
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 		if (scenePlaying) scenePlaying = false;
-		std::cout << "x: " << worldPos.x << " y: " << worldPos.y << std::endl;
+		//std::cout << "x: " << worldPos.x << " y: " << worldPos.y << std::endl;
 	}
 
 }
@@ -194,7 +194,6 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
 	}
 	else {
-
 		view = getViewport(window.getSize().x, window.getSize().y);
 		view.setSize(viewWidth, viewHeight);
 		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
