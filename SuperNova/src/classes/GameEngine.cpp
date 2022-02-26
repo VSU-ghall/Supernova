@@ -33,7 +33,7 @@ void GameEngine::init() {
 
 	playMusic();
 
-	storyManager.playLogoIntro();
+	storyManager.playIntroScene();
 }
 
 //

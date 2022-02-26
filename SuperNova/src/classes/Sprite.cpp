@@ -32,7 +32,7 @@ void Sprite::animate() {
 	if (timer.getElapsedTime().asMilliseconds() >= frequency) {
 
 		if (random) {
-			offset = std::rand() % 4;
+			offset = std::rand() % numFrames;
 			sprite.setTextureRect(sf::IntRect(offset * width, 0, width, height));
 		}
 		else {
