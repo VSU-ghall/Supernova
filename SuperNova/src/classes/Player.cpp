@@ -2,18 +2,13 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-float playerJumpSpeed, playerSpeed, playerSize, animationPerFrame = 1.0f / 8.0f;
+float playerJumpSpeed, playerSpeed, playerSize, animationPerFrame = 1.0f / 8.0f, jumpHeight = 0;
 int frameCount = 0, offset = 0;
 const float gravity = 1.f;
 sf::Sprite playerSprite;
 sf::Texture texture;
 sf::Vector2f velocity(0, 0);
-bool grounded = true;
-bool jumping = false;
-bool ceilingBump = false;
-int jumpFrames = 0;
-bool isLeft = false;
-bool isRight = true;
+bool grounded = true, jumping = false, ceilingBump = false;
 
 float Player::getX() {
 	return x;
@@ -106,8 +101,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && grounded) {
 			velocity.y = -playerJumpSpeed;
 			jumping = true;
-			jumpFrames = 0;
-
+			jumpHeight = 0;
 		}
 		else if (!grounded || velocity.y < 0) {
 			//if player is suspended in air, then the jumping animation is set depending on direction astronaut is facing
@@ -118,7 +112,6 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 			else if (stoppedLeft) {
 				playerSprite.setTextureRect(sf::IntRect(44, 128, 44 * 2, 64));
 			}
-
 		}
 		else {
 			//if s key is pressed, the astronaut crouches and cannot move along the x-axis 
@@ -139,13 +132,20 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 			ceilingBump = false;
 			jumping = false;
 		}
-		else if (jumpFrames < 15) {
+		else if (jumpHeight < 100) {
 			velocity.y = -playerJumpSpeed;
-			jumpFrames++;
+			jumpHeight -= velocity.y;
+
+			if (stoppedRight) {
+				playerSprite.setTextureRect(sf::IntRect(0, 128, 44, 64));
+			}
+			else if (stoppedLeft) {
+				playerSprite.setTextureRect(sf::IntRect(44, 128, 44 * 2, 64));
+			}
 		}
 		else {
 			jumping = false;
-			jumpFrames = 0;
+			jumpHeight = 0;
 		}
 	}
 
