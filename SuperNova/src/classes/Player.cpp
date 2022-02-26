@@ -107,7 +107,6 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 			velocity.y = -playerJumpSpeed;
 			jumping = true;
 			jumpFrames = 0;
-
 		}
 		else if (!grounded || velocity.y < 0) {
 			//if player is suspended in air, then the jumping animation is set depending on direction astronaut is facing
@@ -118,7 +117,6 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 			else if (stoppedLeft) {
 				playerSprite.setTextureRect(sf::IntRect(44, 128, 44 * 2, 64));
 			}
-
 		}
 		else {
 			//if s key is pressed, the astronaut crouches and cannot move along the x-axis 
@@ -142,6 +140,13 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 		else if (jumpFrames < 15) {
 			velocity.y = -playerJumpSpeed;
 			jumpFrames++;
+
+			if (stoppedRight) {
+				playerSprite.setTextureRect(sf::IntRect(0, 128, 44, 64));
+			}
+			else if (stoppedLeft) {
+				playerSprite.setTextureRect(sf::IntRect(44, 128, 44 * 2, 64));
+			}
 		}
 		else {
 			jumping = false;
