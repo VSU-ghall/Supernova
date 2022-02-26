@@ -29,6 +29,7 @@ class Player
 		void checkMovement(LevelManager::Level currentLevel);
 		void respawn();
 		void update(LevelManager::Level currentLevel);
-		void controlsSound();
+		void playCrouchSound();
+		void playJumpSound();
 };
 

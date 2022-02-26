@@ -8,7 +8,7 @@ const float gravity = 1.f;
 sf::Sprite playerSprite;
 sf::Texture texture;
 sf::Vector2f velocity(0, 0);
-bool grounded = true, jumping = false, ceilingBump = false;
+bool grounded = true, jumping = false, ceilingBump = false, crouchPlayed = false;
 
 float Player::getX() {
 	return x;
@@ -66,6 +66,9 @@ void Player::animate() {
 // ( Movement is animated on a ratio (set by the variable animationPerFrame) )
 //
 void Player::checkMovement(LevelManager::Level currentLevel) {
+	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		crouchPlayed = false;
+
 	if (grounded &&
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::D) &&
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::A) &&
@@ -102,6 +105,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 			velocity.y = -playerJumpSpeed;
 			jumping = true;
 			jumpHeight = 0;
+			playJumpSound();
 		}
 		else if (!grounded || velocity.y < 0) {
 			//if player is suspended in air, then the jumping animation is set depending on direction astronaut is facing
@@ -123,6 +127,8 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 				playerSprite.setTextureRect(sf::IntRect(44, 192, 44 * 2, 64));
 				velocity.x = 0;
 			}
+
+			playCrouchSound();
 			velocity.y = 0;
 		}
 	}
@@ -167,7 +173,6 @@ void Player::respawn() {
 void Player::update(LevelManager::Level currentLevel) {
 	animate();
 	checkMovement(currentLevel);
-	controlsSound();
 }
 
 //returns false if movement will cause collision. returns true otherwise
@@ -247,23 +252,10 @@ void Player::checkTopBotCollision(sf::Vector2f topRight, sf::Vector2f botRight, 
 	else ceilingBump = false;
 }
 
-void Player::controlsSound()
+void Player::playCrouchSound()
 {
-	//sound for jump
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-	{
-		if (!music.openFromFile("src/resources/sounds/astronaut_jump.wav")) 
-		{
-			std::cout << "Could not load astronaut jump sound" << std::endl;
-				return;
-		}
-
-		music.setVolume(25);
-
-		music.play();
-	}
 	//sound for crouch
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && music.getStatus() == sf::SoundSource::Stopped && !crouchPlayed)
 	{
 		if (!music.openFromFile("src/resources/sounds/astronaut_crouch.wav")) 
 		{
@@ -271,8 +263,22 @@ void Player::controlsSound()
 			return;
 		}
 
-		music.setVolume(25);
+		music.setVolume(5);
 
 		music.play();
+		crouchPlayed = true;
 	}
+}
+
+void Player::playJumpSound() {
+	//sound for jump
+	if (!music.openFromFile("src/resources/sounds/astronaut_jump.wav"))
+	{
+		std::cout << "Could not load astronaut jump sound" << std::endl;
+		return;
+	}
+
+	music.setVolume(5);
+
+	music.play();
 }
