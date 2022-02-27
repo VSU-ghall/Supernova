@@ -5,8 +5,6 @@
 float playerJumpSpeed, playerSpeed, playerSize, animationPerFrame = 1.0f / 8.0f, jumpHeight = 0;
 int frameCount = 0, offset = 0;
 const float gravity = 1.f;
-sf::Sprite playerSprite;
-sf::Texture texture;
 sf::Vector2f velocity(0, 0);
 bool grounded = true, jumping = false, ceilingBump = false, crouchPlayed = false;
 
@@ -184,21 +182,12 @@ bool Player::checkCollision(float velo, LevelManager::Level currentLevel) {
 	float mid = ceil(playerSprite.getGlobalBounds().left + 32);
 	float right = ceil(playerSprite.getGlobalBounds().left + 64);
 
-	int dir = 1;
-
-	if (velo > 0)
-		dir = -1;
-	else if (velo < 0)
-		dir = 1;
-	else
-		return false;
-
 	sf::Vector2f topLeft(left, top);
 	sf::Vector2f topRight(right, top);
 
-	sf::Vector2f topLeftHigh(left + (velo * dir), top + 32);
-	sf::Vector2f botLeftHigh(left + (velo * dir), bot - 32);
-	sf::Vector2f botLeft(left + (velo * dir), bot);
+	sf::Vector2f topLeftHigh(left + (-std::abs(velo)), top + 32);
+	sf::Vector2f botLeftHigh(left + (-std::abs(velo)), bot - 32);
+	sf::Vector2f botLeft(left + (-std::abs(velo)), bot);
 
 	sf::Vector2f botMidLeft(left + 5, bot);
 	sf::Vector2f botMid(mid, bot);
@@ -223,8 +212,7 @@ bool Player::checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vecto
 		blockTopRightHigh = currentLevel.colMap.at(floor(topRightHigh.y / 64)).at(floor(topRightHigh.x / 64)) == 1,
 		blockBotRightHigh = currentLevel.colMap.at(floor(botRightHigh.y / 64)).at(floor(botRightHigh.x / 64)) == 1;
 
-	if (((blockTopLeftHigh || blockBotLeftHigh) && velo < 0) ||
-		((blockTopRightHigh || blockBotRightHigh)) && velo > 0)
+	if (((blockTopLeftHigh || blockBotLeftHigh) && velo < 0) || ((blockTopRightHigh || blockBotRightHigh)) && velo > 0)
 		return false;
 
 	return true;
@@ -240,10 +228,9 @@ void Player::checkTopBotCollision(sf::Vector2f topRight, sf::Vector2f botRight, 
 		blockTopRight = currentLevel.colMap.at(floor(topRight.y / 64)).at(floor(topRight.x / 64)) == 1,
 		blockBottomRight = currentLevel.colMap.at(floor(botRight.y / 64)).at(floor(botRight.x / 64)) == 1;
 
-	if ((blockBottomLeft && !blockBotMidLeft) ||
-		(blockBottomRight && !blockBotMidRight))
+	if ((blockBottomLeft && !blockBotMidLeft) || (blockBottomRight && !blockBotMidRight))
 		grounded = false;
-	else if (blockBottomLeft || blockBottomRight)
+	else if (blockBottomLeft || blockBottomRight || blockBotMid)
 		grounded = true;
 	else
 		grounded = false;
