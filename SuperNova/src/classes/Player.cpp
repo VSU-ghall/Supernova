@@ -149,6 +149,16 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 		}
 	}
 
+	// sets player's position to always be on top of a block (not a few pixels inside of it)
+	float bot = ceil(playerSprite.getGlobalBounds().top + 128);
+	if (grounded && !jumping && (int)bot % 64 != 0) {
+
+		sf::Vector2f pos = playerSprite.getPosition();
+		pos.y = (int)(floor(bot / 64) * 64) + 128;
+
+		playerSprite.setPosition(pos);
+	}
+
 	x += velocity.x;
 	y += velocity.y;
 	playerSprite.move(velocity.x, velocity.y);
@@ -196,9 +206,11 @@ bool Player::checkCollision(float velo, LevelManager::Level currentLevel) {
 	//If out of level bounds
 	if (left + velo <= 6 || right + velo >= (currentLevel.width * 64) - 6) return false;
 
-	checkTopBotCollision(topRight, botRight, botMidRight, botMid, botMidLeft, topLeft, botLeft, currentLevel);
+	checkTopBotCollision(topRight, botRightHigh, botRight, botMidRight, botMid, botMidLeft, topLeft, botLeftHigh, botLeft, currentLevel);
 
-	return checkSideCollision(velo, botRightHigh, botLeftHigh, topRightHigh, topLeftHigh, currentLevel);
+	bool temp = checkSideCollision(velo, botRightHigh, botLeftHigh, topRightHigh, topLeftHigh, currentLevel);
+
+	return temp;
 }
 
 bool Player::checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vector2f botLeftHigh, sf::Vector2f topRightHigh, sf::Vector2f topLeftHigh, LevelManager::Level currentLevel) {
@@ -214,19 +226,23 @@ bool Player::checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vecto
 	return true;
 }
 
-void Player::checkTopBotCollision(sf::Vector2f topRight, sf::Vector2f botRight, sf::Vector2f botMidRight, sf::Vector2f botMid, sf::Vector2f botMidLeft, sf::Vector2f topLeft, sf::Vector2f botLeft, LevelManager::Level currentLevel) {
+void Player::checkTopBotCollision(sf::Vector2f topRight, sf::Vector2f botRightHigh, sf::Vector2f botRight, sf::Vector2f botMidRight, sf::Vector2f botMid, sf::Vector2f botMidLeft, sf::Vector2f topLeft, sf::Vector2f botLeftHigh, sf::Vector2f botLeft, LevelManager::Level currentLevel) {
 
 	bool blockTopLeft = currentLevel.colMap.at(floor(topLeft.y / 64)).at(floor(topLeft.x / 64)) == 1,
+		blockBotLeftHigh = currentLevel.colMap.at(floor(botLeftHigh.y / 64)).at(floor(botLeftHigh.x / 64)) == 1,
 		blockBottomLeft = currentLevel.colMap.at(floor(botLeft.y / 64)).at(floor(botLeft.x / 64)) == 1,
+
 		blockBotMidLeft = currentLevel.colMap.at(floor(botMidLeft.y / 64)).at(floor(botMidLeft.x / 64)) == 1,
 		blockBotMid = currentLevel.colMap.at(floor(botMid.y / 64)).at(floor(botMid.x / 64)) == 1,
 		blockBotMidRight = currentLevel.colMap.at(floor(botMidRight.y / 64)).at(floor(botMidRight.x / 64)) == 1,
+
 		blockTopRight = currentLevel.colMap.at(floor(topRight.y / 64)).at(floor(topRight.x / 64)) == 1,
+		blockBotRightHigh = currentLevel.colMap.at(floor(botRightHigh.y / 64)).at(floor(botRightHigh.x / 64)) == 1,
 		blockBottomRight = currentLevel.colMap.at(floor(botRight.y / 64)).at(floor(botRight.x / 64)) == 1;
 
 	if ((blockBottomLeft && !blockBotMidLeft) || (blockBottomRight && !blockBotMidRight))
 		grounded = false;
-	else if (blockBottomLeft || blockBottomRight || blockBotMid)
+	else if ((blockBottomLeft && !blockBotLeftHigh) || (blockBottomRight && !blockBotRightHigh) || blockBotMid)
 		grounded = true;
 	else
 		grounded = false;
