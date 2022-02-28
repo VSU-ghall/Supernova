@@ -173,6 +173,7 @@ void GameEngine::handleEvent(sf::Event event) {
 //
 void GameEngine::loadLevel(LevelManager::Level level) {
 	player.startPosition = Vector2(level.startPosition);
+	player.stoppedLeft = false; player.stoppedRight = true;
 	player.respawn();
 	levelManager.setLevel(level);
 
