@@ -8,15 +8,17 @@
 #include "headers/LevelManager.h"
 #include "headers/Sprite.h"
 #include "headers/EntityManager.h"
-
+#include "headers/StoryManager.h"
 
 class GameEngine
 {
 private:
 	Player player;
 	LevelManager levelManager;
+	StoryManager storyManager;
 	const int tileSize = 64;
 	float viewWidth, viewHeight;
+	bool scenePlaying = false;
 
 	// creates global window
 	sf::RenderWindow window;
@@ -36,6 +38,7 @@ public:
 	LevelManager* getLevelManager() { return &levelManager; }
 	Player* getPlayer() { return &player; };
 	sf::RenderWindow* getWindow() { return &window; }
+	bool isScenePlaying() { return scenePlaying; }
 
 	void run();
 	void init();
@@ -45,5 +48,7 @@ public:
 	void handleEvent(sf::Event event);
 	void loadLevel(LevelManager::Level level);
 	void playMusic();
+	void startplayingScene() { scenePlaying = true; }
+	void stopPlayingScene() { scenePlaying = false; }
 	void update();
 };
