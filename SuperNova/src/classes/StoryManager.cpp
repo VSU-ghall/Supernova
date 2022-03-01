@@ -23,9 +23,9 @@ void StoryManager::update() {
 		else if (seconds >= 2 && logoImg.getFillColor().a < 254) fadeIn(logoImg);
 
 		if (seconds >= 7 && logoImg.getFillColor().a <= 0) {
-			//*scenePlaying = false;
+			*scenePlaying = false;
 			playingLogo = false;
-			playIntroScene();
+			//playIntroScene();
 		}
 	}
 	if (playingIntro) {
