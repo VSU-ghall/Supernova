@@ -7,7 +7,7 @@ int frameCount = 0, offset = 0;
 const float gravity = 1.f;
 sf::Vector2f velocity(0, 0);
 bool grounded = true, jumping = false, ceilingBump = false, crouchPlayed = false;
-
+bool readyToTransition = false;
 float Player::getX() {
 	return x;
 }
@@ -30,7 +30,7 @@ void Player::init() {
 	//this is the Size of the player
 	//playerSize = 64/834.f;
 	playerSize = 2.f;
-
+	
 	//setting the initial size of the player.
 	playerSprite.setScale(playerSize, playerSize);
 
@@ -66,7 +66,14 @@ void Player::animate() {
 void Player::checkMovement(LevelManager::Level currentLevel) {
 	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		crouchPlayed = false;
+	if (readyToTransition) {
+		
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
 
+			transitioning = true;
+		}
+
+	}
 	if (grounded &&
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::D) &&
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::A) &&
@@ -207,7 +214,7 @@ bool Player::checkCollision(float velo, LevelManager::Level currentLevel) {
 	if (left + velo <= 6 || right + velo >= (currentLevel.width * 64) - 6) return false;
 
 	checkTopBotCollision(topRight, botRightHigh, botRight, botMidRight, botMid, botMidLeft, topLeft, botLeftHigh, botLeft, currentLevel);
-
+	checkTransitionCollision(topRight, botRight, topLeft, botLeft, currentLevel);
 	bool temp = checkSideCollision(velo, botRightHigh, botLeftHigh, topRightHigh, topLeftHigh, currentLevel);
 
 	return temp;
@@ -225,7 +232,22 @@ bool Player::checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vecto
 
 	return true;
 }
+void Player::checkTransitionCollision(sf::Vector2f topRight, sf::Vector2f botRight, sf::Vector2f topLeft, sf::Vector2f botLeft, LevelManager::Level currentLevel) {
 
+	bool blockTopLeftHigh = currentLevel.colMap.at(floor(topRight.y / 64)).at(floor(topRight.x / 64)) == 4,
+		blockBotLeftHigh = currentLevel.colMap.at(floor(botRight.y / 64)).at(floor(botRight.x / 64)) == 4,
+		blockTopRightHigh = currentLevel.colMap.at(floor(topLeft.y / 64)).at(floor(topLeft.x / 64)) == 4,
+		blockBotRightHigh = currentLevel.colMap.at(floor(botLeft.y / 64)).at(floor(botLeft.x / 64)) == 4;
+
+	if (blockBotRightHigh || blockTopRightHigh || blockBotLeftHigh || blockTopLeftHigh) {
+		readyToTransition = true;
+	}
+	else {
+		readyToTransition = false;
+	}
+
+
+}
 void Player::checkTopBotCollision(sf::Vector2f topRight, sf::Vector2f botRightHigh, sf::Vector2f botRight, sf::Vector2f botMidRight, sf::Vector2f botMid, sf::Vector2f botMidLeft, sf::Vector2f topLeft, sf::Vector2f botLeftHigh, sf::Vector2f botLeft, LevelManager::Level currentLevel) {
 
 	bool blockTopLeft = currentLevel.colMap.at(floor(topLeft.y / 64)).at(floor(topLeft.x / 64)) == 1,

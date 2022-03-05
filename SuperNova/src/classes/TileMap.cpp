@@ -59,7 +59,10 @@ std::vector<std::vector<int>> TileMap::loadColMap( const int* tiles, unsigned in
         for (int j = 0; j < width; j++) {
             // get the current tile number
             int tileNumber = tiles[(i*width)+j];
-            if (tileNumber > 0) {
+            if (tileNumber==31) {
+                row.push_back(4);
+            }
+            else if (tileNumber > 0) {
                 row.push_back(1);
             }
             else {
@@ -68,15 +71,15 @@ std::vector<std::vector<int>> TileMap::loadColMap( const int* tiles, unsigned in
         }
         colMap.push_back(row);
     }
-    return colMap;
+  
 
     //print out the colMap for debug purposes
     //for (int i = 0; i < height; i++) {
-    //    for (int j = 0; j < width; j++) {
-    //        std::cout << colMap.at(i).at(j);
+   //    for (int j = 0; j < width; j++) {
+    //       std::cout << colMap.at(i).at(j);
     //    }
     //    std::cout << std::endl;
     //}
-
+    return colMap;
 
 }
