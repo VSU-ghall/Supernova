@@ -144,6 +144,18 @@ void GameEngine::handleEvent(sf::Event event) {
 				player.moving = false;
 	}
 
+	if (player.transitioning) {
+		std::cout << levelManager.getCurrentLevel().levelNumber << std::endl;
+		if (levelManager.getCurrentLevel().levelNumber == 2) {
+			loadLevel(levelManager.getLevel1());
+			player.transitioning = false;
+		}
+		else if (levelManager.getCurrentLevel().levelNumber == 1) {
+			loadLevel(levelManager.getLevel2());
+			player.transitioning = false;
+		}
+	}
+
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
 	sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
 	if (btnLevel1->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
