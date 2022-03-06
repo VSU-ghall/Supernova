@@ -19,6 +19,7 @@ public:
 	/*** Scene Methods ***/
 	void playLogoIntro();
 	void playIntroScene();
+	void playWalkOut();
 
 private:
 	sf::RenderWindow* window;
@@ -31,8 +32,9 @@ private:
 	sf::Texture logoImgText;
 
 	/*** Booleans ***/
-	bool playingLogo = false, 
-		playingIntro = false, introFadedOut = false;
+	bool playingLogo = false,
+		playingIntro = false, introFadedOut = false,
+		playingWalkOut = false;
 
 
 	/*** Helper Methods ***/

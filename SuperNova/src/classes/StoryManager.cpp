@@ -23,6 +23,10 @@ void StoryManager::draw() {
 
 		window->draw(blackRect);
 	}
+	if (playingWalkOut) {
+		if (seconds >= 0.2)
+			window->draw(*astronaut->getSprite());
+	}
 }
 
 void StoryManager::update() {
@@ -68,20 +72,30 @@ void StoryManager::update() {
 					}
 					else {
 
-						if (seconds >= 13 && seconds <= 16.5f && blackRect.getFillColor().a < 254) fadeIn(blackRect, 2);
+						if (seconds >= 12.5f && seconds <= 16 && blackRect.getFillColor().a < 254) fadeIn(blackRect, 2);
 						else {
-							if (seconds < 13) return;
+							if (seconds < 12.5f) return;
 							if (!introFadedOut) introFadedOut = true;
 							
 							if (blackRect.getFillColor().a >= 3) fadeOut(blackRect, 1.5f);
 							else {
-								*scenePlaying = false;
+								//*scenePlaying = false;
 								playingIntro = false;
+								playWalkOut();
 							}
 						}
 					}
 				}
 			}
+		}
+	}
+	if (playingWalkOut) {
+		sf::Vector2f astronautPos = astronaut->getSprite()->getPosition();
+		astronaut->getSprite()->setPosition(astronautPos.x + 2.5, astronautPos.y);
+
+		if (astronautPos.x >= 2*64) {
+			*scenePlaying = false;
+			playingWalkOut = false;
 		}
 	}
 }
@@ -118,6 +132,15 @@ void StoryManager::playIntroScene() {
 	blackRect.setFillColor(color);
 
 	rocket->getSprite()->setPosition(64, -96*4.0 +50);
+}
+
+void StoryManager::playWalkOut() {
+	*scenePlaying = true; playingWalkOut = true;
+	timer.restart();
+
+	astronaut = new Sprite("src/resources/astronaut_walk.png", true, false, 8, 32, 64, 2.f, 150);
+
+	astronaut->getSprite()->setPosition(-64, 7*64);
 }
 
 /**************************************************************************/
