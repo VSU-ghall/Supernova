@@ -25,13 +25,14 @@ Sprite::Sprite(const std::string& filePath, bool animated, bool random, int numF
 	this->frequency = frequency;
 
 	sprite.setScale(sf::Vector2f(scale, scale));
+	animating = true;
 }
 
 void Sprite::animate() {
 	if (timer.getElapsedTime().asMilliseconds() >= frequency) {
 
 		if (random) {
-			offset = std::rand() % 4;
+			offset = std::rand() % numFrames;
 			sprite.setTextureRect(sf::IntRect(offset * width, 0, width, height));
 		}
 		else {
@@ -71,4 +72,8 @@ sf::Clock Sprite::getTimer()
 
 int Sprite::getWidth() {
 	return width;
+}
+
+sf::FloatRect Sprite::getBoundingBox() {
+	return sprite.getGlobalBounds();
 }

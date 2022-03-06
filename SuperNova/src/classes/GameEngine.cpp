@@ -1,17 +1,14 @@
 #include "headers/GameEngine.h"
 
 GameEngine::GameEngine() 
-	:window(sf::VideoMode(), "SuperNova")
-{
-}
+	:window(sf::VideoMode(), "SuperNova"), storyManager(&window, &scenePlaying)
+{}
 
 void GameEngine::run() {
-
 	init();
 
 	// main loop --> continues each frame while window is open
 	while (window.isOpen()) {
-
 		// event handling
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -28,13 +25,15 @@ void GameEngine::run() {
 void GameEngine::init() {
 	window.setFramerateLimit(60);
 
+
 	loadLevel(levelManager.getLevel1());
 	player.init();
 
 	gamebar.setFillColor(sf::Color(59, 30, 11));
-	pixiguide->animating = true;
 
 	playMusic();
+
+	storyManager.playLogoIntro();
 }
 
 //
@@ -42,6 +41,7 @@ void GameEngine::init() {
 //
 void GameEngine::draw() {
 	window.clear();
+
 	window.setView(view);
 
 	if (levelManager.currentLevel.hasBackground) {
@@ -52,12 +52,13 @@ void GameEngine::draw() {
 
 	//drawGrid();
 
-	player.draw(window);
-
+	if (!scenePlaying) player.draw(window);
 	window.draw(*pixiguide->getSprite());
 
 	window.draw(gamebar);
 	window.draw(*btnLevel1->getSprite()); window.draw(*btnLevel2->getSprite());
+
+	if (scenePlaying) storyManager.draw();
 
 	window.display();
 }
@@ -142,6 +143,18 @@ void GameEngine::handleEvent(sf::Event event) {
 				player.moving = false;
 	}
 
+	if (player.transitioning) {
+		std::cout << levelManager.getCurrentLevel().levelNumber << std::endl;
+		if (levelManager.getCurrentLevel().levelNumber == 2) {
+			loadLevel(levelManager.getLevel1());
+			player.transitioning = false;
+		}
+		else if (levelManager.getCurrentLevel().levelNumber == 1) {
+			loadLevel(levelManager.getLevel2());
+			player.transitioning = false;
+		}
+	}
+
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
 	sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
 	if (btnLevel1->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
@@ -158,7 +171,12 @@ void GameEngine::handleEvent(sf::Event event) {
 		}
 		if (event.type == sf::Event::MouseButtonReleased) {}
 	}
-		
+	
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+		if (scenePlaying) scenePlaying = false;
+		//std::cout << "x: " << worldPos.x << " y: " << worldPos.y << std::endl;
+	}
+
 }
 
 //
@@ -166,6 +184,7 @@ void GameEngine::handleEvent(sf::Event event) {
 //
 void GameEngine::loadLevel(LevelManager::Level level) {
 	player.startPosition = Vector2(level.startPosition);
+	player.stoppedLeft = false; player.stoppedRight = true;
 	player.respawn();
 	levelManager.setLevel(level);
 
@@ -187,7 +206,6 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
 	}
 	else {
-
 		view = getViewport(window.getSize().x, window.getSize().y);
 		view.setSize(viewWidth, viewHeight);
 		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
@@ -207,7 +225,7 @@ void GameEngine::playMusic()
 		return;
 	}
 
-	music.setVolume(25);
+	music.setVolume(10);
 
 	music.setLoop(true);         // make it loop
 	// Play it
@@ -218,6 +236,8 @@ void GameEngine::playMusic()
 // Updates all game objects
 //
 void GameEngine::update() {
+	if (scenePlaying) storyManager.update();
+
 	player.update(levelManager.getCurrentLevel());
 
 	Sprite::animateAll();
@@ -225,4 +245,7 @@ void GameEngine::update() {
 	sf::Vector2i pixelPos(player.getX(), player.getY());
 	sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
 	pixiguide->getSprite()->setPosition(sf::Vector2f((pixelPos.x - (4.5 * 64)) * 1.1, (pixelPos.y - (2*64))/1.2));
+	if (player.getBoundingBox().intersects(pixiguide->getBoundingBox())) {
+		pixiguide->getSprite()->move(100,0);
+	}
 }

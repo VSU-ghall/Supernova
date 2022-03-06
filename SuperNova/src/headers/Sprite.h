@@ -19,6 +19,7 @@ extern class Sprite
 		sf::Texture getTexture();
 		sf::Clock getTimer();
 		int getWidth();
+		sf::FloatRect getBoundingBox();
 
 	private:
 		int width, height, frequency, numFrames, offset = 0;
