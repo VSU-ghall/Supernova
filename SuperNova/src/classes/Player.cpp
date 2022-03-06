@@ -238,10 +238,8 @@ bool Player::checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vecto
 }
 void Player::checkTransitionCollision(sf::Vector2f topRight, sf::Vector2f botRight, sf::Vector2f topLeft, sf::Vector2f botLeft, LevelManager::Level currentLevel) {
 
-	bool blockTopLeftHigh = currentLevel.colMap.at(floor(topRight.y / 64)).at(floor(topRight.x / 64)) == 4,
-		blockBotLeftHigh = currentLevel.colMap.at(floor(botRight.y / 64)).at(floor(botRight.x / 64)) == 4,
-		blockTopRightHigh = currentLevel.colMap.at(floor(topLeft.y / 64)).at(floor(topLeft.x / 64)) == 4,
-		blockBotRightHigh = currentLevel.colMap.at(floor(botLeft.y / 64)).at(floor(botLeft.x / 64)) == 4;
+	bool blockTopLeftHigh = checkTile(currentLevel, topRight, 4), blockBotLeftHigh = checkTile(currentLevel, botRight, 4), 
+		blockTopRightHigh = checkTile(currentLevel, topLeft, 4), blockBotRightHigh = checkTile(currentLevel, botLeft, 4);
 
 	if (blockBotRightHigh || blockTopRightHigh || blockBotLeftHigh || blockTopLeftHigh) {
 		readyToTransition = true;
