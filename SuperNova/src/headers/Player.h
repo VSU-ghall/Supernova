@@ -28,6 +28,7 @@ class Player
 		void checkTransitionCollision(sf::Vector2f topRight, sf::Vector2f botRight, sf::Vector2f topLeft, sf::Vector2f botLeft, LevelManager::Level currentLevel);
 		void checkTopBotCollision(sf::Vector2f topRight, sf::Vector2f botRightHigh, sf::Vector2f botRight, sf::Vector2f botMidRight, sf::Vector2f botMid, sf::Vector2f botMidLeft, sf::Vector2f topLeft, sf::Vector2f botLeftHigh, sf::Vector2f botLeft, LevelManager::Level currentLevel);
 		bool checkCollision(float velo, LevelManager::Level currentLevel);
+		bool checkTile(LevelManager::Level currentLevel, sf::Vector2f position, int remainder);
 		void checkMovement(LevelManager::Level currentLevel);
 		void respawn();
 		void update(LevelManager::Level currentLevel);
