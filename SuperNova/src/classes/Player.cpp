@@ -16,6 +16,10 @@ float Player::getY() {
 	return y;
 }
 
+sf::FloatRect Player::getBoundingBox() {
+	return playerSprite.getGlobalBounds();
+}
+
 void Player::init() {
 
 	//this is how fast we want the player. If we want to change their speed this can be changed.

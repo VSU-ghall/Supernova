@@ -19,6 +19,7 @@ class Player
 		bool transitioning;
 		float getX();
 		float getY();
+		sf::FloatRect getBoundingBox();
 
 		void init();
 		void animate();
