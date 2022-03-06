@@ -85,11 +85,12 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 		velocity.x = playerSpeed;
 		//the sprite size in sprite sheet is 32x64. this tells textureRect to start at beginning and every time walkCount is added, then it goes to next frame
 		playerSprite.setTextureRect(sf::IntRect(offset * 32, 0, 32, 64));
+		playWalkSound();
 	}
 	else if (checkLeft && sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
 		stoppedLeft = true;  stoppedRight = false;
 		moving = true;
-
+		playWalkSound();
 		velocity.x = -playerSpeed;
 		//the left facing frames are at 32*2 x 64 so this tells does same as above but lower on the sprite sheet
 		playerSprite.setTextureRect(sf::IntRect(offset * 32, 32 * 2, 32, 64));
@@ -262,14 +263,15 @@ void Player::playCrouchSound()
 			return;
 		}
 
-		music.setVolume(5);
+		music.setVolume(15);
 
 		music.play();
 		crouchPlayed = true;
 	}
 }
 
-void Player::playJumpSound() {
+void Player::playJumpSound() 
+{
 	//sound for jump
 	if (!music.openFromFile("src/resources/sounds/astronaut_jump.wav"))
 	{
@@ -277,7 +279,29 @@ void Player::playJumpSound() {
 		return;
 	}
 
-	music.setVolume(5);
+
+	music.setVolume(20);
 
 	music.play();
+}
+
+void Player::playWalkSound() 
+{
+	//sound for jump
+	if (moving)
+	{
+		if (!music.openFromFile("src/resources/sounds/astronaut_walking.wav"))
+		{
+			std::cout << "Could not load astronaut walk sound" << std::endl;
+			return;
+		}
+	}
+	music.setVolume(100);
+
+
+	music.play();
+	if (!moving)
+	{
+		music.stop();
+	}
 }

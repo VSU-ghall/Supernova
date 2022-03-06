@@ -31,5 +31,6 @@ class Player
 		void update(LevelManager::Level currentLevel);
 		void playCrouchSound();
 		void playJumpSound();
+		void playWalkSound();
 };
 
