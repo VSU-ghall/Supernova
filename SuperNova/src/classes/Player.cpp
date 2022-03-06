@@ -226,16 +226,16 @@ bool Player::checkCollision(float velo, LevelManager::Level currentLevel) {
 
 bool Player::checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vector2f botLeftHigh, sf::Vector2f topRightHigh, sf::Vector2f topLeftHigh, LevelManager::Level currentLevel) {
 
-	bool blockTopLeftHigh = currentLevel.colMap.at(floor(topLeftHigh.y / 64)).at(floor(topLeftHigh.x / 64)) == 1,
-		blockBotLeftHigh = currentLevel.colMap.at(floor(botLeftHigh.y / 64)).at(floor(botLeftHigh.x / 64)) == 1,
-		blockTopRightHigh = currentLevel.colMap.at(floor(topRightHigh.y / 64)).at(floor(topRightHigh.x / 64)) == 1,
-		blockBotRightHigh = currentLevel.colMap.at(floor(botRightHigh.y / 64)).at(floor(botRightHigh.x / 64)) == 1;
+	bool blockTopLeftHigh = checkTile(currentLevel, topLeftHigh, 1), blockBotLeftHigh = checkTile(currentLevel, botLeftHigh, 1),
+		blockTopRightHigh = checkTile(currentLevel, topRightHigh, 1), blockBotRightHigh = checkTile(currentLevel, botRightHigh, 1);
 
-	if (((blockTopLeftHigh || blockBotLeftHigh) && velo < 0) || ((blockTopRightHigh || blockBotRightHigh)) && velo > 0)
+	if (((blockTopLeftHigh || blockBotLeftHigh) && velo < 0) || ((blockTopRightHigh || blockBotRightHigh)) && velo > 0) {
 		return false;
+	}
 
 	return true;
 }
+
 void Player::checkTransitionCollision(sf::Vector2f topRight, sf::Vector2f botRight, sf::Vector2f topLeft, sf::Vector2f botLeft, LevelManager::Level currentLevel) {
 
 	bool blockTopLeftHigh = checkTile(currentLevel, topRight, 4), blockBotLeftHigh = checkTile(currentLevel, botRight, 4), 
@@ -247,9 +247,8 @@ void Player::checkTransitionCollision(sf::Vector2f topRight, sf::Vector2f botRig
 	else {
 		readyToTransition = false;
 	}
-
-
 }
+
 void Player::checkTopBotCollision(sf::Vector2f topRight, sf::Vector2f botRightHigh, sf::Vector2f botRight, sf::Vector2f botMidRight, sf::Vector2f botMid, sf::Vector2f botMidLeft, sf::Vector2f topLeft, sf::Vector2f botLeftHigh, sf::Vector2f botLeft, LevelManager::Level currentLevel) {
 
 	bool blockTopLeft = checkTile(currentLevel, topLeft, 1), blockBotLeftHigh = checkTile(currentLevel, botLeftHigh, 1), blockBottomLeft = checkTile(currentLevel, botLeft, 1),
