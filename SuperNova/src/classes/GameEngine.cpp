@@ -245,4 +245,7 @@ void GameEngine::update() {
 	sf::Vector2i pixelPos(player.getX(), player.getY());
 	sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
 	pixiguide->getSprite()->setPosition(sf::Vector2f((pixelPos.x - (4.5 * 64)) * 1.1, (pixelPos.y - (2*64))/1.2));
+	if (player.getBoundingBox().intersects(pixiguide->getBoundingBox())) {
+		pixiguide->getSprite()->move(100,0);
+	}
 }
