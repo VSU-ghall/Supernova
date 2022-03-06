@@ -27,15 +27,16 @@ private:
 
 	/*** Sprites and Textures ***/
 	sf::RectangleShape blackRect, logoImg;
-	Sprite* rocket, *astronaut;
+	Sprite* rocket, *astronaut, *planetSurfaceBackground = new Sprite("src/resources/planet_surface.png", false, false, 1, 200, 120, 7.0, 0);
 	sf::Texture logoImgText;
 
 	/*** Booleans ***/
-	bool playingLogo = false, playingIntro = false;
+	bool playingLogo = false, 
+		playingIntro = false, introFadedOut = false;
 
 
 	/*** Helper Methods ***/
-	void fadeIn(sf::RectangleShape& rect);
-	void fadeOut(sf::RectangleShape& rect);
+	void fadeIn(sf::RectangleShape& rect, int speed);
+	void fadeOut(sf::RectangleShape& rect, int speed);
 };
 
