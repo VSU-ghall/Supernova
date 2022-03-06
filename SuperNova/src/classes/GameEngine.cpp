@@ -52,8 +52,7 @@ void GameEngine::draw() {
 
 	//drawGrid();
 
-	player.draw(window);
-
+	if (!scenePlaying) player.draw(window);
 	window.draw(*pixiguide->getSprite());
 
 	window.draw(gamebar);
