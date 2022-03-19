@@ -30,6 +30,8 @@ void GameEngine::init() {
 	player.init();
 
 	gamebar.setFillColor(sf::Color(59, 30, 11));
+	btnLevel1->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
+	btnLevel2->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
 
 	playMusic();
 
@@ -134,7 +136,7 @@ void GameEngine::handleEvent(sf::Event event) {
 		view = getViewport(event.size.width, event.size.height);
 		gamebar.setSize(sf::Vector2f(event.size.width, 75));
 		btnLevel1->getSprite()->setPosition(gamebar.getPosition().x + 10, gamebar.getPosition().y + 5);
-		btnLevel2->getSprite()->setPosition(gamebar.getPosition().x + 20 + btnLevel1->getTexture().getSize().x, gamebar.getPosition().y + 5);
+		btnLevel2->getSprite()->setPosition(gamebar.getPosition().x + 20 + btnLevel1->getTexture().getSize().x-150, gamebar.getPosition().y + 5);
 	}
 
 	if (event.type == sf::Event::KeyReleased) {
@@ -155,21 +157,25 @@ void GameEngine::handleEvent(sf::Event event) {
 		}
 	}
 
-	sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
-	sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
-	if (btnLevel1->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+	sf::Vector2i pixelPos = sf::Mouse::getPosition(gameWindow);
+	sf::Vector2f worldPos = gameWindow.mapPixelToCoords(pixelPos);
+	if (gameMode == game && btnLevel1->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			btnLevel1->getSprite()->setTextureRect(sf::IntRect(150, 0, 150, 65));
+		if (event.type == sf::Event::MouseButtonReleased) {
 			if (levelManager.getCurrentLevel().levelNumber == 2)
 				loadLevel(levelManager.getLevel1());
+			btnLevel1->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
 		}
-		if (event.type == sf::Event::MouseButtonReleased) {}
 	}
-	if (btnLevel2->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+	if (gameMode == game && btnLevel2->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			btnLevel2->getSprite()->setTextureRect(sf::IntRect(150, 0, 150, 65));
+		if (event.type == sf::Event::MouseButtonReleased) {
 			if (levelManager.getCurrentLevel().levelNumber == 1)
 				loadLevel(levelManager.getLevel2());
+			btnLevel2->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
 		}
-		if (event.type == sf::Event::MouseButtonReleased) {}
 	}
 	
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
