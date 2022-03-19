@@ -1,21 +1,35 @@
 #include "headers/GameEngine.h"
 
 GameEngine::GameEngine() 
-	:window(sf::VideoMode(), "SuperNova"), storyManager(&window, &scenePlaying)
+	:gameWindow(sf::VideoMode(), "SuperNova"), storyManager(&gameWindow, &scenePlaying)
 {}
 
 void GameEngine::run() {
 	init();
 
 	// main loop --> continues each frame while window is open
-	while (window.isOpen()) {
+	while (gameWindow.isOpen()) {
+		if (scenePlaying) gameMode = scene;
+		else gameMode = game;
+
 		// event handling
 		sf::Event event;
-		while (window.pollEvent(event))
+		while (gameWindow.pollEvent(event))
 			handleEvent(event);
 
-		update();
-		draw();
+		switch (gameMode) {
+			case menu:
+				std::cout << "menu" << std::endl; break;
+			case scene:
+				updateGame();
+				drawGame();
+				std::cout << "scene" << std::endl; break;
+			case game:
+				updateGame();
+				drawGame();
+				std::cout << "game" << std::endl; break;
+		}
+		
 	}
 }
 
@@ -23,7 +37,7 @@ void GameEngine::run() {
 //	Initializes the game components
 //
 void GameEngine::init() {
-	window.setFramerateLimit(60);
+	gameWindow.setFramerateLimit(60);
 
 
 	loadLevel(levelManager.getLevel1());
@@ -35,59 +49,70 @@ void GameEngine::init() {
 
 	playMusic();
 
-	storyManager.playLogoIntro();
+	//storyManager.playLogoIntro();
 }
 
 //
-// Draws all objects on window
+// Draws all objects on game window
 //
-void GameEngine::draw() {
-	window.clear();
+void GameEngine::drawGame() {
+	gameWindow.clear();
 
-	window.setView(view);
+	gameWindow.setView(view);
 
 	if (levelManager.currentLevel.hasBackground) {
-		window.draw(*levelManager.getCurrentBackground().getSprite());
+		gameWindow.draw(*levelManager.getCurrentBackground().getSprite());
 	}
 
-	window.draw(levelManager.getMap());
+	gameWindow.draw(levelManager.getMap());
 
 	//drawGrid();
 
-	if (!scenePlaying) player.draw(window);
-	window.draw(*pixiguide->getSprite());
+	if (gameMode != scene) player.draw(gameWindow);
+	gameWindow.draw(*pixiguide->getSprite());
 
-	window.draw(gamebar);
-	window.draw(*btnLevel1->getSprite()); window.draw(*btnLevel2->getSprite());
+	gameWindow.draw(gamebar);
+	gameWindow.draw(*btnLevel1->getSprite()); gameWindow.draw(*btnLevel2->getSprite());
 
-	if (scenePlaying) storyManager.draw();
+	if (gameMode == scene) storyManager.draw();
 
-	window.display();
+	gameWindow.display();
 }
 
 //
 // Draws grid for development/testing purposes
 //
 void GameEngine::drawGrid() {
-	for (int x = 0; x <= window.getSize().x; x = x + tileSize) {
+	for (int x = 0; x <= gameWindow.getSize().x; x = x + tileSize) {
 		sf::VertexArray lines(sf::LinesStrip, 2);
 		lines[0].position = sf::Vector2f(x, 0);
 		lines[0].color = sf::Color::White;
-		lines[1].position = sf::Vector2f(x, window.getSize().y);
+		lines[1].position = sf::Vector2f(x, gameWindow.getSize().y);
 		lines[1].color = sf::Color::White;
 
-		window.draw(lines);
+		gameWindow.draw(lines);
 	}
 
-	for (int y = 0; y <= window.getSize().y; y = y + tileSize) {
+	for (int y = 0; y <= gameWindow.getSize().y; y = y + tileSize) {
 		sf::VertexArray lines(sf::LinesStrip, 2);
 		lines[0].position = sf::Vector2f(0, y);
 		lines[0].color = sf::Color::White;
-		lines[1].position = sf::Vector2f(window.getSize().x, y);
+		lines[1].position = sf::Vector2f(gameWindow.getSize().x, y);
 		lines[1].color = sf::Color::White;
 
-		window.draw(lines);
+		gameWindow.draw(lines);
 	}
+}
+
+//
+// Draws all objects on menu window
+//
+void GameEngine::drawMenu() {
+	menuWindow.clear();
+
+	
+
+	menuWindow.display();
 }
 
 //
@@ -129,7 +154,7 @@ sf::View GameEngine::getViewport(float width, float height) {
 void GameEngine::handleEvent(sf::Event event) {
 	// event triggered when window is closed
 	if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-		window.close();
+		gameWindow.close();
 
 	// sets viewport when window is resized
 	if (event.type == sf::Event::Resized) {
@@ -196,26 +221,24 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 
 
 	sf::String title("SuperNova - Level " + std::to_string(level.levelNumber));
-	window.setTitle(title);
+	gameWindow.setTitle(title);
 
 	auto desktop = sf::VideoMode::getDesktopMode();
 	viewWidth = tileSize * level.width;
 	viewHeight = tileSize * level.height;
 
-	if (window.getSize().x != desktop.width) { // if window is not full screen
-
-		window.setSize(sf::Vector2u(viewWidth, viewHeight));
-		window.setPosition(sf::Vector2i(desktop.width / 2 - window.getSize().x / 2, desktop.height / 2 - window.getSize().y / 2));
+	if (gameWindow.getSize().x != desktop.width) { // if window is not full screen
+		gameWindow.setSize(sf::Vector2u(viewWidth, viewHeight));
+		gameWindow.setPosition(sf::Vector2i(desktop.width / 2 - gameWindow.getSize().x / 2, desktop.height / 2 - gameWindow.getSize().y / 2));
 	
 		view.setSize(tileSize * level.width, tileSize * level.height + gamebar.getSize().y);
 		view = getViewport(viewWidth, viewHeight);
 		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
 	}
 	else {
-		view = getViewport(window.getSize().x, window.getSize().y);
+		view = getViewport(gameWindow.getSize().x, gameWindow.getSize().y);
 		view.setSize(viewWidth, viewHeight);
 		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
-
 	}
 }
 
@@ -241,17 +264,24 @@ void GameEngine::playMusic()
 //
 // Updates all game objects
 //
-void GameEngine::update() {
-	if (scenePlaying) storyManager.update();
+void GameEngine::updateGame() {
+	if (gameMode == scene) storyManager.update();
 
 	player.update(levelManager.getCurrentLevel());
 
 	Sprite::animateAll();
 
 	sf::Vector2i pixelPos(player.getX(), player.getY());
-	sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+	sf::Vector2f worldPos = gameWindow.mapPixelToCoords(pixelPos);
 	pixiguide->getSprite()->setPosition(sf::Vector2f((pixelPos.x - (4.5 * 64)) * 1.1, (pixelPos.y - (2*64))/1.2));
 	if (player.getBoundingBox().intersects(pixiguide->getBoundingBox())) {
 		pixiguide->getSprite()->move(100,0);
 	}
+}
+
+//
+// Updates all menu objects
+//
+void GameEngine::updateMenu() {
+
 }

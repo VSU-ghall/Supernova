@@ -21,7 +21,7 @@ private:
 	bool scenePlaying = false;
 
 	// creates global window
-	sf::RenderWindow window;
+	sf::RenderWindow gameWindow, menuWindow;
 	sf::View view;
 	sf::Music music;
 	Sprite *btnLevel1 = new Sprite("src/resources/Level1Button.png"), 
@@ -32,23 +32,28 @@ private:
 	sf::Texture texture;
 	std::vector<Vector2> levelVector;
 
+	enum Mode {menu, scene, game};
+	Mode gameMode = menu;
+
 public:
 	GameEngine();
 
 	LevelManager* getLevelManager() { return &levelManager; }
 	Player* getPlayer() { return &player; };
-	sf::RenderWindow* getWindow() { return &window; }
+	sf::RenderWindow* getWindow() { return &gameWindow; }
 	bool isScenePlaying() { return scenePlaying; }
 
 	void run();
 	void init();
-	void draw();
+	void drawGame();
 	void drawGrid();
+	void drawMenu();
 	sf::View getViewport(float width, float height);
 	void handleEvent(sf::Event event);
 	void loadLevel(LevelManager::Level level);
 	void playMusic();
 	void startplayingScene() { scenePlaying = true; }
 	void stopPlayingScene() { scenePlaying = false; }
-	void update();
+	void updateGame();
+	void updateMenu();
 };
