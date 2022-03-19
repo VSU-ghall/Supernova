@@ -1,24 +1,30 @@
 #include "headers/GameEngine.h"
 
 GameEngine::GameEngine() 
-	:gameWindow(sf::VideoMode(), "SuperNova"), storyManager(&gameWindow, &scenePlaying)
+	:gameWindow(sf::VideoMode(), "SuperNova"), menuWindow(sf::VideoMode(), "SuperNova - Menu"), storyManager(&gameWindow, &scenePlaying)
 {}
 
 void GameEngine::run() {
 	init();
 
 	// main loop --> continues each frame while window is open
-	while (gameWindow.isOpen()) {
+	while (gameWindow.isOpen() && menuWindow.isOpen()) {
 		if (scenePlaying) gameMode = scene;
-		else gameMode = game;
+		//else gameMode = game;
 
 		// event handling
 		sf::Event event;
-		while (gameWindow.pollEvent(event))
-			handleEvent(event);
+		if (gameMode == menu)
+			while (menuWindow.pollEvent(event))
+				handleEvent(event);
+		else
+			while (gameWindow.pollEvent(event))
+				handleEvent(event);
 
 		switch (gameMode) {
 			case menu:
+				updateMenu();
+				drawMenu();
 				std::cout << "menu" << std::endl; break;
 			case scene:
 				updateGame();
@@ -37,8 +43,16 @@ void GameEngine::run() {
 //	Initializes the game components
 //
 void GameEngine::init() {
-	gameWindow.setFramerateLimit(60);
+	initMenu();
 
+	playMusic();
+
+	//storyManager.playLogoIntro();
+	//initGame();
+}
+
+void GameEngine::initGame() {
+	gameWindow.setFramerateLimit(60);
 
 	loadLevel(levelManager.getLevel1());
 	player.init();
@@ -47,9 +61,24 @@ void GameEngine::init() {
 	btnLevel1->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
 	btnLevel2->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
 
-	playMusic();
+	gameWindow.setVisible(true);
+	gameMode = game;
+}
 
-	//storyManager.playLogoIntro();
+void GameEngine::initMenu() {
+	blackRect.setFillColor(sf::Color(0, 10, 0, 255));
+	menuWindow.setFramerateLimit(60);
+	setWindowView(menuWindow, tileSize * 20, tileSize * 20);
+
+	// All menu buttons are centered and linked together, so if you vertically move the first, the others with it.
+	btnPlay->getSprite()->setTextureRect(sf::IntRect(0, 0, 256, 75));
+	btnPlay->getSprite()->setPosition((menuWindow.getSize().x - 256) / 2, (menuWindow.getSize().y - 74*5) / 2);
+	
+	btnOptions->getSprite()->setTextureRect(sf::IntRect(0, 0, 448, 75));
+	btnOptions->getSprite()->setPosition((menuWindow.getSize().x - 448) / 2, btnPlay->getSprite()->getPosition().y + (74*2));
+	
+	btnExit->getSprite()->setTextureRect(sf::IntRect(0, 0, 254, 75));
+	btnExit->getSprite()->setPosition((menuWindow.getSize().x - 254) / 2, btnOptions->getSprite()->getPosition().y + (74 * 2));
 }
 
 //
@@ -109,8 +138,13 @@ void GameEngine::drawGrid() {
 //
 void GameEngine::drawMenu() {
 	menuWindow.clear();
-
+	menuWindow.setView(view);
 	
+	menuWindow.draw(blackRect);
+
+	menuWindow.draw(*btnPlay->getSprite());
+	menuWindow.draw(*btnOptions->getSprite());
+	menuWindow.draw(*btnExit->getSprite());
 
 	menuWindow.display();
 }
@@ -154,7 +188,8 @@ sf::View GameEngine::getViewport(float width, float height) {
 void GameEngine::handleEvent(sf::Event event) {
 	// event triggered when window is closed
 	if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-		gameWindow.close();
+		if (gameMode == game || gameMode == scene) gameWindow.close();
+		else if (gameMode == menu) menuWindow.close();
 
 	// sets viewport when window is resized
 	if (event.type == sf::Event::Resized) {
@@ -182,6 +217,7 @@ void GameEngine::handleEvent(sf::Event event) {
 		}
 	}
 
+	// Check if game Level 1 Button is clicked
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(gameWindow);
 	sf::Vector2f worldPos = gameWindow.mapPixelToCoords(pixelPos);
 	if (gameMode == game && btnLevel1->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
@@ -193,6 +229,8 @@ void GameEngine::handleEvent(sf::Event event) {
 			btnLevel1->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
 		}
 	}
+
+	// Check if game Level 2 Button is clicked
 	if (gameMode == game && btnLevel2->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			btnLevel2->getSprite()->setTextureRect(sf::IntRect(150, 0, 150, 65));
@@ -200,6 +238,38 @@ void GameEngine::handleEvent(sf::Event event) {
 			if (levelManager.getCurrentLevel().levelNumber == 1)
 				loadLevel(levelManager.getLevel2());
 			btnLevel2->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
+		}
+	}
+
+	pixelPos = sf::Mouse::getPosition(menuWindow);
+	worldPos = menuWindow.mapPixelToCoords(pixelPos);
+	// Check if menu Play Button is clicked
+	if (gameMode == menu && btnPlay->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			btnPlay->getSprite()->setTextureRect(sf::IntRect(257, 0, 256, 75));
+		if (event.type == sf::Event::MouseButtonReleased) {
+			initGame();
+			menuWindow.setVisible(false);
+			btnPlay->getSprite()->setTextureRect(sf::IntRect(0, 0, 256, 75));
+		}
+	}
+
+	// Check if menu Options Button is clicked
+	if (gameMode == menu && btnOptions->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			btnOptions->getSprite()->setTextureRect(sf::IntRect(449, 0, 448, 75));
+		if (event.type == sf::Event::MouseButtonReleased) {
+			btnOptions->getSprite()->setTextureRect(sf::IntRect(0, 0, 448, 75));
+		}
+	}
+
+	// Check if menu Exit Button is clicked
+	if (gameMode == menu && btnExit->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			btnExit->getSprite()->setTextureRect(sf::IntRect(255, 0, 254, 75));
+		if (event.type == sf::Event::MouseButtonReleased) {
+			menuWindow.close();
+			btnExit->getSprite()->setTextureRect(sf::IntRect(0, 0, 254, 75));
 		}
 	}
 	
@@ -222,24 +292,7 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 
 	sf::String title("SuperNova - Level " + std::to_string(level.levelNumber));
 	gameWindow.setTitle(title);
-
-	auto desktop = sf::VideoMode::getDesktopMode();
-	viewWidth = tileSize * level.width;
-	viewHeight = tileSize * level.height;
-
-	if (gameWindow.getSize().x != desktop.width) { // if window is not full screen
-		gameWindow.setSize(sf::Vector2u(viewWidth, viewHeight));
-		gameWindow.setPosition(sf::Vector2i(desktop.width / 2 - gameWindow.getSize().x / 2, desktop.height / 2 - gameWindow.getSize().y / 2));
-	
-		view.setSize(tileSize * level.width, tileSize * level.height + gamebar.getSize().y);
-		view = getViewport(viewWidth, viewHeight);
-		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
-	}
-	else {
-		view = getViewport(gameWindow.getSize().x, gameWindow.getSize().y);
-		view.setSize(viewWidth, viewHeight);
-		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
-	}
+	setWindowView(gameWindow, tileSize * level.width, tileSize * level.height);
 }
 
 //
@@ -259,6 +312,29 @@ void GameEngine::playMusic()
 	music.setLoop(true);         // make it loop
 	// Play it
 	music.play();
+}
+
+//
+// Set and center window
+//
+void GameEngine::setWindowView(sf::RenderWindow& window, float width, float height) {
+	auto desktop = sf::VideoMode::getDesktopMode();
+	viewWidth = width;
+	viewHeight = height;
+
+	if (window.getSize().x != desktop.width) { // if window is not full screen
+		window.setSize(sf::Vector2u(viewWidth, viewHeight));
+		window.setPosition(sf::Vector2i(desktop.width / 2 - window.getSize().x / 2, desktop.height / 2 - window.getSize().y / 2));
+
+		view.setSize(viewWidth, viewHeight + gamebar.getSize().y);
+		view = getViewport(viewWidth, viewHeight);
+		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
+	}
+	else {
+		view = getViewport(window.getSize().x, window.getSize().y);
+		view.setSize(viewWidth, viewHeight);
+		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
+	}
 }
 
 //
@@ -283,5 +359,6 @@ void GameEngine::updateGame() {
 // Updates all menu objects
 //
 void GameEngine::updateMenu() {
-
+	gameWindow.setVisible(false);
+	blackRect.setSize(sf::Vector2f(menuWindow.getSize()));
 }
