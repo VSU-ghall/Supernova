@@ -59,9 +59,10 @@ void GameEngine::initGame() {
 }
 
 void GameEngine::initMenu() {
-	blackRect.setFillColor(sf::Color(0, 10, 0, 255));
 	menuWindow.setFramerateLimit(60);
 	setWindowView(menuWindow, tileSize * 20, tileSize * 20);
+	blackRect.setFillColor(sf::Color(0, 10, 0, 255));
+	blackRect.setSize(sf::Vector2f(menuWindow.getSize()));
 
 	// All menu buttons are centered and linked together, so if you vertically move the first, the others with it.
 	btnPlay->getSprite()->setTextureRect(sf::IntRect(0, 0, 256, 75));
@@ -371,5 +372,5 @@ void GameEngine::updateGame() {
 // Updates all menu objects
 //
 void GameEngine::updateMenu() {
-	blackRect.setSize(sf::Vector2f(menuWindow.getSize()));
+	//blackRect.setSize(sf::Vector2f(menuWindow.getSize()));
 }
