@@ -9,15 +9,12 @@ void GameEngine::run() {
 
 	// main loop --> continues each frame while window is open
 	while (gameWindow.isOpen() && menuWindow.isOpen()) {
-		if (scenePlaying) gameMode = scene;
-		//else gameMode = game;
-
 		// event handling
 		sf::Event event;
 		if (gameMode == menu)
 			while (menuWindow.pollEvent(event))
 				handleEvent(event);
-		else
+		else if (gameMode == game)
 			while (gameWindow.pollEvent(event))
 				handleEvent(event);
 
@@ -25,15 +22,11 @@ void GameEngine::run() {
 			case menu:
 				updateMenu();
 				drawMenu();
-				std::cout << "menu" << std::endl; break;
-			case scene:
-				updateGame();
-				drawGame();
-				std::cout << "scene" << std::endl; break;
+				break;
 			case game:
 				updateGame();
 				drawGame();
-				std::cout << "game" << std::endl; break;
+				break;
 		}
 		
 	}
@@ -46,9 +39,6 @@ void GameEngine::init() {
 	initMenu();
 
 	playMusic();
-
-	//storyManager.playLogoIntro();
-	//initGame();
 }
 
 void GameEngine::initGame() {
@@ -61,8 +51,10 @@ void GameEngine::initGame() {
 	btnLevel1->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
 	btnLevel2->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
 
-	gameWindow.setVisible(true);
 	gameMode = game;
+	gameWindow.setVisible(true);
+
+	storyManager.playLogoIntro();
 }
 
 void GameEngine::initMenu() {
@@ -97,13 +89,13 @@ void GameEngine::drawGame() {
 
 	//drawGrid();
 
-	if (gameMode != scene) player.draw(gameWindow);
+	if (!scenePlaying) player.draw(gameWindow);
 	gameWindow.draw(*pixiguide->getSprite());
 
 	gameWindow.draw(gamebar);
 	gameWindow.draw(*btnLevel1->getSprite()); gameWindow.draw(*btnLevel2->getSprite());
 
-	if (gameMode == scene) storyManager.draw();
+	if (scenePlaying) storyManager.draw();
 
 	gameWindow.display();
 }
@@ -188,7 +180,7 @@ sf::View GameEngine::getViewport(float width, float height) {
 void GameEngine::handleEvent(sf::Event event) {
 	// event triggered when window is closed
 	if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-		if (gameMode == game || gameMode == scene) gameWindow.close();
+		if (gameMode == game) gameWindow.close();
 		else if (gameMode == menu) menuWindow.close();
 
 	// sets viewport when window is resized
@@ -323,12 +315,12 @@ void GameEngine::setWindowView(sf::RenderWindow& window, float width, float heig
 	viewHeight = height;
 
 	if (window.getSize().x != desktop.width) { // if window is not full screen
-		window.setSize(sf::Vector2u(viewWidth, viewHeight));
-		window.setPosition(sf::Vector2i(desktop.width / 2 - window.getSize().x / 2, desktop.height / 2 - window.getSize().y / 2));
-
 		view.setSize(viewWidth, viewHeight + gamebar.getSize().y);
 		view = getViewport(viewWidth, viewHeight);
 		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
+
+		window.setSize(sf::Vector2u(view.getSize()));
+		window.setPosition(sf::Vector2i(desktop.width / 2 - window.getSize().x / 2, desktop.height / 2 - window.getSize().y / 2));
 	}
 	else {
 		view = getViewport(window.getSize().x, window.getSize().y);
@@ -341,7 +333,7 @@ void GameEngine::setWindowView(sf::RenderWindow& window, float width, float heig
 // Updates all game objects
 //
 void GameEngine::updateGame() {
-	if (gameMode == scene) storyManager.update();
+	if (scenePlaying) storyManager.update();
 
 	player.update(levelManager.getCurrentLevel());
 

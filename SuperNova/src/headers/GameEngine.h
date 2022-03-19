@@ -35,7 +35,7 @@ private:
 	sf::Texture texture;
 	std::vector<Vector2> levelVector;
 
-	enum Mode {menu, scene, game};
+	enum Mode {menu, game};
 	Mode gameMode = menu;
 
 public:
