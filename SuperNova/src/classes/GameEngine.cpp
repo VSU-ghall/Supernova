@@ -50,6 +50,7 @@ void GameEngine::initGame() {
 	gamebar.setFillColor(sf::Color(59, 30, 11));
 	btnLevel1->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
 	btnLevel2->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
+	btnMenu->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
 
 	gameMode = game;
 	gameWindow.setVisible(true);
@@ -71,6 +72,9 @@ void GameEngine::initMenu() {
 	
 	btnExit->getSprite()->setTextureRect(sf::IntRect(0, 0, 254, 75));
 	btnExit->getSprite()->setPosition((menuWindow.getSize().x - 254) / 2, btnOptions->getSprite()->getPosition().y + (74 * 2));
+	
+	gameWindow.setVisible(false); menuWindow.setVisible(true);
+	gameMode = menu;
 }
 
 //
@@ -93,7 +97,7 @@ void GameEngine::drawGame() {
 	gameWindow.draw(*pixiguide->getSprite());
 
 	gameWindow.draw(gamebar);
-	gameWindow.draw(*btnLevel1->getSprite()); gameWindow.draw(*btnLevel2->getSprite());
+	gameWindow.draw(*btnLevel1->getSprite()); gameWindow.draw(*btnLevel2->getSprite()); gameWindow.draw(*btnMenu->getSprite());
 
 	if (scenePlaying) storyManager.draw();
 
@@ -186,9 +190,10 @@ void GameEngine::handleEvent(sf::Event event) {
 	// sets viewport when window is resized
 	if (event.type == sf::Event::Resized) {
 		view = getViewport(event.size.width, event.size.height);
-		gamebar.setSize(sf::Vector2f(event.size.width, 75));
+		gamebar.setSize(sf::Vector2f(view.getSize().x, 75));
 		btnLevel1->getSprite()->setPosition(gamebar.getPosition().x + 10, gamebar.getPosition().y + 5);
 		btnLevel2->getSprite()->setPosition(gamebar.getPosition().x + 20 + btnLevel1->getTexture().getSize().x-150, gamebar.getPosition().y + 5);
+		btnMenu->getSprite()->setPosition(gamebar.getSize().x - 150 - 10, gamebar.getPosition().y + 5);
 	}
 
 	if (event.type == sf::Event::KeyReleased) {
@@ -230,6 +235,16 @@ void GameEngine::handleEvent(sf::Event event) {
 			if (levelManager.getCurrentLevel().levelNumber == 1)
 				loadLevel(levelManager.getLevel2());
 			btnLevel2->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
+		}
+	}
+
+	// Check if game Menu Button is clicked
+	if (gameMode == game && btnMenu->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			btnMenu->getSprite()->setTextureRect(sf::IntRect(149, 0, 150, 65));
+		if (event.type == sf::Event::MouseButtonReleased) {
+			initMenu();
+			btnMenu->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
 		}
 	}
 
@@ -326,6 +341,11 @@ void GameEngine::setWindowView(sf::RenderWindow& window, float width, float heig
 		view = getViewport(window.getSize().x, window.getSize().y);
 		view.setSize(viewWidth, viewHeight);
 		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
+
+		gamebar.setSize(sf::Vector2f(view.getSize().x, 75));
+		btnLevel1->getSprite()->setPosition(gamebar.getPosition().x + 10, gamebar.getPosition().y + 5);
+		btnLevel2->getSprite()->setPosition(gamebar.getPosition().x + 20 + btnLevel1->getTexture().getSize().x - 150, gamebar.getPosition().y + 5);
+		btnMenu->getSprite()->setPosition(gamebar.getSize().x - 150 - 10, gamebar.getPosition().y + 5);
 	}
 }
 
@@ -351,6 +371,5 @@ void GameEngine::updateGame() {
 // Updates all menu objects
 //
 void GameEngine::updateMenu() {
-	gameWindow.setVisible(false);
 	blackRect.setSize(sf::Vector2f(menuWindow.getSize()));
 }

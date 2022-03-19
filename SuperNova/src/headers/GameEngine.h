@@ -26,6 +26,7 @@ private:
 	sf::Music music;
 	Sprite *btnLevel1 = new Sprite("src/resources/Level1Button.png"), 
 		*btnLevel2 = new Sprite("src/resources/Level2Button.png"),
+		*btnMenu = new Sprite("src/resources/MenuButton.png"),
 		*pixiguide = new Sprite("src/resources/pixiguide.png", true, false, 6, 32, 48, 1.0f, 150),
 		*btnPlay = new Sprite("src/resources/MenuPlayButton.png"),
 		*btnOptions = new Sprite("src/resources/MenuOptionsButton.png"),
@@ -36,7 +37,7 @@ private:
 	std::vector<Vector2> levelVector;
 
 	enum Mode {menu, game};
-	Mode gameMode = menu;
+	Mode gameMode;
 
 public:
 	GameEngine();
