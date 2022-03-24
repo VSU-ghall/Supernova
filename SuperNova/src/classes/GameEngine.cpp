@@ -52,8 +52,7 @@ void GameEngine::draw() {
 
 	//drawGrid();
 
-	player.draw(window);
-
+	if (!scenePlaying) player.draw(window);
 	window.draw(*pixiguide->getSprite());
 
 	window.draw(gamebar);
@@ -142,6 +141,18 @@ void GameEngine::handleEvent(sf::Event event) {
 		if (sf::Keyboard::D || sf::Keyboard::A)
 			if (player.stoppedLeft || player.stoppedRight)
 				player.moving = false;
+	}
+
+	if (player.transitioning) {
+		std::cout << levelManager.getCurrentLevel().levelNumber << std::endl;
+		if (levelManager.getCurrentLevel().levelNumber == 2) {
+			loadLevel(levelManager.getLevel1());
+			player.transitioning = false;
+		}
+		else if (levelManager.getCurrentLevel().levelNumber == 1) {
+			loadLevel(levelManager.getLevel2());
+			player.transitioning = false;
+		}
 	}
 
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
@@ -234,4 +245,7 @@ void GameEngine::update() {
 	sf::Vector2i pixelPos(player.getX(), player.getY());
 	sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
 	pixiguide->getSprite()->setPosition(sf::Vector2f((pixelPos.x - (4.5 * 64)) * 1.1, (pixelPos.y - (2*64))/1.2));
+	if (player.getBoundingBox().intersects(pixiguide->getBoundingBox())) {
+		pixiguide->getSprite()->move(100,0);
+	}
 }

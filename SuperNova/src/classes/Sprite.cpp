@@ -73,3 +73,7 @@ sf::Clock Sprite::getTimer()
 int Sprite::getWidth() {
 	return width;
 }
+
+sf::FloatRect Sprite::getBoundingBox() {
+	return sprite.getGlobalBounds();
+}
