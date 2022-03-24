@@ -5,7 +5,6 @@ bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize, const int*
     // load the tileset texture
     if (!m_tileset.loadFromFile(tileset))
         return false;
-    colMap.clear();
     // resize the vertex array to fit the level size
     m_vertices.setPrimitiveType(sf::Quads);
     m_vertices.resize(width * height * 4);
@@ -52,7 +51,7 @@ void TileMap::draw(sf::RenderTarget & target, sf::RenderStates states) const
 std::vector<std::vector<int>> TileMap::loadColMap( const int* tiles, unsigned int width, unsigned int height)
 {
 
-    colMap.clear();
+    std::vector<std::vector<int>> colMap;
     
     for (int i = 0; i < height; i++) {
         std::vector<int> row;
@@ -82,4 +81,16 @@ std::vector<std::vector<int>> TileMap::loadColMap( const int* tiles, unsigned in
     }*/
     return colMap;
 
+}
+
+int TileMap::getTransitionTile() {
+    return transitionTile;
+}
+
+int TileMap::getCollisionTile() {
+    return collisionTile;
+}
+
+int TileMap::getEmptyTile() {
+    return emptyTile;
 }
