@@ -11,7 +11,7 @@ void GameEngine::run() {
 	while (gameWindow.isOpen() && menuWindow.isOpen()) {
 		// event handling
 		sf::Event event;
-		if (gameMode == menu)
+		if (gameMode == menu || gameMode == paused)
 			while (menuWindow.pollEvent(event))
 				handleEvent(event);
 		else if (gameMode == game)
@@ -20,6 +20,10 @@ void GameEngine::run() {
 
 		switch (gameMode) {
 			case menu:
+				updateMenu();
+				drawMenu();
+				break;
+			case paused:
 				updateMenu();
 				drawMenu();
 				break;
@@ -44,38 +48,50 @@ void GameEngine::init() {
 void GameEngine::initGame() {
 	gameWindow.setFramerateLimit(60);
 
-	loadLevel(levelManager.getLevel1());
-	player.init();
+	if (gameMode != paused) {
+		loadLevel(levelManager.getLevel1());
+		player.init();
 
-	gamebar.setFillColor(sf::Color(59, 30, 11));
-	btnLevel1->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
-	btnLevel2->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
-	btnMenu->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
+		gamebar.setFillColor(sf::Color(59, 30, 11));
+		btnLevel1->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
+		btnLevel2->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
+		btnMenu->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
+
+		storyManager.playLogoIntro();
+	}
+	else {
+		sf::Vector2u winSize = gameWindow.getSize();
+		setWindowView(gameWindow, tileSize * levelManager.currentLevel.width, tileSize * levelManager.currentLevel.height);
+		gameWindow.setSize(winSize);
+	}
 
 	gameMode = game;
-	gameWindow.setVisible(true);
-
-	storyManager.playLogoIntro();
+	gameWindow.setVisible(true); menuWindow.setVisible(false);
 }
 
 void GameEngine::initMenu() {
 	menuWindow.setFramerateLimit(60);
 	setWindowView(menuWindow, tileSize * 20, tileSize * 20);
-	blackRect.setFillColor(sf::Color(0, 10, 0, 255));
-	blackRect.setSize(sf::Vector2f(menuWindow.getSize()));
 
-	// All menu buttons are centered and linked together, so if you vertically move the first, the others with it.
-	btnPlay->getSprite()->setTextureRect(sf::IntRect(0, 0, 256, 75));
-	btnPlay->getSprite()->setPosition((menuWindow.getSize().x - 256) / 2, (menuWindow.getSize().y - 74*5) / 2);
+	if (gameMode != paused) {
+		blackRect.setFillColor(sf::Color(0, 10, 0, 255));
+		blackRect.setSize(sf::Vector2f(menuWindow.getSize()));
+
+		// All menu buttons are centered and linked together, so if you vertically move the first, the others with it.
+		btnPlay->getSprite()->setTextureRect(sf::IntRect(0, 0, 256, 75));
+		btnPlay->getSprite()->setPosition((menuWindow.getSize().x - 256) / 2, (menuWindow.getSize().y - 74 * 5) / 2);
+
+		btnOptions->getSprite()->setTextureRect(sf::IntRect(0, 0, 448, 75));
+		btnOptions->getSprite()->setPosition((menuWindow.getSize().x - 448) / 2, btnPlay->getSprite()->getPosition().y + (74 * 2));
+
+		btnExit->getSprite()->setTextureRect(sf::IntRect(0, 0, 254, 75));
+		btnExit->getSprite()->setPosition((menuWindow.getSize().x - 254) / 2, btnOptions->getSprite()->getPosition().y + (74 * 2));
+
+		gameMode = menu;
+		gameWindow.setVisible(false);
+	}
 	
-	btnOptions->getSprite()->setTextureRect(sf::IntRect(0, 0, 448, 75));
-	btnOptions->getSprite()->setPosition((menuWindow.getSize().x - 448) / 2, btnPlay->getSprite()->getPosition().y + (74*2));
-	
-	btnExit->getSprite()->setTextureRect(sf::IntRect(0, 0, 254, 75));
-	btnExit->getSprite()->setPosition((menuWindow.getSize().x - 254) / 2, btnOptions->getSprite()->getPosition().y + (74 * 2));
-	
-	gameWindow.setVisible(false); menuWindow.setVisible(true);
-	gameMode = menu;
+	menuWindow.setVisible(true);
 }
 
 //
@@ -186,15 +202,17 @@ void GameEngine::handleEvent(sf::Event event) {
 	// event triggered when window is closed
 	if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		if (gameMode == game) gameWindow.close();
-		else if (gameMode == menu) menuWindow.close();
+		else if (gameMode == menu || gameMode == paused) menuWindow.close();
 
 	// sets viewport when window is resized
 	if (event.type == sf::Event::Resized) {
 		view = getViewport(event.size.width, event.size.height);
-		gamebar.setSize(sf::Vector2f(view.getSize().x, 75));
-		btnLevel1->getSprite()->setPosition(gamebar.getPosition().x + 10, gamebar.getPosition().y + 5);
-		btnLevel2->getSprite()->setPosition(gamebar.getPosition().x + 20 + btnLevel1->getTexture().getSize().x-150, gamebar.getPosition().y + 5);
-		btnMenu->getSprite()->setPosition(gamebar.getSize().x - 150 - 10, gamebar.getPosition().y + 5);
+		if (gameMode == game) {
+			gamebar.setSize(sf::Vector2f(view.getSize().x, 75));
+			btnLevel1->getSprite()->setPosition(gamebar.getPosition().x + 10, gamebar.getPosition().y + 5);
+			btnLevel2->getSprite()->setPosition(gamebar.getPosition().x + 20 + btnLevel1->getTexture().getSize().x - 150, gamebar.getPosition().y + 5);
+			btnMenu->getSprite()->setPosition(gamebar.getSize().x - 150 - 10, gamebar.getPosition().y + 5);
+		}
 	}
 
 	if (event.type == sf::Event::KeyReleased) {
@@ -244,6 +262,7 @@ void GameEngine::handleEvent(sf::Event event) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			btnMenu->getSprite()->setTextureRect(sf::IntRect(149, 0, 150, 65));
 		if (event.type == sf::Event::MouseButtonReleased) {
+			gameMode = paused;
 			initMenu();
 			btnMenu->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
 		}
@@ -252,18 +271,17 @@ void GameEngine::handleEvent(sf::Event event) {
 	pixelPos = sf::Mouse::getPosition(menuWindow);
 	worldPos = menuWindow.mapPixelToCoords(pixelPos);
 	// Check if menu Play Button is clicked
-	if (gameMode == menu && btnPlay->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+	if ((gameMode == menu || gameMode == paused) && btnPlay->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			btnPlay->getSprite()->setTextureRect(sf::IntRect(257, 0, 256, 75));
 		if (event.type == sf::Event::MouseButtonReleased) {
 			initGame();
-			menuWindow.setVisible(false);
 			btnPlay->getSprite()->setTextureRect(sf::IntRect(0, 0, 256, 75));
 		}
 	}
 
 	// Check if menu Options Button is clicked
-	if (gameMode == menu && btnOptions->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+	if ((gameMode == menu || gameMode == paused) && btnOptions->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			btnOptions->getSprite()->setTextureRect(sf::IntRect(449, 0, 448, 75));
 		if (event.type == sf::Event::MouseButtonReleased) {
@@ -272,7 +290,7 @@ void GameEngine::handleEvent(sf::Event event) {
 	}
 
 	// Check if menu Exit Button is clicked
-	if (gameMode == menu && btnExit->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+	if ((gameMode == menu || gameMode == paused) && btnExit->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			btnExit->getSprite()->setTextureRect(sf::IntRect(255, 0, 254, 75));
 		if (event.type == sf::Event::MouseButtonReleased) {
