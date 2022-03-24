@@ -60,13 +60,13 @@ std::vector<std::vector<int>> TileMap::loadColMap( const int* tiles, unsigned in
             // get the current tile number
             int tileNumber = tiles[(i*width)+j];
             if (tileNumber==31) {
-                row.push_back(4);
+                row.push_back(collisionTile);
             }
             else if (tileNumber > 0) {
-                row.push_back(1);
+                row.push_back(collisionTile);
             }
             else {
-                row.push_back(0);
+                row.push_back(emptyTile);
             }
         }
         colMap.push_back(row);
