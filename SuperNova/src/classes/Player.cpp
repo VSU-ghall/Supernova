@@ -218,9 +218,7 @@ bool Player::checkCollision(float velo, LevelManager::Level currentLevel) {
 
 	checkTopBotCollision(topRight, botRightHigh, botRight, botMidRight, botMid, botMidLeft, topLeft, botLeftHigh, botLeft, currentLevel);
 	checkTransitionCollision(topRight, botRight, topLeft, botLeft, currentLevel);
-	bool temp = checkSideCollision(velo, botRightHigh, botLeftHigh, topRightHigh, topLeftHigh, currentLevel);
-
-	return temp;
+	return checkSideCollision(velo, botRightHigh, botLeftHigh, topRightHigh, topLeftHigh, currentLevel);
 }
 
 //Note: The values of collisionTile and transitionTile can be changed in TileMap.h
