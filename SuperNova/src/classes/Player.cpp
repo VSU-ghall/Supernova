@@ -25,11 +25,10 @@ void Player::init() {
 	//this is how fast we want the player. If we want to change their speed this can be changed.
 	playerSpeed = 6.0f;
 	playerJumpSpeed = 9.0f;
-	//playerSprite.setPosition(64 * 5, 64 * 9);
-	playerSprite.setPosition(64 * startPosition.x, 64 * startPosition.y);
+	playerSprite.setPosition(tileSize * startPosition.x, tileSize * startPosition.y);
 	playerSprite.setTextureRect(sf::IntRect(0, 0, 32, 64));
-	x = startPosition.x * 64;
-	y = startPosition.y * 64;
+	x = startPosition.x * tileSize;
+	y = startPosition.y * tileSize;
 
 	//this is the Size of the player
 	//playerSize = 64/834.f;
@@ -180,9 +179,9 @@ void Player::draw(sf::RenderWindow& window) {
 }
 
 void Player::respawn() {
-	playerSprite.setPosition(64 * startPosition.x, 64 * startPosition.y);
-	x = startPosition.x * 64;
-	y = startPosition.y * 64;
+	playerSprite.setPosition(tileSize * startPosition.x, tileSize * startPosition.y);
+	x = startPosition.x * tileSize;
+	y = startPosition.y * tileSize;
 }
 
 void Player::update(LevelManager::Level currentLevel) {
@@ -215,7 +214,7 @@ bool Player::checkCollision(float velo, LevelManager::Level currentLevel) {
 	sf::Vector2f botRight(right + velo, bot);
 
 	//If out of level bounds
-	if (left + velo <= 6 || right + velo >= (currentLevel.width * 64) - 6) return false;
+	if (left + velo <= 6 || right + velo >= (currentLevel.width * tileSize) - 6) return false;
 
 	checkTopBotCollision(topRight, botRightHigh, botRight, botMidRight, botMid, botMidLeft, topLeft, botLeftHigh, botLeft, currentLevel);
 	checkTransitionCollision(topRight, botRight, topLeft, botLeft, currentLevel);
@@ -224,10 +223,12 @@ bool Player::checkCollision(float velo, LevelManager::Level currentLevel) {
 	return temp;
 }
 
+//Note: The values of collisionTile and transitionTile can be changed in TileMap.h
+
 bool Player::checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vector2f botLeftHigh, sf::Vector2f topRightHigh, sf::Vector2f topLeftHigh, LevelManager::Level currentLevel) {
 
-	bool blockTopLeftHigh = checkTile(currentLevel, topLeftHigh, 1), blockBotLeftHigh = checkTile(currentLevel, botLeftHigh, 1),
-		blockTopRightHigh = checkTile(currentLevel, topRightHigh, 1), blockBotRightHigh = checkTile(currentLevel, botRightHigh, 1);
+	bool blockTopLeftHigh = checkTile(currentLevel, topLeftHigh, currentLevel.collisionTile), blockBotLeftHigh = checkTile(currentLevel, botLeftHigh, currentLevel.collisionTile),
+		blockTopRightHigh = checkTile(currentLevel, topRightHigh, currentLevel.collisionTile), blockBotRightHigh = checkTile(currentLevel, botRightHigh, currentLevel.collisionTile);
 
 	if (((blockTopLeftHigh || blockBotLeftHigh) && velo < 0) || ((blockTopRightHigh || blockBotRightHigh)) && velo > 0) {
 		return false;
@@ -238,8 +239,8 @@ bool Player::checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vecto
 
 void Player::checkTransitionCollision(sf::Vector2f topRight, sf::Vector2f botRight, sf::Vector2f topLeft, sf::Vector2f botLeft, LevelManager::Level currentLevel) {
 
-	bool blockTopLeftHigh = checkTile(currentLevel, topRight, 4), blockBotLeftHigh = checkTile(currentLevel, botRight, 4), 
-		blockTopRightHigh = checkTile(currentLevel, topLeft, 4), blockBotRightHigh = checkTile(currentLevel, botLeft, 4);
+	bool blockTopLeftHigh = checkTile(currentLevel, topRight, currentLevel.transitionTile), blockBotLeftHigh = checkTile(currentLevel, botRight, currentLevel.transitionTile),
+		blockTopRightHigh = checkTile(currentLevel, topLeft, currentLevel.transitionTile), blockBotRightHigh = checkTile(currentLevel, botLeft, currentLevel.transitionTile);
 
 	if (blockBotRightHigh || blockTopRightHigh || blockBotLeftHigh || blockTopLeftHigh) {
 		readyToTransition = true;
@@ -251,9 +252,9 @@ void Player::checkTransitionCollision(sf::Vector2f topRight, sf::Vector2f botRig
 
 void Player::checkTopBotCollision(sf::Vector2f topRight, sf::Vector2f botRightHigh, sf::Vector2f botRight, sf::Vector2f botMidRight, sf::Vector2f botMid, sf::Vector2f botMidLeft, sf::Vector2f topLeft, sf::Vector2f botLeftHigh, sf::Vector2f botLeft, LevelManager::Level currentLevel) {
 
-	bool blockTopLeft = checkTile(currentLevel, topLeft, 1), blockBotLeftHigh = checkTile(currentLevel, botLeftHigh, 1), blockBottomLeft = checkTile(currentLevel, botLeft, 1),
-		blockBotMidLeft = checkTile(currentLevel, botMidLeft, 1), blockBotMid = checkTile(currentLevel, botMid, 1), blockBotMidRight = checkTile(currentLevel, botMidRight, 1),
-		blockTopRight = checkTile(currentLevel, topRight, 1), blockBotRightHigh = checkTile(currentLevel, botRightHigh, 1), blockBottomRight = checkTile(currentLevel, botRight, 1);
+	bool blockTopLeft = checkTile(currentLevel, topLeft, currentLevel.collisionTile), blockBotLeftHigh = checkTile(currentLevel, botLeftHigh, currentLevel.collisionTile), blockBottomLeft = checkTile(currentLevel, botLeft, currentLevel.collisionTile),
+		blockBotMidLeft = checkTile(currentLevel, botMidLeft, currentLevel.collisionTile), blockBotMid = checkTile(currentLevel, botMid, currentLevel.collisionTile), blockBotMidRight = checkTile(currentLevel, botMidRight, currentLevel.collisionTile),
+		blockTopRight = checkTile(currentLevel, topRight, currentLevel.collisionTile), blockBotRightHigh = checkTile(currentLevel, botRightHigh, currentLevel.collisionTile), blockBottomRight = checkTile(currentLevel, botRight, currentLevel.collisionTile);
 
 	if ((blockBottomLeft && !blockBotMidLeft) || (blockBottomRight && !blockBotMidRight)) {
 		grounded = false;
@@ -274,7 +275,7 @@ void Player::checkTopBotCollision(sf::Vector2f topRight, sf::Vector2f botRightHi
 }
 
 bool Player::checkTile(LevelManager::Level currentLevel, sf::Vector2f position, int remainder) {
-	return currentLevel.colMap.at(floor(position.y / 64)).at(floor(position.x / 64)) == remainder;
+	return currentLevel.colMap.at(floor(position.y / tileSize)).at(floor(position.x / tileSize)) == remainder;
 }
 
 void Player::playCrouchSound()

@@ -9,6 +9,7 @@ class Player
 {
 	private:
 		float x, y;
+		int tileSize = 64;
 
 	public:
 		Vector2 startPosition;
