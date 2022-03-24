@@ -93,6 +93,10 @@ void LevelManager::loadLevel(Level* level) {
 
 	level->colMap = map.loadColMap(level->map, level->width, level->height);
 
+	level->transitionTile = map.getTransitionTile();
+	level->collisionTile = map.getCollisionTile();
+	level->emptyTile = map.getEmptyTile();
+
 	if (level->hasBackground)
 		level->background->animating = true;
 }
