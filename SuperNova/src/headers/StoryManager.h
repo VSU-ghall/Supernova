@@ -28,7 +28,8 @@ private:
 
 	/*** Sprites and Textures ***/
 	sf::RectangleShape blackRect, logoImg;
-	Sprite* rocket, *astronaut, *planetSurfaceBackground = new Sprite("src/resources/planet_surface.png", false, false, 1, 200, 120, 7.0, 0);
+	Sprite* rocket, *astronaut, *planetSurfaceBackground = 
+		new Sprite("src/resources/planet_surface.png", false, false, 1, 200, 120, 7.0, 0);
 	sf::Texture logoImgText;
 
 	/*** Booleans ***/
