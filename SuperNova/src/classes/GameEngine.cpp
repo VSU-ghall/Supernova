@@ -282,6 +282,7 @@ void GameEngine::handleEvent(sf::Event event) {
 	
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 		if (scenePlaying) scenePlaying = false;
+		if (displayingText) displayingText = false;
 		//std::cout << "x: " << worldPos.x << " y: " << worldPos.y << std::endl;
 	}
 
@@ -351,7 +352,10 @@ void GameEngine::setWindowView(sf::RenderWindow& window, float width, float heig
 // Updates all game objects
 //
 void GameEngine::updateGame() {
-	if (scenePlaying || displayingText) storyManager.update();
+	if (scenePlaying || displayingText) {
+		storyManager.update();
+		return;
+	}
 
 	if (player.transitioningLeft) {
 		std::cout << levelManager.getCurrentLevel().levelNumber << std::endl;
