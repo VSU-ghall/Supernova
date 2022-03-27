@@ -67,6 +67,8 @@ void GameEngine::initGame() {
 
 	gameMode = game;
 	gameWindow.setVisible(true); menuWindow.setVisible(false);
+
+	addEntities();
 }
 
 void GameEngine::initMenu() {
@@ -115,6 +117,19 @@ void GameEngine::drawGame() {
 
 	gameWindow.draw(gamebar);
 	gameWindow.draw(*btnLevel1->getSprite()); gameWindow.draw(*btnLevel2->getSprite()); gameWindow.draw(*btnMenu->getSprite());
+
+	enemies.update();
+	std::cout << enemies.getNumEntities();
+	if (!scenePlaying) {
+		for (auto e : enemies.getEntities()) {
+			if (e->getTag() == levelManager.getCurrentLevel().levelName) {
+				gameWindow.draw(*e->getSprite()->getSprite());
+				e->getSprite()->getSprite()->setPosition(e->getPosition());
+			}
+			
+		}
+	}
+
 
 	if (scenePlaying) storyManager.draw();
 
@@ -381,8 +396,13 @@ void GameEngine::updateGame() {
 	sf::Vector2i pixelPos(player.getX(), player.getY());
 	sf::Vector2f worldPos = gameWindow.mapPixelToCoords(pixelPos);
 	pixiguide->getSprite()->setPosition(sf::Vector2f((pixelPos.x - (4.5 * 64)) * 1.1, (pixelPos.y - (2*64))/1.2));
-	if (player.getBoundingBox().intersects(pixiguide->getBoundingBox())) {
+	/*if (player.getBoundingBox().intersects(pixiguide->getBoundingBox())) {
 		pixiguide->getSprite()->move(100,0);
+	}*/
+	for (auto e : enemies.getEntities()) {
+		if (player.getBoundingBox().intersects(e->getSprite()->getBoundingBox())) {
+			std::cout << "collision";
+		}
 	}
 }
 
@@ -391,4 +411,10 @@ void GameEngine::updateGame() {
 //
 void GameEngine::updateMenu() {
 	//blackRect.setSize(sf::Vector2f(menuWindow.getSize()));
+}
+
+void GameEngine::addEntities() {
+	for (auto e : levelManager.getCurrentLevel().enemies) {
+		enemies.addEntity(e);
+	}
 }
