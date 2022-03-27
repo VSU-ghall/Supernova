@@ -13,6 +13,24 @@ Sprite::Sprite(const std::string& filePath) {
 	sprites.push_back(this);
 }
 
+Sprite::Sprite(const std::string& filePath, bool animated, bool random, int numFrames, int width, int height, float scale, int frequency, bool startAnimated)
+	:Sprite(filePath)
+{
+	this->animated = animated;
+	this->random = random;
+	this->numFrames = numFrames;
+	this->width = width;
+	this->height = height;
+	this->scale = scale;
+	this->frequency = frequency;
+
+	sprite.setScale(sf::Vector2f(scale, scale));
+	if (startAnimated) {
+		animating = true;
+	}
+	sprite.setTextureRect(sf::IntRect(offset * width, 0, width, height));
+}
+
 Sprite::Sprite(const std::string& filePath, bool animated, bool random, int numFrames, int width, int height, float scale, int frequency)
 	:Sprite(filePath)
 {
