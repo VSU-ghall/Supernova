@@ -4,6 +4,7 @@
 #include <headers/TileMap.h>
 #include <headers/Sprite.h>
 #include <vector>
+#include <headers/Entity.h>
 
 static class LevelManager
 {
@@ -27,6 +28,9 @@ static class LevelManager
 			Level* right;
 			Level* top;
 			Level* bot;
+
+			std::vector<Entity> enemies;
+			std::string levelName;
 
 		} testLevel = {this}, 
 			level1 = { this, new Sprite("src/resources/space_background_sprite_sheet.png", true, true, 4, 1280, 768, 1.0f, 1000), true },

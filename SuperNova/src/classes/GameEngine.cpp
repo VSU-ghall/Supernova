@@ -56,6 +56,9 @@ void GameEngine::initGame() {
 		chatBar.setFillColor(sf::Color(0,0,0,200));
 		btnMenu->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
 
+		jetpackIcon.setSize(sf::Vector2f(64, 64));
+		jetpackIcon.setFillColor(sf::Color::Red);
+
 		//storyManager.playLogoIntro();
 		storyManager.playTextIntro();
 	}
@@ -67,6 +70,8 @@ void GameEngine::initGame() {
 
 	gameMode = game;
 	gameWindow.setVisible(true); menuWindow.setVisible(false);
+
+	addEntities();
 }
 
 void GameEngine::initMenu() {
@@ -114,10 +119,22 @@ void GameEngine::drawGame() {
 	gameWindow.draw(*pixiguide->getSprite());
 
 	gameWindow.draw(gameBar);
+	gameWindow.draw(jetpackIcon);
 	gameWindow.draw(*btnMenu->getSprite());
 
 	if (displayingText) gameWindow.draw(chatBar);
 
+	enemies.update();
+	if (!scenePlaying) {
+		for (auto e : enemies.getEntities()) {
+			if (e->getTag() == levelManager.getCurrentLevel().levelName) {
+				gameWindow.draw(*e->getSprite()->getSprite());
+				e->getSprite()->getSprite()->setPosition(e->getPosition());
+			}
+			
+		}
+	}
+	
 	if (scenePlaying || displayingText) storyManager.draw();
 
 	gameWindow.display();
@@ -210,9 +227,14 @@ void GameEngine::handleEvent(sf::Event event) {
 	if (event.type == sf::Event::Resized) {
 		view = getViewport(event.size.width, event.size.height);
 		if (gameMode == game) {
+			// Set the game bar and contents
 			gameBar.setSize(sf::Vector2f(view.getSize().x, 75));
-			btnMenu->getSprite()->setPosition(gameBar.getSize().x - 150 - 10, gameBar.getPosition().y + 5);
+			jetpackIcon.setPosition(gameBar.getPosition().x + 10, 
+				gameBar.getPosition().y + ((gameBar.getSize().y - jetpackIcon.getSize().y)/2));
+			btnMenu->getSprite()->setPosition(gameBar.getSize().x - 
+				(btnMenu->getTexture().getSize().x/2) - 10, gameBar.getPosition().y + 5);
 			
+			// Set the text bar
 			chatBar.setSize(sf::Vector2f(view.getSize().x, 100));
 			chatBar.setPosition(0, view.getSize().y-chatBar.getSize().y);
 		}
@@ -238,6 +260,22 @@ void GameEngine::handleEvent(sf::Event event) {
 
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(gameWindow);
 	sf::Vector2f worldPos = gameWindow.mapPixelToCoords(pixelPos);
+
+	// Check if Jetpack Icon is clicked
+	if (gameMode == game && jetpackIcon.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+		/*if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			btnMenu->getSprite()->setTextureRect(sf::IntRect(149, 0, 150, 65));*/
+		if (event.type == sf::Event::MouseButtonReleased) {
+			if (player.jetPack) {
+				player.jetPack = false;
+				jetpackIcon.setFillColor(sf::Color::Red);
+			}else {
+				player.jetPack = true;
+				jetpackIcon.setFillColor(sf::Color::Green);
+			}
+		}
+	}
+
 	// Check if game Menu Button is clicked
 	if (gameMode == game && btnMenu->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -382,8 +420,13 @@ void GameEngine::updateGame() {
 	sf::Vector2i pixelPos(player.getX(), player.getY());
 	sf::Vector2f worldPos = gameWindow.mapPixelToCoords(pixelPos);
 	pixiguide->getSprite()->setPosition(sf::Vector2f((pixelPos.x - (4.5 * 64)) * 1.1, (pixelPos.y - (2*64))/1.2));
-	if (player.getBoundingBox().intersects(pixiguide->getBoundingBox())) {
+	/*if (player.getBoundingBox().intersects(pixiguide->getBoundingBox())) {
 		pixiguide->getSprite()->move(100,0);
+	}*/
+	for (auto e : enemies.getEntities()) {
+		if (player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && !e->getSprite()->animating) {
+			e->getSprite()->animateOnce();
+		}
 	}
 }
 
@@ -392,4 +435,10 @@ void GameEngine::updateGame() {
 //
 void GameEngine::updateMenu() {
 	//blackRect.setSize(sf::Vector2f(menuWindow.getSize()));
+}
+
+void GameEngine::addEntities() {
+	for (auto e : levelManager.getCurrentLevel().enemies) {
+		enemies.addEntity(e);
+	}
 }

@@ -111,21 +111,21 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 	}
 	if(jetPack){
 		if(checkCollision(0, currentLevel))
-		if (!ceilingBump) {
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-				velocity.y = -playerJumpSpeed;
-			}
-			if (!grounded || velocity.y < 0) {
-				velocity.y += gravity;
+			if (!ceilingBump) {
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+					velocity.y = -playerJumpSpeed;
+				}
+				if (!grounded || velocity.y < 0) {
+					velocity.y += gravity;
+				}
+				else {
+					velocity.y = 0;
+				}
 			}
 			else {
-				velocity.y = 0;
+				velocity.y = 1;
+				ceilingBump = false;
 			}
-		}
-		else {
-			velocity.y = 1;
-			ceilingBump = false;
-		}
 	}
 	else {
 		if (!jumping) {

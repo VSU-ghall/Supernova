@@ -25,7 +25,9 @@ Sprite::Sprite(const std::string& filePath, bool animated, bool random, int numF
 	this->frequency = frequency;
 
 	sprite.setScale(sf::Vector2f(scale, scale));
-	animating = true;
+	if (animated) animating = true;
+
+	if (!animated) sprite.setTextureRect(sf::IntRect(0,0, width, height));
 }
 
 void Sprite::animate() {
@@ -46,10 +48,30 @@ void Sprite::animate() {
 	}
 }
 
+void Sprite::animateOnce() {
+	if (!animating) animating = true;
+	if (timer.getElapsedTime().asMilliseconds() >= frequency) {
+
+		sprite.setTextureRect(sf::IntRect(offset++ * width, 0, width, height));
+		if (offset == numFrames) {
+			offset = 0;
+			animating = false;
+		}
+
+		//std::cout << "offset: " << offset << std::endl;
+
+		timer.restart();
+	}
+}
+
 void Sprite::animateAll() {
 	for (Sprite* s : sprites) {
 		if (s->animated && s->animating) {
 			s->animate();
+		}
+
+		if (!s->animated && s->animating) {
+			if (s->offset != s->numFrames) s->animateOnce();
 		}
 	}
 }

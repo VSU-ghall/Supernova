@@ -30,12 +30,14 @@ private:
 		*btnOptions = new Sprite("src/resources/MenuOptionsButton.png"),
 		*btnExit = new Sprite("src/resources/MenuExitButton.png");
 	sf::Texture backgroundTexture;
-	sf::RectangleShape gameBar, chatBar, blackRect;
+	sf::RectangleShape gameBar, chatBar, blackRect, jetpackIcon;
 	sf::Texture texture;
 	std::vector<Vector2> levelVector;
 
 	enum Mode {menu, game, paused};
 	Mode gameMode;
+
+	EntityManager enemies;
 
 public:
 	GameEngine();
@@ -58,4 +60,6 @@ public:
 	void setWindowView(sf::RenderWindow &window, float width, float height);
 	void updateGame();
 	void updateMenu();
+
+	void addEntities();
 };
