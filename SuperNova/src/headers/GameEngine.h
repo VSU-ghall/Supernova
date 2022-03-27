@@ -39,6 +39,8 @@ private:
 	enum Mode {menu, game, paused};
 	Mode gameMode;
 
+	EntityManager enemies;
+
 public:
 	GameEngine();
 
@@ -63,4 +65,6 @@ public:
 	void stopPlayingScene() { scenePlaying = false; }
 	void updateGame();
 	void updateMenu();
+
+	void addEntities();
 };
