@@ -56,6 +56,9 @@ void GameEngine::initGame() {
 		chatBar.setFillColor(sf::Color(0,0,0,200));
 		btnMenu->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
 
+		jetpackIcon.setSize(sf::Vector2f(64, 64));
+		jetpackIcon.setFillColor(sf::Color::Red);
+
 		//storyManager.playLogoIntro();
 		storyManager.playTextIntro();
 	}
@@ -114,6 +117,7 @@ void GameEngine::drawGame() {
 	gameWindow.draw(*pixiguide->getSprite());
 
 	gameWindow.draw(gameBar);
+	gameWindow.draw(jetpackIcon);
 	gameWindow.draw(*btnMenu->getSprite());
 
 	if (displayingText) gameWindow.draw(chatBar);
@@ -210,9 +214,14 @@ void GameEngine::handleEvent(sf::Event event) {
 	if (event.type == sf::Event::Resized) {
 		view = getViewport(event.size.width, event.size.height);
 		if (gameMode == game) {
+			// Set the game bar and contents
 			gameBar.setSize(sf::Vector2f(view.getSize().x, 75));
-			btnMenu->getSprite()->setPosition(gameBar.getSize().x - 150 - 10, gameBar.getPosition().y + 5);
+			jetpackIcon.setPosition(gameBar.getPosition().x + 10, 
+				gameBar.getPosition().y + ((gameBar.getSize().y - jetpackIcon.getSize().y)/2));
+			btnMenu->getSprite()->setPosition(gameBar.getSize().x - 
+				(btnMenu->getTexture().getSize().x/2) - 10, gameBar.getPosition().y + 5);
 			
+			// Set the text bar
 			chatBar.setSize(sf::Vector2f(view.getSize().x, 100));
 			chatBar.setPosition(0, view.getSize().y-chatBar.getSize().y);
 		}
@@ -238,6 +247,22 @@ void GameEngine::handleEvent(sf::Event event) {
 
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(gameWindow);
 	sf::Vector2f worldPos = gameWindow.mapPixelToCoords(pixelPos);
+
+	// Check if Jetpack Icon is clicked
+	if (gameMode == game && jetpackIcon.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+		/*if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			btnMenu->getSprite()->setTextureRect(sf::IntRect(149, 0, 150, 65));*/
+		if (event.type == sf::Event::MouseButtonReleased) {
+			if (player.jetPack) {
+				player.jetPack = false;
+				jetpackIcon.setFillColor(sf::Color::Red);
+			}else {
+				player.jetPack = true;
+				jetpackIcon.setFillColor(sf::Color::Green);
+			}
+		}
+	}
+
 	// Check if game Menu Button is clicked
 	if (gameMode == game && btnMenu->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))

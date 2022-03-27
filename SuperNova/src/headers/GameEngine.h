@@ -30,7 +30,7 @@ private:
 		*btnOptions = new Sprite("src/resources/MenuOptionsButton.png"),
 		*btnExit = new Sprite("src/resources/MenuExitButton.png");
 	sf::Texture backgroundTexture;
-	sf::RectangleShape gameBar, chatBar, blackRect;
+	sf::RectangleShape gameBar, chatBar, blackRect, jetpackIcon;
 	sf::Texture texture;
 	std::vector<Vector2> levelVector;
 
