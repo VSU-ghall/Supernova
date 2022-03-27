@@ -32,3 +32,11 @@ Sprite* Entity::getSprite(){
 sf::Vector2f Entity::getPosition() {
 	return position;
 }
+
+void Entity::notInteractable() {
+	isInteractable = false;
+}
+
+bool Entity::getIsInteractable() {
+	return isInteractable;
+}
