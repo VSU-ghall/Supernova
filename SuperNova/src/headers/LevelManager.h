@@ -4,6 +4,7 @@
 #include <headers/TileMap.h>
 #include <headers/Sprite.h>
 #include <vector>
+#include <headers/Entity.h>
 
 static class LevelManager
 {
@@ -21,9 +22,10 @@ static class LevelManager
 			int transitionTile;
 			int collisionTile;
 			int emptyTile;
+			std::vector<Entity> enemies;
 		} testLevel = {this}, 
-			level1 = { this, new Sprite("src/resources/space_background_sprite_sheet.png", true, true, 4, 1280, 768, 1.0f, 1000), true },
-			level2 = {this, new Sprite("src/resources/waterfall_background.png", true, false, 16, 350, 210, 4.57f, 500), true, 25, 17 },
+			level1 = { this, new Sprite("src/resources/space_background_sprite_sheet.png", true, true, 4, 1280, 768, 1.0f, 1000), true},
+			level2 = {this, new Sprite("src/resources/waterfall_background.png", true, false, 16, 350, 210, 4.57f, 500), true, 25, 17},
 			currentLevel = {this};
 
 		LevelManager();
