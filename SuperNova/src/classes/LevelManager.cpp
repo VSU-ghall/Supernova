@@ -1,4 +1,5 @@
 #include "headers/LevelManager.h"
+#include <headers/Entity.h>
 
 
 LevelManager::LevelManager(){
@@ -37,7 +38,12 @@ void LevelManager::init() {
 		 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,
 		 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
 	};
+	level1.levelName = "level1";
 		level1.startPosition = Vector2(6, 11);
+		Sprite* spicyFlower = new Sprite("src/resources/spicy_flower.png", true, false, 4, 38, 64, 1.0f, 150, false);
+		Entity spicyFlowerEntity = Entity(1, "level1", spicyFlower, sf::Vector2f(702.f, 512.f));
+		level1.enemies.push_back(spicyFlowerEntity);
+
 
 	level2.map = new int[level2.width * level2.height] {
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
