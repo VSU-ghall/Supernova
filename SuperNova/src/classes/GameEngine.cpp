@@ -1,7 +1,7 @@
 #include "headers/GameEngine.h"
 
 GameEngine::GameEngine() 
-	:gameWindow(sf::VideoMode(), "SuperNova"), menuWindow(sf::VideoMode(), "SuperNova - Menu"), storyManager(&gameWindow, &scenePlaying)
+	:gameWindow(sf::VideoMode(), "SuperNova"), menuWindow(sf::VideoMode(), "SuperNova - Menu"), storyManager(&gameWindow, &scenePlaying, &displayingText)
 {}
 
 void GameEngine::run() {
@@ -52,12 +52,15 @@ void GameEngine::initGame() {
 		loadLevel(levelManager.getLevel1());
 		player.init();
 
-		gamebar.setFillColor(sf::Color(59, 30, 11));
-		btnLevel1->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
-		btnLevel2->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
+		gameBar.setFillColor(sf::Color(59, 30, 11));
+		chatBar.setFillColor(sf::Color(0,0,0,200));
 		btnMenu->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
 
-		storyManager.playLogoIntro();
+		jetpackIcon.setSize(sf::Vector2f(64, 64));
+		jetpackIcon.setFillColor(sf::Color::Red);
+
+		//storyManager.playLogoIntro();
+		storyManager.playTextIntro();
 	}
 	else {
 		sf::Vector2u winSize = gameWindow.getSize();
@@ -115,8 +118,11 @@ void GameEngine::drawGame() {
 	if (!scenePlaying) player.draw(gameWindow);
 	gameWindow.draw(*pixiguide->getSprite());
 
-	gameWindow.draw(gamebar);
-	gameWindow.draw(*btnLevel1->getSprite()); gameWindow.draw(*btnLevel2->getSprite()); gameWindow.draw(*btnMenu->getSprite());
+	gameWindow.draw(gameBar);
+	gameWindow.draw(jetpackIcon);
+	gameWindow.draw(*btnMenu->getSprite());
+
+	if (displayingText) gameWindow.draw(chatBar);
 
 	enemies.update();
 	if (!scenePlaying) {
@@ -128,9 +134,8 @@ void GameEngine::drawGame() {
 			
 		}
 	}
-
-
-	if (scenePlaying) storyManager.draw();
+	
+	if (scenePlaying || displayingText) storyManager.draw();
 
 	gameWindow.display();
 }
@@ -222,10 +227,16 @@ void GameEngine::handleEvent(sf::Event event) {
 	if (event.type == sf::Event::Resized) {
 		view = getViewport(event.size.width, event.size.height);
 		if (gameMode == game) {
-			gamebar.setSize(sf::Vector2f(view.getSize().x, 75));
-			btnLevel1->getSprite()->setPosition(gamebar.getPosition().x + 10, gamebar.getPosition().y + 5);
-			btnLevel2->getSprite()->setPosition(gamebar.getPosition().x + 20 + btnLevel1->getTexture().getSize().x - 150, gamebar.getPosition().y + 5);
-			btnMenu->getSprite()->setPosition(gamebar.getSize().x - 150 - 10, gamebar.getPosition().y + 5);
+			// Set the game bar and contents
+			gameBar.setSize(sf::Vector2f(view.getSize().x, 75));
+			jetpackIcon.setPosition(gameBar.getPosition().x + 10, 
+				gameBar.getPosition().y + ((gameBar.getSize().y - jetpackIcon.getSize().y)/2));
+			btnMenu->getSprite()->setPosition(gameBar.getSize().x - 
+				(btnMenu->getTexture().getSize().x/2) - 10, gameBar.getPosition().y + 5);
+			
+			// Set the text bar
+			chatBar.setSize(sf::Vector2f(view.getSize().x, 100));
+			chatBar.setPosition(0, view.getSize().y-chatBar.getSize().y);
 		}
 	}
 
@@ -235,39 +246,33 @@ void GameEngine::handleEvent(sf::Event event) {
 				player.moving = false;
 	}
 
-	if (player.transitioning) {
-		std::cout << levelManager.getCurrentLevel().levelNumber << std::endl;
-		if (levelManager.getCurrentLevel().levelNumber == 2) {
-			loadLevel(levelManager.getLevel1());
-			player.transitioning = false;
-		}
-		else if (levelManager.getCurrentLevel().levelNumber == 1) {
-			loadLevel(levelManager.getLevel2());
-			player.transitioning = false;
-		}
-	}
+	// Temporary key bindings for development
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
+		loadLevel(levelManager.getLevel1());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
+		loadLevel(levelManager.getLevel2());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
+		loadLevel(levelManager.getLevel3());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
+		loadLevel(levelManager.getLevel4());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5))
+		loadLevel(levelManager.getLevel5());
 
-	// Check if game Level 1 Button is clicked
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(gameWindow);
 	sf::Vector2f worldPos = gameWindow.mapPixelToCoords(pixelPos);
-	if (gameMode == game && btnLevel1->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-			btnLevel1->getSprite()->setTextureRect(sf::IntRect(150, 0, 150, 65));
-		if (event.type == sf::Event::MouseButtonReleased) {
-			if (levelManager.getCurrentLevel().levelNumber == 2)
-				loadLevel(levelManager.getLevel1());
-			btnLevel1->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
-		}
-	}
 
-	// Check if game Level 2 Button is clicked
-	if (gameMode == game && btnLevel2->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-			btnLevel2->getSprite()->setTextureRect(sf::IntRect(150, 0, 150, 65));
+	// Check if Jetpack Icon is clicked
+	if (gameMode == game && jetpackIcon.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+		/*if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			btnMenu->getSprite()->setTextureRect(sf::IntRect(149, 0, 150, 65));*/
 		if (event.type == sf::Event::MouseButtonReleased) {
-			if (levelManager.getCurrentLevel().levelNumber == 1)
-				loadLevel(levelManager.getLevel2());
-			btnLevel2->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
+			if (player.jetPack) {
+				player.jetPack = false;
+				jetpackIcon.setFillColor(sf::Color::Red);
+			}else {
+				player.jetPack = true;
+				jetpackIcon.setFillColor(sf::Color::Green);
+			}
 		}
 	}
 
@@ -315,6 +320,7 @@ void GameEngine::handleEvent(sf::Event event) {
 	
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 		if (scenePlaying) scenePlaying = false;
+		if (displayingText) displayingText = false;
 		//std::cout << "x: " << worldPos.x << " y: " << worldPos.y << std::endl;
 	}
 
@@ -363,7 +369,7 @@ void GameEngine::setWindowView(sf::RenderWindow& window, float width, float heig
 	viewHeight = height;
 
 	if (window.getSize().x != desktop.width) { // if window is not full screen
-		view.setSize(viewWidth, viewHeight + gamebar.getSize().y);
+		view.setSize(viewWidth, viewHeight + gameBar.getSize().y);
 		view = getViewport(viewWidth, viewHeight);
 		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
 
@@ -375,10 +381,8 @@ void GameEngine::setWindowView(sf::RenderWindow& window, float width, float heig
 		view.setSize(viewWidth, viewHeight);
 		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
 
-		gamebar.setSize(sf::Vector2f(view.getSize().x, 75));
-		btnLevel1->getSprite()->setPosition(gamebar.getPosition().x + 10, gamebar.getPosition().y + 5);
-		btnLevel2->getSprite()->setPosition(gamebar.getPosition().x + 20 + btnLevel1->getTexture().getSize().x - 150, gamebar.getPosition().y + 5);
-		btnMenu->getSprite()->setPosition(gamebar.getSize().x - 150 - 10, gamebar.getPosition().y + 5);
+		gameBar.setSize(sf::Vector2f(view.getSize().x, 75));
+		btnMenu->getSprite()->setPosition(gameBar.getSize().x - 150 - 10, gameBar.getPosition().y + 5);
 	}
 }
 
@@ -386,7 +390,28 @@ void GameEngine::setWindowView(sf::RenderWindow& window, float width, float heig
 // Updates all game objects
 //
 void GameEngine::updateGame() {
-	if (scenePlaying) storyManager.update();
+	if (scenePlaying || displayingText) {
+		storyManager.update();
+		return;
+	}
+
+	if (player.transitioningLeft) {
+		std::cout << levelManager.getCurrentLevel().levelNumber << std::endl;
+		loadLevel(*levelManager.currentLevel.left);
+		player.transitioningLeft = false;
+	}
+	else if (player.transitioningRight) {
+		loadLevel(*levelManager.currentLevel.right);
+		player.transitioningRight = false;
+	}
+	else if (player.transitioningTop) {
+		loadLevel(*levelManager.currentLevel.top);
+		player.transitioningTop = false;
+	}
+	else if (player.transitioningBot) {
+		loadLevel(*levelManager.currentLevel.bot);
+		player.transitioningBot = false;
+	}
 
 	player.update(levelManager.getCurrentLevel());
 
@@ -399,7 +424,7 @@ void GameEngine::updateGame() {
 		pixiguide->getSprite()->move(100,0);
 	}*/
 	for (auto e : enemies.getEntities()) {
-		if (player.getBoundingBox().intersects(e->getSprite()->getBoundingBox())) {
+		if (player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && !e->getSprite()->animating) {
 			e->getSprite()->animateOnce();
 		}
 	}
