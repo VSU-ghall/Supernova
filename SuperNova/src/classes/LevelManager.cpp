@@ -90,9 +90,8 @@ void LevelManager::init() {
 			 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 		};
 		level3.startPosition = Vector2(6, 14);
-		level3.background->getSprite()->setTextureRect(sf::IntRect(0, 0, 64 * level3.width, 64 * level3.height));
-		// the above won't work on animated backgrounds... Find a workaround. Possibly make edits inside the Sprite Class
-
+		level3.background->setBounds(64 * level3.width, 64 * level3.height);
+		
 		level3.left = &level2;
 		level3.right = &level5;
 		level3.bot = &level4;
@@ -112,7 +111,8 @@ void LevelManager::init() {
 			 4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,
 		};
 		level4.startPosition = Vector2(6, 12);
-		level4.background->getSprite()->setTextureRect(sf::IntRect(0, 0, 64 * level4.width, 64 * level4.height));
+		level4.background->setBounds(64 * level4.width, 64 * level4.height);
+
 		level4.top = &level3;
 
 		level5.map = new int[level5.width * level5.height]{
