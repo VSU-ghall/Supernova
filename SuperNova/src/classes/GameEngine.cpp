@@ -224,6 +224,18 @@ void GameEngine::handleEvent(sf::Event event) {
 				player.moving = false;
 	}
 
+	// Temporary key bindings for development
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
+		loadLevel(levelManager.getLevel1());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
+		loadLevel(levelManager.getLevel2());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
+		loadLevel(levelManager.getLevel3());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
+		loadLevel(levelManager.getLevel4());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5))
+		loadLevel(levelManager.getLevel5());
+
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(gameWindow);
 	sf::Vector2f worldPos = gameWindow.mapPixelToCoords(pixelPos);
 	// Check if game Menu Button is clicked
