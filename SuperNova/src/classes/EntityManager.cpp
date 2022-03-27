@@ -41,12 +41,22 @@ void EntityManager::removeDeadEntities(EntityVector& vector) {
 }
 
 //creates and returns an entity with the tag provided
-std::shared_ptr<Entity> EntityManager::addEntity(const std::string& tag, Sprite *s, sf::Vector2f pos) {
-	auto entity = std::shared_ptr<Entity>(new Entity(numEntities++, tag, s,  pos));
+std::shared_ptr<Entity> EntityManager::addEntity(const std::string& tag) {
+	auto entity = std::shared_ptr<Entity>(new Entity(numEntities++, tag));
 	entitiesToAdd.push_back(entity);
 	return entity;
 
 }
+
+//creates and returns an entity with the tag provided
+std::shared_ptr<Entity> EntityManager::addEntity(Entity e) {
+	auto entity = std::make_shared<Entity>(std::move(e));
+	entitiesToAdd.push_back(entity);
+	return entity;
+
+}
+
+
 
 //returns a vector containing all entities that are currently alive
 const EntityVector& EntityManager::getEntities() {
