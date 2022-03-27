@@ -33,7 +33,7 @@ public:
 
 	void update(); //method updates EntityManager to add new entities and remove dead entities
 
-	std::shared_ptr<Entity> addEntity(const std::string& tag, Sprite *s); //creates and returns an entity with the tag provided
+	std::shared_ptr<Entity> addEntity(const std::string& tag, Sprite *s, sf::Vector2f position); //creates and returns an entity with the tag provided
 	const EntityVector& getEntities(); //returns a vector containing all entities that are currently alive
 	const EntityVector& getEntities(const std::string& tag); //returns a vector containing all entities that share the tag parameter
 	size_t getNumEntities();
