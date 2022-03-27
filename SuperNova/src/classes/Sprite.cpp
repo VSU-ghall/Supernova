@@ -13,24 +13,6 @@ Sprite::Sprite(const std::string& filePath) {
 	sprites.push_back(this);
 }
 
-Sprite::Sprite(const std::string& filePath, bool animated, bool random, int numFrames, int width, int height, float scale, int frequency, bool startAnimated)
-	:Sprite(filePath)
-{
-	this->animated = animated;
-	this->random = random;
-	this->numFrames = numFrames;
-	this->width = width;
-	this->height = height;
-	this->scale = scale;
-	this->frequency = frequency;
-
-	sprite.setScale(sf::Vector2f(scale, scale));
-	if (startAnimated) {
-		animating = true;
-	}
-	sprite.setTextureRect(sf::IntRect(offset * width, 0, width, height));
-}
-
 Sprite::Sprite(const std::string& filePath, bool animated, bool random, int numFrames, int width, int height, float scale, int frequency)
 	:Sprite(filePath)
 {
@@ -43,7 +25,9 @@ Sprite::Sprite(const std::string& filePath, bool animated, bool random, int numF
 	this->frequency = frequency;
 
 	sprite.setScale(sf::Vector2f(scale, scale));
-	animating = true;
+	if (animated) animating = true;
+
+	if (!animated) sprite.setTextureRect(sf::IntRect(0,0, width, height));
 }
 
 void Sprite::animate() {
@@ -65,24 +49,29 @@ void Sprite::animate() {
 }
 
 void Sprite::animateOnce() {
-	//if (timer.getElapsedTime().asMilliseconds() >= 1000) {
-	sf::Clock tempTimer;
-	tempTimer.restart();
-		for (int i = 1; i <= numFrames; i++) {
-			if (tempTimer.getElapsedTime().asMilliseconds() >= frequency) {
-				sprite.setTextureRect(sf::IntRect(i * width, 0, width, height));
-				tempTimer.restart();
-			}
-			
+	if (!animating) animating = true;
+	if (timer.getElapsedTime().asMilliseconds() >= frequency) {
+
+		sprite.setTextureRect(sf::IntRect(offset++ * width, 0, width, height));
+		if (offset == numFrames) {
+			offset = 0;
+			animating = false;
 		}
-		//timer.restart();
-	//}
+
+		//std::cout << "offset: " << offset << std::endl;
+
+		timer.restart();
+	}
 }
 
 void Sprite::animateAll() {
 	for (Sprite* s : sprites) {
 		if (s->animated && s->animating) {
 			s->animate();
+		}
+
+		if (!s->animated && s->animating) {
+			if (s->offset != s->numFrames) s->animateOnce();
 		}
 	}
 }

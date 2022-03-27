@@ -424,7 +424,7 @@ void GameEngine::updateGame() {
 		pixiguide->getSprite()->move(100,0);
 	}*/
 	for (auto e : enemies.getEntities()) {
-		if (player.getBoundingBox().intersects(e->getSprite()->getBoundingBox())) {
+		if (player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && !e->getSprite()->animating) {
 			e->getSprite()->animateOnce();
 		}
 	}
