@@ -169,8 +169,13 @@ TileMap LevelManager::getMap() {
 
 void LevelManager::loadLevel(Level* level) {
 	// create the tilemap from the level definition
-	if (!map.load("src/resources/tilemap_v4.5.png", sf::Vector2u(64, 64), level->map, level->width, level->height))
-		std::cout << "Error loading TileMap";
+	if (level->levelNumber == 4) { // Loads tilemap2 if it's a mining level
+		if (!map.load("src/resources/tilemap2_v1.5.png", sf::Vector2u(64, 64), level->map, level->width, level->height))
+			std::cout << "Error loading TileMap2";
+	}
+	else // if not mining level, loads original tilemap
+		if (!map.load("src/resources/tilemap_v4.5.png", sf::Vector2u(64, 64), level->map, level->width, level->height))
+			std::cout << "Error loading TileMap";
 
 	level->colMap = map.loadColMap(level->map, level->width, level->height);
 

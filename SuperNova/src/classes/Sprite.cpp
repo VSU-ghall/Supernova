@@ -103,5 +103,4 @@ sf::FloatRect Sprite::getBoundingBox() {
 void Sprite::setBounds(int width, int height) {
 	boundWidth = floor(floor(scale*this->width - width) / scale);
 	boundHeight = ceil((ceil(scale * this->height) - height) / scale);
-	std::cout << "bw: " << boundWidth << " bh: " << boundHeight << std::endl;
 }
