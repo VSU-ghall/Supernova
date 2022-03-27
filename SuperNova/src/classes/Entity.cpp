@@ -5,8 +5,8 @@ Entity::Entity(const size_t& id, const std::string& tag)
 	:id(id), tag(tag)
 {}
 
-Entity::Entity(const size_t& id, const std::string& tag, Sprite *s)
-	: id(id), tag(tag), sprite(s)
+Entity::Entity(const size_t& id, const std::string& tag, Sprite *s, sf::Vector2f pos)
+	: id(id), tag(tag), sprite(s), position(pos)
 {}
 
 bool Entity::getIsActive() {
@@ -27,4 +27,8 @@ void Entity::destroy() {
 
 Sprite* Entity::getSprite(){
 	return sprite;
+}
+
+sf::Vector2f Entity::getPosition() {
+	return position;
 }

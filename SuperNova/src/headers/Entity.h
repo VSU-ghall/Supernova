@@ -21,9 +21,10 @@ private:
 	bool isActive = true; //true if the entity is alive false if entity is dead
 	Sprite *sprite;
 	std::vector<Component> components;
+	sf::Vector2f position;
 
 	Entity(const size_t& id, const std::string& tag); //constructor requries a unique unsigned int as id and tag
-	Entity(const size_t& id, const std::string& tag, Sprite* s);
+	Entity(const size_t& id, const std::string& tag, Sprite* s, sf::Vector2f pos);
 
 public:
 	
@@ -32,6 +33,7 @@ public:
 	size_t getId();
 	void destroy(); //sets isActive to false
 	Sprite* getSprite();
+	sf::Vector2f getPosition();
 
 	//template <typename T>
 	//bool hasComponent() {
