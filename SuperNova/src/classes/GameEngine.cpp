@@ -49,7 +49,7 @@ void GameEngine::initGame() {
 	gameWindow.setFramerateLimit(60);
 
 	if (gameMode != paused) {
-		loadLevel(levelManager.getLevel1());
+		loadLevel(levelManager.getLevel3());
 		player.init();
 
 		gamebar.setFillColor(sf::Color(59, 30, 11));
@@ -221,17 +221,6 @@ void GameEngine::handleEvent(sf::Event event) {
 				player.moving = false;
 	}
 
-	if (player.transitioning) {
-		std::cout << levelManager.getCurrentLevel().levelNumber << std::endl;
-		if (levelManager.getCurrentLevel().levelNumber == 2) {
-			loadLevel(levelManager.getLevel1());
-			player.transitioning = false;
-		}
-		else if (levelManager.getCurrentLevel().levelNumber == 1) {
-			loadLevel(levelManager.getLevel2());
-			player.transitioning = false;
-		}
-	}
 
 	// Check if game Level 1 Button is clicked
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(gameWindow);
@@ -372,6 +361,23 @@ void GameEngine::setWindowView(sf::RenderWindow& window, float width, float heig
 // Updates all game objects
 //
 void GameEngine::updateGame() {
+	if (player.transitioningLeft) {
+		std::cout << levelManager.getCurrentLevel().levelNumber << std::endl;
+		loadLevel(*levelManager.currentLevel.left);
+		player.transitioningLeft = false;
+	}
+	else if (player.transitioningRight) {
+		loadLevel(*levelManager.currentLevel.right);
+		player.transitioningRight = false;
+	}
+	else if (player.transitioningTop) {
+		loadLevel(*levelManager.currentLevel.top);
+		player.transitioningTop = false;
+	}
+	else if (player.transitioningBot) {
+		loadLevel(*levelManager.currentLevel.bot);
+		player.transitioningBot = false;
+	}
 	if (scenePlaying) storyManager.update();
 
 	player.update(levelManager.getCurrentLevel());

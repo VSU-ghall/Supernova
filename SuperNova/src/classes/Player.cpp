@@ -31,6 +31,7 @@ void Player::init() {
 	x = startPosition.x * 64;
 	y = startPosition.y * 64;
 
+	jetPack = false;
 	//this is the Size of the player
 	//playerSize = 64/834.f;
 	playerSize = 2.f;
@@ -68,16 +69,10 @@ void Player::animate() {
 // ( Movement is animated on a ratio (set by the variable animationPerFrame) )
 //
 void Player::checkMovement(LevelManager::Level currentLevel) {
+
 	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		crouchPlayed = false;
-	if (readyToTransition) {
-		
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
 
-			transitioning = true;
-		}
-
-	}
 	if (grounded &&
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::D) &&
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::A) &&
@@ -108,49 +103,60 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 	else {
 		velocity.x = 0;
 	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)) {
+		jetPack = true;
 
-	if (!jumping) {
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && grounded) {
-			velocity.y = -playerJumpSpeed;
-			jumping = true;
-			jumpHeight = 0;
-			playJumpSound();
-		}
-		else if (!grounded || velocity.y < 0) {
-			//if player is suspended in air, then the jumping animation is set depending on direction astronaut is facing
-			velocity.y = velocity.y * .9f + gravity;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
+		jetPack = false;
+	}
+	if(jetPack){
+		if(checkCollision(0, currentLevel))
+		if (!ceilingBump) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+				velocity.y = -playerJumpSpeed;
+			}
+			if (!grounded || velocity.y < 0) {
+				velocity.y += gravity;
+			}
+			else {
+				velocity.y = 0;
+			}
 		}
 		else {
-			//if s key is pressed, the astronaut crouches and cannot move along the x-axis 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && stoppedRight) {
-				playerSprite.setTextureRect(sf::IntRect(0, 192, 44, 64));
-				velocity.x = 0;
-			}
-			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && stoppedLeft) {
-				playerSprite.setTextureRect(sf::IntRect(44, 192, 44 * 2, 64));
-				velocity.x = 0;
-			}
-
-			playCrouchSound();
-			velocity.y = 0;
+			velocity.y = 1;
+			ceilingBump = false;
 		}
 	}
 	else {
-		if (ceilingBump) {
-			velocity.y = 0;
-			ceilingBump = false;
-			jumping = false;
-		}
-		else if (jumpHeight < 100) {
-			velocity.y = -playerJumpSpeed;
-			jumpHeight -= velocity.y;
+		if (!jumping) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && grounded) {
+				velocity.y = -playerJumpSpeed;
+				jumping = true;
+				jumpHeight = 0;
+				playJumpSound();
+			}
+			else if (!grounded || velocity.y < 0) {
+				//if player is suspended in air, then the jumping animation is set depending on direction astronaut is facing
+				velocity.y = velocity.y * .9f + gravity;
+			}
 		}
 		else {
-			jumping = false;
-			jumpHeight = 0;
+			if (ceilingBump) {
+				velocity.y = 0;
+				ceilingBump = false;
+				jumping = false;
+			}
+			else if (jumpHeight < 100) {
+				velocity.y = -playerJumpSpeed;
+				jumpHeight -= velocity.y;
+			}
+			else {
+				jumping = false;
+				jumpHeight = 0;
+			}
 		}
 	}
-
 	if (!grounded || jumping) {
 		if (stoppedRight) {
 			playerSprite.setTextureRect(sf::IntRect(0, 128, 44, 64));
@@ -215,18 +221,18 @@ bool Player::checkCollision(float velo, LevelManager::Level currentLevel) {
 	sf::Vector2f botRight(right + velo, bot);
 
 	//If out of level bounds
-	if (left + velo <= 6 || right + velo >= (currentLevel.width * 64) - 6) return false;
+	
+	
 
 	checkTopBotCollision(topRight, botRightHigh, botRight, botMidRight, botMid, botMidLeft, topLeft, botLeftHigh, botLeft, currentLevel);
-	checkTransitionCollision(topRight, botRight, topLeft, botLeft, currentLevel);
-	return checkSideCollision(velo, botRightHigh, botLeftHigh, topRightHigh, topLeftHigh, currentLevel);
+	return checkTransitionCollision(left, right, top, bot, velo, botRightHigh, botLeftHigh, topRightHigh, topLeftHigh, currentLevel);
 }
 
 bool Player::checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vector2f botLeftHigh, sf::Vector2f topRightHigh, sf::Vector2f topLeftHigh, LevelManager::Level currentLevel) {
 
 	bool blockTopLeftHigh = checkTile(currentLevel, topLeftHigh, 1), blockBotLeftHigh = checkTile(currentLevel, botLeftHigh, 1),
 		blockTopRightHigh = checkTile(currentLevel, topRightHigh, 1), blockBotRightHigh = checkTile(currentLevel, botRightHigh, 1);
-
+	
 	if (((blockTopLeftHigh || blockBotLeftHigh) && velo < 0) || ((blockTopRightHigh || blockBotRightHigh)) && velo > 0) {
 		return false;
 	}
@@ -234,16 +240,27 @@ bool Player::checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vecto
 	return true;
 }
 
-void Player::checkTransitionCollision(sf::Vector2f topRight, sf::Vector2f botRight, sf::Vector2f topLeft, sf::Vector2f botLeft, LevelManager::Level currentLevel) {
-
-	bool blockTopLeftHigh = checkTile(currentLevel, topRight, 4), blockBotLeftHigh = checkTile(currentLevel, botRight, 4), 
-		blockTopRightHigh = checkTile(currentLevel, topLeft, 4), blockBotRightHigh = checkTile(currentLevel, botLeft, 4);
-
-	if (blockBotRightHigh || blockTopRightHigh || blockBotLeftHigh || blockTopLeftHigh) {
-		readyToTransition = true;
+bool Player::checkTransitionCollision(float left, float right, float top, float bot, float velo, sf::Vector2f botRightHigh, sf::Vector2f botLeftHigh, sf::Vector2f topRightHigh, sf::Vector2f topLeftHigh, LevelManager::Level currentLevel) {
+	bool checkLeftEdge = left + velo <= 6;
+	bool checkRightEdge = right + velo >= (currentLevel.width * 64) - 6;
+	bool checkBotEdge = bot + velo >= (currentLevel.height * 64) - 6;
+	bool checkTopEdge = top - velo <= 63;
+	std::cout << top - velo << std::endl;
+	if (checkLeftEdge|| checkRightEdge || checkBotEdge || checkTopEdge) {
+		if (checkLeftEdge)
+			transitioningLeft = true;
+		if (checkRightEdge)
+			transitioningRight= true;
+		if (checkBotEdge)
+			transitioningBot = true;
+		if (checkTopEdge)
+			transitioningTop = true;
+		grounded = true;
+		velocity.y = 0;
+		return false;
 	}
 	else {
-		readyToTransition = false;
+		return checkSideCollision(velo, botRightHigh, botLeftHigh, topRightHigh, topLeftHigh, currentLevel);
 	}
 }
 
