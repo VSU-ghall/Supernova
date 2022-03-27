@@ -11,12 +11,14 @@ void EntityManager::update() {
 	for (auto& e : entitiesToAdd) {
 		entities.push_back(e);
 		entityMap[e->getTag()].push_back(e);
+		entitiesInteractable.push_back(e);
 	}
 
 	entitiesToAdd.clear();
 		
 	//remove dead entities from entities
 	removeDeadEntities(entities);
+	removeUninteractableEntities(entitiesInteractable);
 
 	//remove dead entities from vector in map
 	for (auto & v : entityMap) {
@@ -29,6 +31,21 @@ void EntityManager::removeDeadEntities(EntityVector& vector) {
 	for (auto iterator = vector.begin(); iterator != vector.end(); iterator++) {
 		auto e = *iterator;
 		if (e->getIsActive() == false) {
+			vector.erase(iterator);
+			if (!vector.empty()) {
+				iterator--;
+			}
+			else {
+				break;
+			}
+		}
+	}
+}
+
+void EntityManager::removeUninteractableEntities(EntityVector& vector) {
+	for (auto iterator = vector.begin(); iterator != vector.end(); iterator++) {
+		auto e = *iterator;
+		if (e->getIsInteractable() == false) {
 			vector.erase(iterator);
 			if (!vector.empty()) {
 				iterator--;
@@ -61,6 +78,10 @@ std::shared_ptr<Entity> EntityManager::addEntity(Entity e) {
 //returns a vector containing all entities that are currently alive
 const EntityVector& EntityManager::getEntities() {
 	return entities;
+}
+
+const EntityVector& EntityManager::getEntitiesInteractable() {
+	return entitiesInteractable;
 }
 
 //returns a vector containing all entities that share the tag parameter

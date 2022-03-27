@@ -22,6 +22,7 @@ private:
 	Sprite *sprite;
 	std::vector<Component> components;
 	sf::Vector2f position;
+	bool isInteractable = true;
 
 	
 
@@ -36,6 +37,8 @@ public:
 	void destroy(); //sets isActive to false
 	Sprite* getSprite();
 	sf::Vector2f getPosition();
+	void notInteractable();
+	bool getIsInteractable();
 
 	//template <typename T>
 	//bool hasComponent() {

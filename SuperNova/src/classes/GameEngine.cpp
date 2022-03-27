@@ -423,9 +423,10 @@ void GameEngine::updateGame() {
 	/*if (player.getBoundingBox().intersects(pixiguide->getBoundingBox())) {
 		pixiguide->getSprite()->move(100,0);
 	}*/
-	for (auto e : enemies.getEntities()) {
+	for (auto e : enemies.getEntitiesInteractable()) {
 		if (player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && !e->getSprite()->animating) {
 			e->getSprite()->animateOnce();
+			e->notInteractable();
 		}
 	}
 }
