@@ -90,9 +90,8 @@ void LevelManager::init() {
 			 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 		};
 		level3.startPosition = Vector2(6, 14);
-		level3.background->getSprite()->setTextureRect(sf::IntRect(0, 0, 64 * level3.width, 64 * level3.height));
-		// the above won't work on animated backgrounds... Find a workaround. Possibly make edits inside the Sprite Class
-
+		level3.background->setBounds(64 * level3.width, 64 * level3.height);
+		
 		level3.left = &level2;
 		level3.right = &level5;
 		level3.bot = &level4;
@@ -112,7 +111,8 @@ void LevelManager::init() {
 			 4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,
 		};
 		level4.startPosition = Vector2(6, 12);
-		level4.background->getSprite()->setTextureRect(sf::IntRect(0, 0, 64 * level4.width, 64 * level4.height));
+		level4.background->setBounds(64 * level4.width, 64 * level4.height);
+
 		level4.top = &level3;
 
 		level5.map = new int[level5.width * level5.height]{
@@ -169,8 +169,13 @@ TileMap LevelManager::getMap() {
 
 void LevelManager::loadLevel(Level* level) {
 	// create the tilemap from the level definition
-	if (!map.load("src/resources/tilemap_v4.5.png", sf::Vector2u(64, 64), level->map, level->width, level->height))
-		std::cout << "Error loading TileMap";
+	if (level->levelNumber == 4) { // Loads tilemap2 if it's a mining level
+		if (!map.load("src/resources/tilemap2_v1.5.png", sf::Vector2u(64, 64), level->map, level->width, level->height))
+			std::cout << "Error loading TileMap2";
+	}
+	else // if not mining level, loads original tilemap
+		if (!map.load("src/resources/tilemap_v4.5.png", sf::Vector2u(64, 64), level->map, level->width, level->height))
+			std::cout << "Error loading TileMap";
 
 	level->colMap = map.loadColMap(level->map, level->width, level->height);
 

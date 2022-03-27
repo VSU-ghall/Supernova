@@ -23,7 +23,7 @@ private:
 	// creates global window
 	sf::RenderWindow gameWindow, menuWindow;
 	sf::View view;
-	sf::Music music;
+	sf::Music music, soundEffect;
 	Sprite *btnMenu = new Sprite("src/resources/MenuButton.png"),
 		*pixiguide = new Sprite("src/resources/pixiguide.png", true, false, 6, 32, 48, 1.0f, 150),
 		*btnPlay = new Sprite("src/resources/MenuPlayButton.png"),
@@ -57,6 +57,7 @@ public:
 	void handleEvent(sf::Event event);
 	void loadLevel(LevelManager::Level level);
 	void playMusic();
+	void playSoundEffect(const std::string& filePath);
 	void setWindowView(sf::RenderWindow &window, float width, float height);
 	void updateGame();
 	void updateMenu();

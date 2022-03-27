@@ -41,8 +41,6 @@ void GameEngine::run() {
 //
 void GameEngine::init() {
 	initMenu();
-
-	playMusic();
 }
 
 void GameEngine::initGame() {
@@ -71,6 +69,8 @@ void GameEngine::initGame() {
 	gameMode = game;
 	gameWindow.setVisible(true); menuWindow.setVisible(false);
 
+	playMusic();
+
 	addEntities();
 }
 
@@ -95,6 +95,8 @@ void GameEngine::initMenu() {
 		gameMode = menu;
 		gameWindow.setVisible(false);
 	}
+
+	playMusic();
 	
 	menuWindow.setVisible(true);
 }
@@ -294,6 +296,7 @@ void GameEngine::handleEvent(sf::Event event) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			btnPlay->getSprite()->setTextureRect(sf::IntRect(257, 0, 256, 75));
 		if (event.type == sf::Event::MouseButtonReleased) {
+			playSoundEffect("src/resources/sounds/main_menu_click.wav");
 			initGame();
 			btnPlay->getSprite()->setTextureRect(sf::IntRect(0, 0, 256, 75));
 		}
@@ -304,6 +307,7 @@ void GameEngine::handleEvent(sf::Event event) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			btnOptions->getSprite()->setTextureRect(sf::IntRect(449, 0, 448, 75));
 		if (event.type == sf::Event::MouseButtonReleased) {
+			playSoundEffect("src/resources/sounds/main_menu_click.wav");
 			btnOptions->getSprite()->setTextureRect(sf::IntRect(0, 0, 448, 75));
 		}
 	}
@@ -313,6 +317,7 @@ void GameEngine::handleEvent(sf::Event event) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			btnExit->getSprite()->setTextureRect(sf::IntRect(255, 0, 254, 75));
 		if (event.type == sf::Event::MouseButtonReleased) {
+			playSoundEffect("src/resources/sounds/main_menu_click.wav");
 			menuWindow.close();
 			btnExit->getSprite()->setTextureRect(sf::IntRect(0, 0, 254, 75));
 		}
@@ -348,16 +353,34 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 void GameEngine::playMusic()
 {
 	// Open the Background Music
-	if (!music.openFromFile("src/resources/sounds/background_sound.wav")) {
-		std::cout << "Could not load background_music" << std::endl;
-		return;
+	if (gameMode == menu || gameMode == paused) {
+		if (!music.openFromFile("src/resources/sounds/main_menu_sound.wav")) {
+			std::cout << "Could not load main_menu_sound" << std::endl;
+			return;
+		}
 	}
+	else
+		if (!music.openFromFile("src/resources/sounds/background_sound.wav")) {
+			std::cout << "Could not load background_music" << std::endl;
+			return;
+		}
 
 	music.setVolume(10);
 
 	music.setLoop(true);         // make it loop
 	// Play it
 	music.play();
+}
+
+void GameEngine::playSoundEffect(const std::string& filePath) {
+	if (!soundEffect.openFromFile(filePath)) {
+		std::cout << "Could not load " << filePath << std::endl;
+		return;
+	}
+
+	soundEffect.setVolume(10);
+
+	soundEffect.play();
 }
 
 //

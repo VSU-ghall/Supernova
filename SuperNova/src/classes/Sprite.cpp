@@ -35,10 +35,10 @@ void Sprite::animate() {
 
 		if (random) {
 			offset = std::rand() % numFrames;
-			sprite.setTextureRect(sf::IntRect(offset * width, 0, width, height));
+			sprite.setTextureRect(sf::IntRect(offset * width, 0, width-boundWidth, height-boundHeight));
 		}
 		else {
-			sprite.setTextureRect(sf::IntRect(offset++ * width, 0, width, height));
+			sprite.setTextureRect(sf::IntRect(offset++ * width, 0, width-boundWidth, height-boundHeight));
 			if (offset == numFrames) offset = 0;
 		}
 
@@ -98,4 +98,9 @@ int Sprite::getWidth() {
 
 sf::FloatRect Sprite::getBoundingBox() {
 	return sprite.getGlobalBounds();
+}
+
+void Sprite::setBounds(int width, int height) {
+	boundWidth = floor(floor(scale*this->width - width) / scale);
+	boundHeight = ceil((ceil(scale * this->height) - height) / scale);
 }

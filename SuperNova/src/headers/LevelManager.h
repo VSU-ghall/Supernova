@@ -36,9 +36,10 @@ static class LevelManager
 			level1 = { this, new Sprite("src/resources/space_background_sprite_sheet.png", true, true, 4, 1280, 768, 1.0f, 1000), true },
 			level2 = { this, new Sprite("src/resources/waterfall_background.png", true, false, 16, 350, 210, 4.57f, 500), true, 25, 17 },
 			level3 = { this, new Sprite("src/resources/waterfall_background.png", true, false, 16, 350, 210, 5.49f, 500), true, 30, 16 },
-			level4 = { this, new Sprite("src/resources/mining_background_1.png", true, false, 5, 200, 120, 6.46f, 500), true },
+			level4 = { this, new Sprite("src/resources/mining_background_1.png", true, false, 5, 200, 120, 6.4f, 500), true },
 			level5 = { this, new Sprite("src/resources/space_background_sprite_sheet.png", true, true, 4, 1280, 768, 1.0f, 1000), true },
 			currentLevel = {this};
+
 		Level* currentLevelPtr;
 		LevelManager();
 		Sprite getCurrentBackground();
