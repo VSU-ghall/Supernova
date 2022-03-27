@@ -1,7 +1,7 @@
 #include "headers/GameEngine.h"
 
 GameEngine::GameEngine() 
-	:gameWindow(sf::VideoMode(), "SuperNova"), menuWindow(sf::VideoMode(), "SuperNova - Menu"), storyManager(&gameWindow, &scenePlaying)
+	:gameWindow(sf::VideoMode(), "SuperNova"), menuWindow(sf::VideoMode(), "SuperNova - Menu"), storyManager(&gameWindow, &scenePlaying, &displayingText)
 {}
 
 void GameEngine::run() {
@@ -52,12 +52,14 @@ void GameEngine::initGame() {
 		loadLevel(levelManager.getLevel1());
 		player.init();
 
-		gamebar.setFillColor(sf::Color(59, 30, 11));
+		gameBar.setFillColor(sf::Color(59, 30, 11));
+		chatBar.setFillColor(sf::Color(0,0,0,200));
 		btnLevel1->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
 		btnLevel2->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
 		btnMenu->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
 
-		storyManager.playLogoIntro();
+		//storyManager.playLogoIntro();
+		storyManager.playTextIntro();
 	}
 	else {
 		sf::Vector2u winSize = gameWindow.getSize();
@@ -113,10 +115,12 @@ void GameEngine::drawGame() {
 	if (!scenePlaying) player.draw(gameWindow);
 	gameWindow.draw(*pixiguide->getSprite());
 
-	gameWindow.draw(gamebar);
+	gameWindow.draw(gameBar);
 	gameWindow.draw(*btnLevel1->getSprite()); gameWindow.draw(*btnLevel2->getSprite()); gameWindow.draw(*btnMenu->getSprite());
 
-	if (scenePlaying) storyManager.draw();
+	if (displayingText) gameWindow.draw(chatBar);
+
+	if (scenePlaying || displayingText) storyManager.draw();
 
 	gameWindow.display();
 }
@@ -208,10 +212,13 @@ void GameEngine::handleEvent(sf::Event event) {
 	if (event.type == sf::Event::Resized) {
 		view = getViewport(event.size.width, event.size.height);
 		if (gameMode == game) {
-			gamebar.setSize(sf::Vector2f(view.getSize().x, 75));
-			btnLevel1->getSprite()->setPosition(gamebar.getPosition().x + 10, gamebar.getPosition().y + 5);
-			btnLevel2->getSprite()->setPosition(gamebar.getPosition().x + 20 + btnLevel1->getTexture().getSize().x - 150, gamebar.getPosition().y + 5);
-			btnMenu->getSprite()->setPosition(gamebar.getSize().x - 150 - 10, gamebar.getPosition().y + 5);
+			gameBar.setSize(sf::Vector2f(view.getSize().x, 75));
+			btnLevel1->getSprite()->setPosition(gameBar.getPosition().x + 10, gameBar.getPosition().y + 5);
+			btnLevel2->getSprite()->setPosition(gameBar.getPosition().x + 20 + btnLevel1->getTexture().getSize().x - 150, gameBar.getPosition().y + 5);
+			btnMenu->getSprite()->setPosition(gameBar.getSize().x - 150 - 10, gameBar.getPosition().y + 5);
+			
+			chatBar.setSize(sf::Vector2f(view.getSize().x, 100));
+			chatBar.setPosition(0, view.getSize().y-chatBar.getSize().y);
 		}
 	}
 
@@ -349,7 +356,7 @@ void GameEngine::setWindowView(sf::RenderWindow& window, float width, float heig
 	viewHeight = height;
 
 	if (window.getSize().x != desktop.width) { // if window is not full screen
-		view.setSize(viewWidth, viewHeight + gamebar.getSize().y);
+		view.setSize(viewWidth, viewHeight + gameBar.getSize().y);
 		view = getViewport(viewWidth, viewHeight);
 		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
 
@@ -361,10 +368,10 @@ void GameEngine::setWindowView(sf::RenderWindow& window, float width, float heig
 		view.setSize(viewWidth, viewHeight);
 		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
 
-		gamebar.setSize(sf::Vector2f(view.getSize().x, 75));
-		btnLevel1->getSprite()->setPosition(gamebar.getPosition().x + 10, gamebar.getPosition().y + 5);
-		btnLevel2->getSprite()->setPosition(gamebar.getPosition().x + 20 + btnLevel1->getTexture().getSize().x - 150, gamebar.getPosition().y + 5);
-		btnMenu->getSprite()->setPosition(gamebar.getSize().x - 150 - 10, gamebar.getPosition().y + 5);
+		gameBar.setSize(sf::Vector2f(view.getSize().x, 75));
+		btnLevel1->getSprite()->setPosition(gameBar.getPosition().x + 10, gameBar.getPosition().y + 5);
+		btnLevel2->getSprite()->setPosition(gameBar.getPosition().x + 20 + btnLevel1->getTexture().getSize().x - 150, gameBar.getPosition().y + 5);
+		btnMenu->getSprite()->setPosition(gameBar.getSize().x - 150 - 10, gameBar.getPosition().y + 5);
 	}
 }
 
@@ -372,7 +379,7 @@ void GameEngine::setWindowView(sf::RenderWindow& window, float width, float heig
 // Updates all game objects
 //
 void GameEngine::updateGame() {
-	if (scenePlaying) storyManager.update();
+	if (scenePlaying || displayingText) storyManager.update();
 
 	player.update(levelManager.getCurrentLevel());
 

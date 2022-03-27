@@ -18,7 +18,7 @@ private:
 	StoryManager storyManager;
 	const int tileSize = 64;
 	float viewWidth, viewHeight;
-	bool scenePlaying = false;
+	bool scenePlaying = false, displayingText = false;
 
 	// creates global window
 	sf::RenderWindow gameWindow, menuWindow;
@@ -32,7 +32,7 @@ private:
 		*btnOptions = new Sprite("src/resources/MenuOptionsButton.png"),
 		*btnExit = new Sprite("src/resources/MenuExitButton.png");
 	sf::Texture backgroundTexture;
-	sf::RectangleShape gamebar, blackRect;
+	sf::RectangleShape gameBar, chatBar, blackRect;
 	sf::Texture texture;
 	std::vector<Vector2> levelVector;
 
@@ -45,7 +45,6 @@ public:
 	LevelManager* getLevelManager() { return &levelManager; }
 	Player* getPlayer() { return &player; };
 	sf::RenderWindow* getWindow() { return &gameWindow; }
-	bool isScenePlaying() { return scenePlaying; }
 
 	void run();
 	void init();
@@ -59,8 +58,6 @@ public:
 	void loadLevel(LevelManager::Level level);
 	void playMusic();
 	void setWindowView(sf::RenderWindow &window, float width, float height);
-	void startplayingScene() { scenePlaying = true; }
-	void stopPlayingScene() { scenePlaying = false; }
 	void updateGame();
 	void updateMenu();
 };
