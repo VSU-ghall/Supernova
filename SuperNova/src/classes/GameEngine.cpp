@@ -54,8 +54,6 @@ void GameEngine::initGame() {
 
 		gameBar.setFillColor(sf::Color(59, 30, 11));
 		chatBar.setFillColor(sf::Color(0,0,0,200));
-		btnLevel1->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
-		btnLevel2->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
 		btnMenu->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
 
 		//storyManager.playLogoIntro();
@@ -116,7 +114,7 @@ void GameEngine::drawGame() {
 	gameWindow.draw(*pixiguide->getSprite());
 
 	gameWindow.draw(gameBar);
-	gameWindow.draw(*btnLevel1->getSprite()); gameWindow.draw(*btnLevel2->getSprite()); gameWindow.draw(*btnMenu->getSprite());
+	gameWindow.draw(*btnMenu->getSprite());
 
 	if (displayingText) gameWindow.draw(chatBar);
 
@@ -213,8 +211,6 @@ void GameEngine::handleEvent(sf::Event event) {
 		view = getViewport(event.size.width, event.size.height);
 		if (gameMode == game) {
 			gameBar.setSize(sf::Vector2f(view.getSize().x, 75));
-			btnLevel1->getSprite()->setPosition(gameBar.getPosition().x + 10, gameBar.getPosition().y + 5);
-			btnLevel2->getSprite()->setPosition(gameBar.getPosition().x + 20 + btnLevel1->getTexture().getSize().x - 150, gameBar.getPosition().y + 5);
 			btnMenu->getSprite()->setPosition(gameBar.getSize().x - 150 - 10, gameBar.getPosition().y + 5);
 			
 			chatBar.setSize(sf::Vector2f(view.getSize().x, 100));
@@ -228,31 +224,8 @@ void GameEngine::handleEvent(sf::Event event) {
 				player.moving = false;
 	}
 
-
-	// Check if game Level 1 Button is clicked
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(gameWindow);
 	sf::Vector2f worldPos = gameWindow.mapPixelToCoords(pixelPos);
-	if (gameMode == game && btnLevel1->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-			btnLevel1->getSprite()->setTextureRect(sf::IntRect(150, 0, 150, 65));
-		if (event.type == sf::Event::MouseButtonReleased) {
-			if (levelManager.getCurrentLevel().levelNumber == 2)
-				loadLevel(levelManager.getLevel1());
-			btnLevel1->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
-		}
-	}
-
-	// Check if game Level 2 Button is clicked
-	if (gameMode == game && btnLevel2->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-			btnLevel2->getSprite()->setTextureRect(sf::IntRect(150, 0, 150, 65));
-		if (event.type == sf::Event::MouseButtonReleased) {
-			if (levelManager.getCurrentLevel().levelNumber == 1)
-				loadLevel(levelManager.getLevel2());
-			btnLevel2->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
-		}
-	}
-
 	// Check if game Menu Button is clicked
 	if (gameMode == game && btnMenu->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -358,8 +331,6 @@ void GameEngine::setWindowView(sf::RenderWindow& window, float width, float heig
 		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
 
 		gameBar.setSize(sf::Vector2f(view.getSize().x, 75));
-		btnLevel1->getSprite()->setPosition(gameBar.getPosition().x + 10, gameBar.getPosition().y + 5);
-		btnLevel2->getSprite()->setPosition(gameBar.getPosition().x + 20 + btnLevel1->getTexture().getSize().x - 150, gameBar.getPosition().y + 5);
 		btnMenu->getSprite()->setPosition(gameBar.getSize().x - 150 - 10, gameBar.getPosition().y + 5);
 	}
 }
