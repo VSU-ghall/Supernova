@@ -23,10 +23,12 @@ private:
 	std::vector<Component> components;
 	sf::Vector2f position;
 
-	Entity(const size_t& id, const std::string& tag); //constructor requries a unique unsigned int as id and tag
-	Entity(const size_t& id, const std::string& tag, Sprite* s, sf::Vector2f pos);
+	
 
 public:
+
+	Entity(const size_t& id, const std::string& tag); //constructor requries a unique unsigned int as id and tag
+	Entity(const size_t& id, const std::string& tag, Sprite* s, sf::Vector2f pos);
 	
 	bool getIsActive();
 	std::string& getTag();
