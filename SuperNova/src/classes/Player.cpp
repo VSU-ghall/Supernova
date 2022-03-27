@@ -139,6 +139,8 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 				//if player is suspended in air, then the jumping animation is set depending on direction astronaut is facing
 				velocity.y = velocity.y * .9f + gravity;
 			}
+			else
+				velocity.y = 0;
 		}
 		else {
 			if (ceilingBump) {
