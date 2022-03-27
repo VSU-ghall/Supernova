@@ -61,7 +61,7 @@ std::vector<std::vector<int>> TileMap::loadColMap( const int* tiles, unsigned in
             if (tileNumber==31) {
                 row.push_back(transitionTile);
             }
-            else if (tileNumber > 0) {
+            else if (tileNumber > 1) {
                 row.push_back(collisionTile);
             }
             else {
