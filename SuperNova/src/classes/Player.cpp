@@ -34,7 +34,7 @@ void Player::init() {
 	//this is the Size of the player
 	//playerSize = 64/834.f;
 	playerSize = 2.f;
-	
+
 	//setting the initial size of the player.
 	playerSprite.setScale(playerSize, playerSize);
 
@@ -109,8 +109,8 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
 		jetPack = false;
 	}
-	if(jetPack){
-		if(checkCollision(0, currentLevel))
+	if (jetPack) {
+		if (checkCollision(0, currentLevel))
 			if (!ceilingBump) {
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
 					velocity.y = -playerJumpSpeed;
@@ -139,8 +139,20 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 				//if player is suspended in air, then the jumping animation is set depending on direction astronaut is facing
 				velocity.y = velocity.y * .9f + gravity;
 			}
-			else
+			else {
+				//if s key is pressed, the astronaut crouches and cannot move along the x-axis 
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && stoppedRight) {
+					playerSprite.setTextureRect(sf::IntRect(0, 192, 44, 64));
+					velocity.x = 0;
+				}
+				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && stoppedLeft) {
+					playerSprite.setTextureRect(sf::IntRect(44, 192, 44 * 2, 64));
+					velocity.x = 0;
+				}
+
+				playCrouchSound();
 				velocity.y = 0;
+			}
 		}
 		else {
 			if (ceilingBump) {
@@ -242,10 +254,8 @@ bool Player::checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vecto
 }
 
 /*void Player::checkTransitionCollision(sf::Vector2f topRight, sf::Vector2f botRight, sf::Vector2f topLeft, sf::Vector2f botLeft, LevelManager::Level currentLevel) {
-
 	bool blockTopLeftHigh = checkTile(currentLevel, topRight, currentLevel.transitionTile), blockBotLeftHigh = checkTile(currentLevel, botRight, currentLevel.transitionTile),
 		blockTopRightHigh = checkTile(currentLevel, topLeft, currentLevel.transitionTile), blockBotRightHigh = checkTile(currentLevel, botLeft, currentLevel.transitionTile);
-
 	if (blockBotRightHigh || blockTopRightHigh || blockBotLeftHigh || blockTopLeftHigh) {
 		readyToTransition = true;*/
 
@@ -256,11 +266,11 @@ bool Player::checkTransitionCollision(float left, float right, float top, float 
 	bool checkTopEdge = top - velo <= 63;
 	//std::cout << top - velo << std::endl;
 
-	if (checkLeftEdge|| checkRightEdge || checkBotEdge || checkTopEdge) {
+	if (checkLeftEdge || checkRightEdge || checkBotEdge || checkTopEdge) {
 		if (checkLeftEdge)
 			transitioningLeft = true;
 		if (checkRightEdge)
-			transitioningRight= true;
+			transitioningRight = true;
 		if (checkBotEdge)
 			transitioningBot = true;
 		if (checkTopEdge)
@@ -307,7 +317,7 @@ void Player::playCrouchSound()
 	//sound for crouch
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && music.getStatus() == sf::SoundSource::Stopped && !crouchPlayed)
 	{
-		if (!music.openFromFile("src/resources/sounds/astronaut_crouch.wav")) 
+		if (!music.openFromFile("src/resources/sounds/astronaut_crouch.wav"))
 		{
 			std::cout << "Could not load astronaut crouch sound" << std::endl;
 			return;
@@ -331,4 +341,19 @@ void Player::playJumpSound() {
 	music.setVolume(5);
 
 	music.play();
+}
+
+void Player::playWalkSound()
+{
+	//sound for jump
+	if (music.getStatus() == sf::SoundSource::Stopped) {
+		if (!music.openFromFile("src/resources/sounds/astronaut_walking.wav"))
+		{
+			std::cout << "Could not load astronaut walk sound" << std::endl;
+			return;
+		}
+		music.setVolume(100);
+
+		music.play();
+	}
 }
