@@ -37,6 +37,8 @@ private:
 	enum Mode {menu, game, paused};
 	Mode gameMode;
 
+	EntityManager enemies;
+
 public:
 	GameEngine();
 
@@ -58,4 +60,6 @@ public:
 	void setWindowView(sf::RenderWindow &window, float width, float height);
 	void updateGame();
 	void updateMenu();
+
+	void addEntities();
 };

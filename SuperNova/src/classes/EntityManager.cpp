@@ -48,6 +48,16 @@ std::shared_ptr<Entity> EntityManager::addEntity(const std::string& tag) {
 
 }
 
+//creates and returns an entity with the tag provided
+std::shared_ptr<Entity> EntityManager::addEntity(Entity e) {
+	auto entity = std::make_shared<Entity>(std::move(e));
+	entitiesToAdd.push_back(entity);
+	return entity;
+
+}
+
+
+
 //returns a vector containing all entities that are currently alive
 const EntityVector& EntityManager::getEntities() {
 	return entities;

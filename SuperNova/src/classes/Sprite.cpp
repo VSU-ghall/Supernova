@@ -13,6 +13,24 @@ Sprite::Sprite(const std::string& filePath) {
 	sprites.push_back(this);
 }
 
+Sprite::Sprite(const std::string& filePath, bool animated, bool random, int numFrames, int width, int height, float scale, int frequency, bool startAnimated)
+	:Sprite(filePath)
+{
+	this->animated = animated;
+	this->random = random;
+	this->numFrames = numFrames;
+	this->width = width;
+	this->height = height;
+	this->scale = scale;
+	this->frequency = frequency;
+
+	sprite.setScale(sf::Vector2f(scale, scale));
+	if (startAnimated) {
+		animating = true;
+	}
+	sprite.setTextureRect(sf::IntRect(offset * width, 0, width, height));
+}
+
 Sprite::Sprite(const std::string& filePath, bool animated, bool random, int numFrames, int width, int height, float scale, int frequency)
 	:Sprite(filePath)
 {
@@ -44,6 +62,21 @@ void Sprite::animate() {
 
 		timer.restart();
 	}
+}
+
+void Sprite::animateOnce() {
+	//if (timer.getElapsedTime().asMilliseconds() >= 1000) {
+	sf::Clock tempTimer;
+	tempTimer.restart();
+		for (int i = 1; i <= numFrames; i++) {
+			if (tempTimer.getElapsedTime().asMilliseconds() >= frequency) {
+				sprite.setTextureRect(sf::IntRect(i * width, 0, width, height));
+				tempTimer.restart();
+			}
+			
+		}
+		//timer.restart();
+	//}
 }
 
 void Sprite::animateAll() {
