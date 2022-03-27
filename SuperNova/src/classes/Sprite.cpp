@@ -64,6 +64,21 @@ void Sprite::animate() {
 	}
 }
 
+void Sprite::animateOnce() {
+	//if (timer.getElapsedTime().asMilliseconds() >= 1000) {
+	sf::Clock tempTimer;
+	tempTimer.restart();
+		for (int i = 1; i <= numFrames; i++) {
+			if (tempTimer.getElapsedTime().asMilliseconds() >= frequency) {
+				sprite.setTextureRect(sf::IntRect(i * width, 0, width, height));
+				tempTimer.restart();
+			}
+			
+		}
+		//timer.restart();
+	//}
+}
+
 void Sprite::animateAll() {
 	for (Sprite* s : sprites) {
 		if (s->animated && s->animating) {

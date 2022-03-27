@@ -40,7 +40,7 @@ void LevelManager::init() {
 	};
 	level1.levelName = "level1";
 		level1.startPosition = Vector2(6, 11);
-		Sprite* spicyFlower = new Sprite("src/resources/spicy_flower.png", true, false, 4, 38, 64, 1.0f, 150, false);
+		Sprite* spicyFlower = new Sprite("src/resources/spicy_flower.png", true, false, 4, 44, 64, 1.0f, 150, false);
 		Entity spicyFlowerEntity = Entity(1, "level1", spicyFlower, sf::Vector2f(702.f, 512.f));
 		level1.enemies.push_back(spicyFlowerEntity);
 

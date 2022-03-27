@@ -119,7 +119,6 @@ void GameEngine::drawGame() {
 	gameWindow.draw(*btnLevel1->getSprite()); gameWindow.draw(*btnLevel2->getSprite()); gameWindow.draw(*btnMenu->getSprite());
 
 	enemies.update();
-	std::cout << enemies.getNumEntities();
 	if (!scenePlaying) {
 		for (auto e : enemies.getEntities()) {
 			if (e->getTag() == levelManager.getCurrentLevel().levelName) {
@@ -401,7 +400,7 @@ void GameEngine::updateGame() {
 	}*/
 	for (auto e : enemies.getEntities()) {
 		if (player.getBoundingBox().intersects(e->getSprite()->getBoundingBox())) {
-			std::cout << "collision";
+			e->getSprite()->animateOnce();
 		}
 	}
 }

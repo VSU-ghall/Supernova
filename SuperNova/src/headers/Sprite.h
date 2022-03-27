@@ -21,6 +21,7 @@ extern class Sprite
 		sf::Clock getTimer();
 		int getWidth();
 		sf::FloatRect getBoundingBox();
+		void animateOnce();
 	private:
 		int width, height, frequency, numFrames, offset = 0;
 		float scale;
