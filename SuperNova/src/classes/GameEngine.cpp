@@ -59,6 +59,8 @@ void GameEngine::initGame() {
 
 		//storyManager.playLogoIntro();
 		storyManager.playTextIntro();
+
+		addEntities();
 	}
 	else {
 		sf::Vector2u winSize = gameWindow.getSize();
@@ -70,8 +72,6 @@ void GameEngine::initGame() {
 	gameWindow.setVisible(true); menuWindow.setVisible(false);
 
 	playMusic();
-
-	addEntities();
 }
 
 void GameEngine::initMenu() {
