@@ -263,6 +263,8 @@ void GameEngine::handleEvent(sf::Event event) {
 		loadLevel(levelManager.getLevel6());
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7))
 		loadLevel(levelManager.getLevel7());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8))
+		loadLevel(levelManager.getLevel8());
 
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(gameWindow);
 	sf::Vector2f worldPos = gameWindow.mapPixelToCoords(pixelPos);
