@@ -262,7 +262,7 @@ bool Player::checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vecto
 bool Player::checkTransitionCollision(float left, float right, float top, float bot, float velo, sf::Vector2f botRightHigh, sf::Vector2f botLeftHigh, sf::Vector2f topRightHigh, sf::Vector2f topLeftHigh, LevelManager::Level currentLevel) {
 	bool checkLeftEdge = left + velo <= 6;
 	bool checkRightEdge = right + velo >= (currentLevel.width * 64) - 6;
-	bool checkBotEdge = bot + velo >= (currentLevel.height * 64) - 6;
+	bool checkBotEdge = bot + velo >= (currentLevel.height * 64) - 12;
 	bool checkTopEdge = top - velo <= 63;
 	//std::cout << top - velo << std::endl;
 
