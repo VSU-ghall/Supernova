@@ -116,7 +116,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 					velocity.y = -playerJumpSpeed;
 				}
 				if (!grounded || velocity.y < 0) {
-					velocity.y += gravity;
+					velocity.y = velocity.y * .9f + gravity;
 				}
 				else {
 					velocity.y = 0;
@@ -125,10 +125,11 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 			else {
 				velocity.y = 1;
 				ceilingBump = false;
+				jumping = false;
 			}
 	}
 	else {
-		if (!jumping) {
+		if (!jumping && !ceilingBump) {
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && grounded) {
 				velocity.y = -playerJumpSpeed;
 				jumping = true;
@@ -137,7 +138,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 			}
 			else if (!grounded || velocity.y < 0) {
 				//if player is suspended in air, then the jumping animation is set depending on direction astronaut is facing
-				velocity.y = velocity.y * .9f + gravity;
+				velocity.y = velocity.y * .95f + gravity;
 			}
 			else {
 				//if s key is pressed, the astronaut crouches and cannot move along the x-axis 
@@ -156,7 +157,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 		}
 		else {
 			if (ceilingBump) {
-				velocity.y = 0;
+				velocity.y = 1;
 				ceilingBump = false;
 				jumping = false;
 			}
@@ -262,7 +263,7 @@ bool Player::checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vecto
 bool Player::checkTransitionCollision(float left, float right, float top, float bot, float velo, sf::Vector2f botRightHigh, sf::Vector2f botLeftHigh, sf::Vector2f topRightHigh, sf::Vector2f topLeftHigh, LevelManager::Level currentLevel) {
 	bool checkLeftEdge = left + velo <= 6;
 	bool checkRightEdge = right + velo >= (currentLevel.width * 64) - 6;
-	bool checkBotEdge = bot + velo >= (currentLevel.height * 64) - 6;
+	bool checkBotEdge = bot + velo >= (currentLevel.height * 64) - 12;
 	bool checkTopEdge = top - velo <= 63;
 	//std::cout << top - velo << std::endl;
 

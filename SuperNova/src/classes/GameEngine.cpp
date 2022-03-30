@@ -259,6 +259,12 @@ void GameEngine::handleEvent(sf::Event event) {
 		loadLevel(levelManager.getLevel4());
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5))
 		loadLevel(levelManager.getLevel5());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6))
+		loadLevel(levelManager.getLevel6());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7))
+		loadLevel(levelManager.getLevel7());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8))
+		loadLevel(levelManager.getLevel8());
 
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(gameWindow);
 	sf::Vector2f worldPos = gameWindow.mapPixelToCoords(pixelPos);
@@ -419,7 +425,6 @@ void GameEngine::updateGame() {
 	}
 
 	if (player.transitioningLeft) {
-		std::cout << levelManager.getCurrentLevel().levelNumber << std::endl;
 		loadLevel(*levelManager.currentLevel.left);
 		player.transitioningLeft = false;
 	}
