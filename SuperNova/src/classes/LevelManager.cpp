@@ -47,6 +47,7 @@ void LevelManager::init() {
 		Entity spicyFlowerEntity = Entity(1, "level1", spicyFlower, sf::Vector2f(702.f, 512.f));
 		level1.enemies.push_back(spicyFlowerEntity);
 
+
 	level2.map = new int[level2.width * level2.height] {
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 		 5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,
@@ -70,6 +71,7 @@ void LevelManager::init() {
 		level2.background->setBounds(64 * level2.width, 64 * level2.height);
 		level2.left = &level1;
 		level2.right = &level3;
+
 
 		level3.map = new int[level3.width * level3.height]{
 			 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
@@ -96,6 +98,7 @@ void LevelManager::init() {
 		level3.right = &level5;
 		level3.bot = &level4;
 
+
 		level4.map = new int[level4.width * level4.height]{
 			 1,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 			12,  0,  0,  0, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12,
@@ -116,6 +119,7 @@ void LevelManager::init() {
 
 		level4.top = &level3;
 
+
 		level5.map = new int[level5.width * level5.height]{
 			 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 			 5,  5,  5,  5,  5,  5,  5,  5,  5,  5, 23, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11,
@@ -135,6 +139,7 @@ void LevelManager::init() {
 		level5.left = &level3;
 		level5.right = &level6;
 
+
 		level6.map = new int[level6.width * level6.height]
 		{
 			1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
@@ -153,15 +158,64 @@ void LevelManager::init() {
 			 9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  8,  8,  8,  0,  0,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,
 			 8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  0,  0,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,
 			
-			 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0, 0, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
-			 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
+			 8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  0,  0,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,
+			 8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  0,  0,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,
+			 
+			 //10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0,  0, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
+			 //1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 		};
-		level6.startPosition = Vector2(6, 14);
+		level6.startPosition = Vector2(5, 14);
 		level6.background->setBounds(64 * level6.width, 64 * level6.height);
 
 		level6.left = &level5;
 		level6.right = &level6;
-		level6.bot = &level6;
+		level6.bot = &level7;
+
+
+		level7.map = new int[level7.width * level7.height]
+		{
+			// 1,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,
+			//11,  0,  0, 11, 11, 11, 11, 11, 11, 11, 11, 11,
+			12,  0,  0, 12, 12, 12, 12, 12, 12, 12, 12, 12,
+			12,  0,  0, 12, 12, 12, 12, 12, 12, 12, 12, 12,
+
+			 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
+			 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
+			 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
+			 8,  9,  9,  9,  9,  9,  9,  9,  9,  0,  0,  8,
+			 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
+			 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
+			 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
+			 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
+			 8,  9,  9,  9,  0,  0,  9,  9,  9,  9,  9,  8,
+			 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
+			 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
+			 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
+			 8,  0,  0,  9,  9,  9,  9,  9,  9,  9,  9,  8,
+			 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
+			 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
+			 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
+			 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
+			 8,  9,  9,  9,  9,  9,  9,  9,  0,  0,  9,  8,
+			 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
+			 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
+			 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
+			 8,  9,  9,  9,  9,  0,  0,  9,  9,  9,  9,  8,
+			 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
+			 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
+			 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
+			 8,  9,  9,  9,  9,  9,  9,  9,  9,  0,  0,  8,
+
+			 8,  8,  8,  8,  8,  8,  8,  8,  8,  0,  0,  8,
+			 8,  8,  8,  8,  8,  8,  8,  8,  8,  0,  0,  8,
+			 //1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
+		};
+		level7.startPosition = Vector2(5, 7);
+		level7.background->setBounds(64 * level7.width, 64 * level7.height);
+		//level7.background->getSprite()->setPosition(0,0);
+
+		level7.top = &level6;
+		level7.bot = &level7;
 }
 
 Sprite LevelManager::getCurrentBackground() {
@@ -190,6 +244,9 @@ LevelManager::Level LevelManager::getLevel5() {
 }
 LevelManager::Level LevelManager::getLevel6() {
 	return LevelManager::level6;
+}
+LevelManager::Level LevelManager::getLevel7() {
+	return LevelManager::level7;
 }
 LevelManager::Level LevelManager::getTestLevel() {
 	return LevelManager::testLevel;
