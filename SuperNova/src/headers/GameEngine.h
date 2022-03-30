@@ -18,26 +18,26 @@ private:
 	StoryManager storyManager;
 	const int tileSize = 64;
 	float viewWidth, viewHeight;
-	bool scenePlaying = false;
+	bool scenePlaying = false, displayingText = false;
 
 	// creates global window
 	sf::RenderWindow gameWindow, menuWindow;
 	sf::View view;
-	sf::Music music;
-	Sprite *btnLevel1 = new Sprite("src/resources/Level1Button.png"), 
-		*btnLevel2 = new Sprite("src/resources/Level2Button.png"),
-		*btnMenu = new Sprite("src/resources/MenuButton.png"),
+	sf::Music music, soundEffect;
+	Sprite *btnMenu = new Sprite("src/resources/MenuButton.png"),
 		*pixiguide = new Sprite("src/resources/pixiguide.png", true, false, 6, 32, 48, 1.0f, 150),
 		*btnPlay = new Sprite("src/resources/MenuPlayButton.png"),
 		*btnOptions = new Sprite("src/resources/MenuOptionsButton.png"),
 		*btnExit = new Sprite("src/resources/MenuExitButton.png");
 	sf::Texture backgroundTexture;
-	sf::RectangleShape gamebar, blackRect;
+	sf::RectangleShape gameBar, chatBar, blackRect, jetpackIcon;
 	sf::Texture texture;
 	std::vector<Vector2> levelVector;
 
 	enum Mode {menu, game, paused};
 	Mode gameMode;
+
+	EntityManager enemies;
 
 public:
 	GameEngine();
@@ -45,7 +45,6 @@ public:
 	LevelManager* getLevelManager() { return &levelManager; }
 	Player* getPlayer() { return &player; };
 	sf::RenderWindow* getWindow() { return &gameWindow; }
-	bool isScenePlaying() { return scenePlaying; }
 
 	void run();
 	void init();
@@ -58,9 +57,10 @@ public:
 	void handleEvent(sf::Event event);
 	void loadLevel(LevelManager::Level level);
 	void playMusic();
+	void playSoundEffect(const std::string& filePath);
 	void setWindowView(sf::RenderWindow &window, float width, float height);
-	void startplayingScene() { scenePlaying = true; }
-	void stopPlayingScene() { scenePlaying = false; }
 	void updateGame();
 	void updateMenu();
+
+	void addEntities();
 };
