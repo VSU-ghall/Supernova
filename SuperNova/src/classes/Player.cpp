@@ -116,7 +116,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 					velocity.y = -playerJumpSpeed;
 				}
 				if (!grounded || velocity.y < 0) {
-					velocity.y += gravity;
+					velocity.y = velocity.y * .9f + gravity;
 				}
 				else {
 					velocity.y = 0;
@@ -137,7 +137,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 			}
 			else if (!grounded || velocity.y < 0) {
 				//if player is suspended in air, then the jumping animation is set depending on direction astronaut is facing
-				velocity.y = velocity.y * .9f + gravity;
+				velocity.y = velocity.y * .95f + gravity;
 			}
 			else {
 				//if s key is pressed, the astronaut crouches and cannot move along the x-axis 
