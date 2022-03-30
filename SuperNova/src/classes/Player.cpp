@@ -125,6 +125,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 			else {
 				velocity.y = 1;
 				ceilingBump = false;
+				jumping = false;
 			}
 	}
 	else {
