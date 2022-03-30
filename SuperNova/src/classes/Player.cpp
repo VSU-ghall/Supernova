@@ -129,7 +129,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 			}
 	}
 	else {
-		if (!jumping) {
+		if (!jumping && !ceilingBump) {
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && grounded) {
 				velocity.y = -playerJumpSpeed;
 				jumping = true;
@@ -157,7 +157,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 		}
 		else {
 			if (ceilingBump) {
-				velocity.y = 0;
+				velocity.y = 1;
 				ceilingBump = false;
 				jumping = false;
 			}
