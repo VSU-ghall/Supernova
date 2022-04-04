@@ -41,6 +41,9 @@ static class LevelManager
 			level6 = { this, new Sprite("src/resources/mining_background_1.png", true, false, 5, 200, 120, 9.65f, 500), true, 30, 16 },
 			level7 = { this, new Sprite("src/resources/mining_background_2.png", true, false, 8, 200, 120, 16.f, 500), true, 12, 30 },
 			level8 = { this, new Sprite("src/resources/mining_background_2.png", true, false, 8, 200, 120, 9.6f, 500), true, 30, 9 },
+			level9 = { this, new Sprite("src/resources/mining_background_2.png", true, false, 8, 200, 120, 9.6f, 500), true, 30, 9 },
+			level10 = { this, new Sprite("src/resources/mining_background_2.png", true, false, 8, 200, 120, 9.6f, 500), true, 30, 9 },
+			level11 = { this, new Sprite("src/resources/waterfall_background.png", true, false, 16, 350, 210, 5.49f, 500), true, 30, 16 },
 			currentLevel = {this};
 
 		Level* currentLevelPtr;
@@ -55,6 +58,9 @@ static class LevelManager
 		Level getLevel6();
 		Level getLevel7();
 		Level getLevel8();
+		Level getLevel9();
+		Level getLevel10();
+		Level getLevel11();
 		Level getTestLevel();
 		TileMap getMap();
 		void setLevel(Level level);
