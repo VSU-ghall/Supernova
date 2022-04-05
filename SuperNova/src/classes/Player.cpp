@@ -98,7 +98,6 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 
 		velocity.x = playerSpeed;
 		//the sprite size in sprite sheet is 32x64. this tells textureRect to start at beginning and every time walkCount is added, then it goes to next frame
-		std::cout << grounded << std::endl;
 		playerSprite.setTextureRect(sf::IntRect(offset * 32, 0, 32, 64));
 	}
 	else if (checkLeft && sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {

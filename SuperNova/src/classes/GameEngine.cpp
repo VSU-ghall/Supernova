@@ -357,7 +357,7 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 	gameWindow.setTitle(title);
 	setWindowView(gameWindow, tileSize * level.width, tileSize * level.height);
 
-	sf::Vector2f pixiPos(player.getX() - player.playerSprite.getTexture()->getSize().x + 16, player.getY() - player.playerSprite.getTexture()->getSize().y);
+	sf::Vector2f pixiPos(player.getX() + 16, player.getY());
 
 	pixiguide->getSprite()->setPosition(sf::Vector2f(pixiPos.x - 64, pixiPos.y - 64));
 }
