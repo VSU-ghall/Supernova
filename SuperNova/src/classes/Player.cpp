@@ -42,9 +42,6 @@ void Player::init() {
 		std::cout << "Could not load astronaut texture" << std::endl;
 	}
 	playerSprite.setTexture(texture);
-
-	//the set Origin will put a "point" in the middle of the sprite and the sprite will now rotate around that point when manipulated.
-	playerSprite.setOrigin((sf::Vector2f)texture.getSize() / 2.f);
 }
 
 void Player::animate() {
@@ -181,11 +178,10 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 	}
 
 	// sets player's position to always be on top of a block (not a few pixels inside of it)
-	float bot = ceil(playerSprite.getGlobalBounds().top + 128);
-	if (grounded && !jumping && (int)bot % 64 != 0) {
+	sf::Vector2f pos = playerSprite.getPosition();
+	if (grounded && !jumping && (int)(pos.y+128) % 64 != 0) {
 
-		sf::Vector2f pos = playerSprite.getPosition();
-		pos.y = (int)(floor(bot / 64) * 64) + 128;
+		pos.y = (int)((pos.y + 10) / 64) * 64;
 
 		playerSprite.setPosition(pos);
 	}
