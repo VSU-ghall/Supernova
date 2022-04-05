@@ -27,10 +27,14 @@ void StoryManager::draw() {
 		if (seconds >= 0.2)
 			window->draw(*astronaut->getSprite());
 	}
+	if (playingTextIntro) {
+		window->draw(displayText);
+	}
 }
 
 void StoryManager::update() {
 	float seconds = timer.getElapsedTime().asSeconds();
+	if (displayText.getPosition().y == 0) displayText.setPosition(10, window->getSize().y - 100 + 10);
 
 	if (playingLogo) {
 		if (seconds >= 7 && logoImg.getFillColor().a >= 3) fadeOut(logoImg, 3);
@@ -94,8 +98,26 @@ void StoryManager::update() {
 		astronaut->getSprite()->setPosition(astronautPos.x + 2.5, astronautPos.y);
 
 		if (astronautPos.x >= 2*64) {
+			playTextIntro();
 			*scenePlaying = false;
 			playingWalkOut = false;
+		}
+	}
+	if (playingTextIntro) {
+		if (seconds >= 6) {
+			playingTextIntro = false; *displayingText = false;
+		}
+		else if (seconds >= 4.5) {
+			displayText.setString("Enjoy the game . . .");
+		}
+		else if (seconds >= 4) {
+			displayText.setString("Enjoy the game . .");
+		}
+		else if (seconds >= 3.5) {
+			displayText.setString("Enjoy the game .");
+		}
+		else if (seconds >= 3) {
+			displayText.setString("Enjoy the game");
 		}
 	}
 }
@@ -141,6 +163,15 @@ void StoryManager::playWalkOut() {
 	astronaut = new Sprite("src/resources/astronaut_walk.png", true, false, 8, 32, 64, 2.f, 150);
 
 	astronaut->getSprite()->setPosition(-64, 7*64);
+}
+
+void StoryManager::playTextIntro() {
+	*displayingText = true; playingTextIntro = true;
+	timer.restart();
+
+	displayText.setString("Welcome traveler!");
+
+	if (displayText.getPosition().y == 0) displayText.setPosition(10, window->getSize().y - 100 + 10);
 }
 
 /**************************************************************************/

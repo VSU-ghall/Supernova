@@ -25,8 +25,10 @@ private:
 	EntityVector entitiesToAdd; //entities that are ready to be added to entities
 	EntityMap entityMap; //map that stores vectors. each vector stores entities that share the same tag
 	size_t numEntities = 0; //unsigned int used to create unique entity ids
+	EntityVector entitiesInteractable;
 
 	void removeDeadEntities(EntityVector& vector); //helper method that iterates through a given vector and removes any entities that are not alive
+	void removeUninteractableEntities(EntityVector& vector);
 
 public:
 	EntityManager();
@@ -34,7 +36,9 @@ public:
 	void update(); //method updates EntityManager to add new entities and remove dead entities
 
 	std::shared_ptr<Entity> addEntity(const std::string& tag); //creates and returns an entity with the tag provided
+	std::shared_ptr<Entity> addEntity(Entity e);
 	const EntityVector& getEntities(); //returns a vector containing all entities that are currently alive
+	const EntityVector& getEntitiesInteractable();
 	const EntityVector& getEntities(const std::string& tag); //returns a vector containing all entities that share the tag parameter
 	size_t getNumEntities();
 
