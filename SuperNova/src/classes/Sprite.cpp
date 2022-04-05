@@ -76,6 +76,13 @@ void Sprite::animateAll() {
 	}
 }
 
+int Sprite::getHeight() {
+	return height;
+}
+
+float Sprite::getScale() {
+	return scale;
+}
 
 sf::Sprite* Sprite::getSprite()
 {

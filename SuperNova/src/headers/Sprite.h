@@ -18,6 +18,8 @@ extern class Sprite
 		void animate();
 		void animateOnce();
 		static void animateAll();
+		int getHeight();
+		float getScale();
 		sf::Sprite* getSprite();
 		sf::Texture getTexture();
 		sf::Clock getTimer();
