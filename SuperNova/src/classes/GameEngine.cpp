@@ -1,7 +1,7 @@
 #include "headers/GameEngine.h"
 
 GameEngine::GameEngine() 
-	:gameWindow(sf::VideoMode(), "SuperNova"), menuWindow(sf::VideoMode(), "SuperNova - Menu"), storyManager(&gameWindow, &scenePlaying)
+	:gameWindow(sf::VideoMode(), "SuperNova"), menuWindow(sf::VideoMode(), "SuperNova - Menu"), storyManager(&gameWindow, &scenePlaying, &displayingText)
 {}
 
 void GameEngine::run() {
@@ -41,23 +41,25 @@ void GameEngine::run() {
 //
 void GameEngine::init() {
 	initMenu();
-
-	playMusic();
 }
-
-void GameEngine::initGame() {
-	gameWindow.setFramerateLimit(60);
-
+	void GameEngine::initGame() {
+		gameWindow.setFramerateLimit(60);
+	
 	if (gameMode != paused) {
-		loadLevel(levelManager.getLevel1());
 		player.init();
+		loadLevel(levelManager.getLevel1());
 
-		gamebar.setFillColor(sf::Color(59, 30, 11));
-		btnLevel1->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
-		btnLevel2->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
+		gameBar.setFillColor(sf::Color(59, 30, 11));
+		chatBar.setFillColor(sf::Color(0,0,0,200));
 		btnMenu->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
 
-		storyManager.playLogoIntro();
+		jetpackIcon.setSize(sf::Vector2f(64, 64));
+		jetpackIcon.setFillColor(sf::Color::Red);
+
+		//storyManager.playLogoIntro();
+		storyManager.playTextIntro();
+
+		addEntities();
 	}
 	else {
 		sf::Vector2u winSize = gameWindow.getSize();
@@ -67,6 +69,8 @@ void GameEngine::initGame() {
 
 	gameMode = game;
 	gameWindow.setVisible(true); menuWindow.setVisible(false);
+
+	playMusic();
 }
 
 void GameEngine::initMenu() {
@@ -90,6 +94,8 @@ void GameEngine::initMenu() {
 		gameMode = menu;
 		gameWindow.setVisible(false);
 	}
+
+	playMusic();
 	
 	menuWindow.setVisible(true);
 }
@@ -106,17 +112,31 @@ void GameEngine::drawGame() {
 		gameWindow.draw(*levelManager.getCurrentBackground().getSprite());
 	}
 
-	gameWindow.draw(levelManager.getMap());
+	gamewindow.draw(levelManager.getMap());
 
 	//drawGrid();
 
 	if (!scenePlaying) player.draw(gameWindow);
 	gameWindow.draw(*pixiguide->getSprite());
 
-	gameWindow.draw(gamebar);
-	gameWindow.draw(*btnLevel1->getSprite()); gameWindow.draw(*btnLevel2->getSprite()); gameWindow.draw(*btnMenu->getSprite());
+	gameWindow.draw(gameBar);
+	gameWindow.draw(jetpackIcon);
+	gameWindow.draw(*btnMenu->getSprite());
 
-	if (scenePlaying) storyManager.draw();
+	if (displayingText) gameWindow.draw(chatBar);
+
+	enemies.update();
+	if (!scenePlaying) {
+		for (auto e : enemies.getEntities()) {
+			if (e->getTag() == levelManager.getCurrentLevel().levelName) {
+				gameWindow.draw(*e->getSprite()->getSprite());
+				e->getSprite()->getSprite()->setPosition(e->getPosition());
+			}
+			
+		}
+	}
+	
+	if (scenePlaying || displayingText) storyManager.draw();
 
 	gameWindow.display();
 }
@@ -208,10 +228,16 @@ void GameEngine::handleEvent(sf::Event event) {
 	if (event.type == sf::Event::Resized) {
 		view = getViewport(event.size.width, event.size.height);
 		if (gameMode == game) {
-			gamebar.setSize(sf::Vector2f(view.getSize().x, 75));
-			btnLevel1->getSprite()->setPosition(gamebar.getPosition().x + 10, gamebar.getPosition().y + 5);
-			btnLevel2->getSprite()->setPosition(gamebar.getPosition().x + 20 + btnLevel1->getTexture().getSize().x - 150, gamebar.getPosition().y + 5);
-			btnMenu->getSprite()->setPosition(gamebar.getSize().x - 150 - 10, gamebar.getPosition().y + 5);
+			// Set the game bar and contents
+			gameBar.setSize(sf::Vector2f(view.getSize().x, 75));
+			jetpackIcon.setPosition(gameBar.getPosition().x + 10, 
+				gameBar.getPosition().y + ((gameBar.getSize().y - jetpackIcon.getSize().y)/2));
+			btnMenu->getSprite()->setPosition(gameBar.getSize().x - 
+				(btnMenu->getTexture().getSize().x/2) - 10, gameBar.getPosition().y + 5);
+			
+			// Set the text bar
+			chatBar.setSize(sf::Vector2f(view.getSize().x, 100));
+			chatBar.setPosition(0, view.getSize().y-chatBar.getSize().y);
 		}
 	}
 
@@ -221,39 +247,45 @@ void GameEngine::handleEvent(sf::Event event) {
 				player.moving = false;
 	}
 
-	if (player.transitioning) {
-		std::cout << levelManager.getCurrentLevel().levelNumber << std::endl;
-		if (levelManager.getCurrentLevel().levelNumber == 2) {
-			loadLevel(levelManager.getLevel1());
-			player.transitioning = false;
-		}
-		else if (levelManager.getCurrentLevel().levelNumber == 1) {
-			loadLevel(levelManager.getLevel2());
-			player.transitioning = false;
-		}
-	}
+	// Temporary key bindings for development
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
+		loadLevel(levelManager.getLevel1());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
+		loadLevel(levelManager.getLevel2());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
+		loadLevel(levelManager.getLevel3());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
+		loadLevel(levelManager.getLevel4());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5))
+		loadLevel(levelManager.getLevel5());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6))
+		loadLevel(levelManager.getLevel6());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7))
+		loadLevel(levelManager.getLevel7());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8))
+		loadLevel(levelManager.getLevel8());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num9))
+		loadLevel(levelManager.getLevel9());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0))
+		loadLevel(levelManager.getLevel10());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Hyphen))
+		loadLevel(levelManager.getLevel11());
 
-	// Check if game Level 1 Button is clicked
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(gameWindow);
 	sf::Vector2f worldPos = gameWindow.mapPixelToCoords(pixelPos);
-	if (gameMode == game && btnLevel1->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-			btnLevel1->getSprite()->setTextureRect(sf::IntRect(150, 0, 150, 65));
-		if (event.type == sf::Event::MouseButtonReleased) {
-			if (levelManager.getCurrentLevel().levelNumber == 2)
-				loadLevel(levelManager.getLevel1());
-			btnLevel1->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
-		}
-	}
 
-	// Check if game Level 2 Button is clicked
-	if (gameMode == game && btnLevel2->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-			btnLevel2->getSprite()->setTextureRect(sf::IntRect(150, 0, 150, 65));
+	// Check if Jetpack Icon is clicked
+	if (gameMode == game && jetpackIcon.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+		/*if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			btnMenu->getSprite()->setTextureRect(sf::IntRect(149, 0, 150, 65));*/
 		if (event.type == sf::Event::MouseButtonReleased) {
-			if (levelManager.getCurrentLevel().levelNumber == 1)
-				loadLevel(levelManager.getLevel2());
-			btnLevel2->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
+			if (player.jetPack) {
+				player.jetPack = false;
+				jetpackIcon.setFillColor(sf::Color::Red);
+			}else {
+				player.jetPack = true;
+				jetpackIcon.setFillColor(sf::Color::Green);
+			}
 		}
 	}
 
@@ -275,6 +307,7 @@ void GameEngine::handleEvent(sf::Event event) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			btnPlay->getSprite()->setTextureRect(sf::IntRect(257, 0, 256, 75));
 		if (event.type == sf::Event::MouseButtonReleased) {
+			playSoundEffect("src/resources/sounds/main_menu_click.wav");
 			initGame();
 			btnPlay->getSprite()->setTextureRect(sf::IntRect(0, 0, 256, 75));
 		}
@@ -285,6 +318,7 @@ void GameEngine::handleEvent(sf::Event event) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			btnOptions->getSprite()->setTextureRect(sf::IntRect(449, 0, 448, 75));
 		if (event.type == sf::Event::MouseButtonReleased) {
+			playSoundEffect("src/resources/sounds/main_menu_click.wav");
 			btnOptions->getSprite()->setTextureRect(sf::IntRect(0, 0, 448, 75));
 		}
 	}
@@ -294,6 +328,7 @@ void GameEngine::handleEvent(sf::Event event) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			btnExit->getSprite()->setTextureRect(sf::IntRect(255, 0, 254, 75));
 		if (event.type == sf::Event::MouseButtonReleased) {
+			playSoundEffect("src/resources/sounds/main_menu_click.wav");
 			menuWindow.close();
 			btnExit->getSprite()->setTextureRect(sf::IntRect(0, 0, 254, 75));
 		}
@@ -301,6 +336,7 @@ void GameEngine::handleEvent(sf::Event event) {
 	
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 		if (scenePlaying) scenePlaying = false;
+		if (displayingText) displayingText = false;
 		//std::cout << "x: " << worldPos.x << " y: " << worldPos.y << std::endl;
 	}
 
@@ -316,9 +352,13 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 	levelManager.setLevel(level);
 
 
-	sf::String title("SuperNova - Level " + std::to_string(level.levelNumber));
+	sf::String title("SuperNova - Level" + std::to_string(level.levelNumber));
 	gameWindow.setTitle(title);
 	setWindowView(gameWindow, tileSize * level.width, tileSize * level.height);
+
+	sf::Vector2f pixiPos(player.getX() + 16, player.getY());
+
+	pixiguide->getSprite()->setPosition(sf::Vector2f(pixiPos.x - 64, pixiPos.y - 64));
 }
 
 //
@@ -328,16 +368,34 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 void GameEngine::playMusic()
 {
 	// Open the Background Music
-	if (!music.openFromFile("src/resources/sounds/background_sound.wav")) {
-		std::cout << "Could not load background_music" << std::endl;
-		return;
+	if (gameMode == menu || gameMode == paused) {
+		if (!music.openFromFile("src/resources/sounds/main_menu_sound.wav")) {
+			std::cout << "Could not load main_menu_sound" << std::endl;
+			return;
+		}
 	}
+	else
+		if (!music.openFromFile("src/resources/sounds/background_sound.wav")) {
+			std::cout << "Could not load background_music" << std::endl;
+			return;
+		}
 
 	music.setVolume(10);
 
 	music.setLoop(true);         // make it loop
 	// Play it
 	music.play();
+}
+
+void GameEngine::playSoundEffect(const std::string& filePath) {
+	if (!soundEffect.openFromFile(filePath)) {
+		std::cout << "Could not load " << filePath << std::endl;
+		return;
+	}
+
+	soundEffect.setVolume(10);
+
+	soundEffect.play();
 }
 
 //
@@ -349,7 +407,7 @@ void GameEngine::setWindowView(sf::RenderWindow& window, float width, float heig
 	viewHeight = height;
 
 	if (window.getSize().x != desktop.width) { // if window is not full screen
-		view.setSize(viewWidth, viewHeight + gamebar.getSize().y);
+		view.setSize(viewWidth, viewHeight + gameBar.getSize().y);
 		view = getViewport(viewWidth, viewHeight);
 		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
 
@@ -361,10 +419,8 @@ void GameEngine::setWindowView(sf::RenderWindow& window, float width, float heig
 		view.setSize(viewWidth, viewHeight);
 		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
 
-		gamebar.setSize(sf::Vector2f(view.getSize().x, 75));
-		btnLevel1->getSprite()->setPosition(gamebar.getPosition().x + 10, gamebar.getPosition().y + 5);
-		btnLevel2->getSprite()->setPosition(gamebar.getPosition().x + 20 + btnLevel1->getTexture().getSize().x - 150, gamebar.getPosition().y + 5);
-		btnMenu->getSprite()->setPosition(gamebar.getSize().x - 150 - 10, gamebar.getPosition().y + 5);
+		gameBar.setSize(sf::Vector2f(view.getSize().x, 75));
+		btnMenu->getSprite()->setPosition(gameBar.getSize().x - 150 - 10, gameBar.getPosition().y + 5);
 	}
 }
 
@@ -372,17 +428,37 @@ void GameEngine::setWindowView(sf::RenderWindow& window, float width, float heig
 // Updates all game objects
 //
 void GameEngine::updateGame() {
-	if (scenePlaying) storyManager.update();
+	Sprite::animateAll();
+
+	if (scenePlaying || displayingText) {
+		storyManager.update();
+		return;
+	}
+
+	if (player.transitioningLeft) {
+		loadLevel(*levelManager.currentLevel.left);
+		player.transitioningLeft = false;
+	}
+	else if (player.transitioningRight) {
+		loadLevel(*levelManager.currentLevel.right);
+		player.transitioningRight = false;
+	}
+	else if (player.transitioningTop) {
+		loadLevel(*levelManager.currentLevel.top);
+		player.transitioningTop = false;
+	}
+	else if (player.transitioningBot) {
+		loadLevel(*levelManager.currentLevel.bot);
+		player.transitioningBot = false;
+	}
 
 	player.update(levelManager.getCurrentLevel());
 
-	Sprite::animateAll();
-
-	sf::Vector2i pixelPos(player.getX(), player.getY());
-	sf::Vector2f worldPos = gameWindow.mapPixelToCoords(pixelPos);
-	pixiguide->getSprite()->setPosition(sf::Vector2f((pixelPos.x - (4.5 * 64)) * 1.1, (pixelPos.y - (2*64))/1.2));
-	if (player.getBoundingBox().intersects(pixiguide->getBoundingBox())) {
-		pixiguide->getSprite()->move(100,0);
+	for (auto e : enemies.getEntitiesInteractable()) {
+		if (player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && !e->getSprite()->animating) {
+			e->getSprite()->animateOnce();
+			e->notInteractable();
+		}
 	}
 }
 
@@ -391,4 +467,10 @@ void GameEngine::updateGame() {
 //
 void GameEngine::updateMenu() {
 	//blackRect.setSize(sf::Vector2f(menuWindow.getSize()));
+}
+
+void GameEngine::addEntities() {
+	for (auto e : levelManager.getCurrentLevel().enemies) {
+		enemies.addEntity(e);
+	}
 }
