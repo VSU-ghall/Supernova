@@ -47,7 +47,7 @@ void GameEngine::initGame() {
 	gameWindow.setFramerateLimit(60);
 
 	if (gameMode != paused) {
-		player.init();
+		player.init(&displayingText);
 		loadLevel(levelManager.getLevel1());
 
 		gameBar.setFillColor(sf::Color(59, 30, 11));
@@ -431,10 +431,12 @@ void GameEngine::setWindowView(sf::RenderWindow& window, float width, float heig
 void GameEngine::updateGame() {
 	Sprite::animateAll();
 
-	if (scenePlaying || displayingText) {
+	if (scenePlaying) {
 		storyManager.update();
 		return;
 	}
+
+	if (displayingText) storyManager.update();
 
 	if (player.transitioningLeft) {
 		loadLevel(*levelManager.currentLevel.left);
