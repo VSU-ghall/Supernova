@@ -4,6 +4,7 @@
 
 float playerJumpSpeed, playerSpeed, playerSize, animationPerFrame = 1.0f / 8.0f, jumpHeight = 0;
 int frameCount = 0, offset = 0;
+int frameCountJetPack = 0, offsetJetPack = 0;
 const float gravity = 1.f;
 sf::Vector2f velocity(0, 0);
 bool grounded = true, jumping = false, ceilingBump = false, crouchPlayed = false;
@@ -45,18 +46,29 @@ void Player::init() {
 }
 
 void Player::animate() {
-	if (stoppedRight && !moving)
-		playerSprite.setTextureRect(sf::IntRect(0, 0, 32, 64));
-	else if (stoppedLeft && !moving)
-		playerSprite.setTextureRect(sf::IntRect(0, 32 * 2, 32, 64));
+	if (stoppedRight && !moving) {
+		if (jetPack && !grounded) playerSprite.setTextureRect(sf::IntRect(0, 322, 38, 64));
+		else playerSprite.setTextureRect(sf::IntRect(0, 0, 32, 64));
+	}
+	else if (stoppedLeft && !moving) {
+		if (jetPack && !grounded) playerSprite.setTextureRect(sf::IntRect(116, 322, 38, 64));
+		else playerSprite.setTextureRect(sf::IntRect(0, 32 * 2, 32, 64));
+	}
 
 	frameCount++;
+	frameCountJetPack++;
 	if ((int)(frameCount * animationPerFrame) > offset) offset++;
+	if ((int)(frameCountJetPack * animationPerFrame) > offsetJetPack) offsetJetPack++;
 
 	//There are 8 frames for walking now, this allows each frame to cycle and then reset when the last frame is projected onto the screen
 	if (offset == 8) {
 		frameCount = 0;
 		offset = 0;
+	}
+
+	if (offsetJetPack == 3) {
+		frameCountJetPack = 0;
+		offsetJetPack = 0;
 	}
 }
 
@@ -86,6 +98,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 
 		velocity.x = playerSpeed;
 		//the sprite size in sprite sheet is 32x64. this tells textureRect to start at beginning and every time walkCount is added, then it goes to next frame
+		std::cout << grounded << std::endl;
 		playerSprite.setTextureRect(sf::IntRect(offset * 32, 0, 32, 64));
 	}
 	else if (checkLeft && sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
@@ -101,7 +114,6 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)) {
 		jetPack = true;
-
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
 		jetPack = false;
@@ -168,12 +180,20 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 			}
 		}
 	}
-	if (!grounded || jumping) {
+	if (!jetPack && (!grounded || jumping)) {
 		if (stoppedRight) {
 			playerSprite.setTextureRect(sf::IntRect(0, 128, 44, 64));
 		}
 		else if (stoppedLeft) {
 			playerSprite.setTextureRect(sf::IntRect(44, 128, 44 * 2, 64));
+		}
+	}
+	else if (jetPack && !grounded) {
+		if (stoppedRight) {
+			playerSprite.setTextureRect(sf::IntRect(offsetJetPack * 38, 322, 38, 64));
+		}
+		else if (stoppedLeft) {
+			playerSprite.setTextureRect(sf::IntRect((offsetJetPack * 38)+114, 322, 38, 64));
 		}
 	}
 
