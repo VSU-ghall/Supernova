@@ -47,8 +47,8 @@ void GameEngine::initGame() {
 	gameWindow.setFramerateLimit(60);
 
 	if (gameMode != paused) {
-		loadLevel(levelManager.getLevel1());
 		player.init();
+		loadLevel(levelManager.getLevel1());
 
 		gameBar.setFillColor(sf::Color(59, 30, 11));
 		chatBar.setFillColor(sf::Color(0,0,0,200));
@@ -356,6 +356,10 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 	sf::String title("SuperNova - Level " + std::to_string(level.levelNumber));
 	gameWindow.setTitle(title);
 	setWindowView(gameWindow, tileSize * level.width, tileSize * level.height);
+
+	sf::Vector2f pixiPos(player.getX() + 16, player.getY());
+
+	pixiguide->getSprite()->setPosition(sf::Vector2f(pixiPos.x - 64, pixiPos.y - 64));
 }
 
 //
@@ -425,6 +429,8 @@ void GameEngine::setWindowView(sf::RenderWindow& window, float width, float heig
 // Updates all game objects
 //
 void GameEngine::updateGame() {
+	Sprite::animateAll();
+
 	if (scenePlaying || displayingText) {
 		storyManager.update();
 		return;
@@ -449,14 +455,6 @@ void GameEngine::updateGame() {
 
 	player.update(levelManager.getCurrentLevel());
 
-	Sprite::animateAll();
-
-	sf::Vector2i pixelPos(player.getX(), player.getY());
-	sf::Vector2f worldPos = gameWindow.mapPixelToCoords(pixelPos);
-	pixiguide->getSprite()->setPosition(sf::Vector2f((pixelPos.x - (4.5 * 64)) * 1.1, (pixelPos.y - (2*64))/1.2));
-	/*if (player.getBoundingBox().intersects(pixiguide->getBoundingBox())) {
-		pixiguide->getSprite()->move(100,0);
-	}*/
 	for (auto e : enemies.getEntitiesInteractable()) {
 		if (player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && !e->getSprite()->animating) {
 			e->getSprite()->animateOnce();

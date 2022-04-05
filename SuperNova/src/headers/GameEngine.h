@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/window.hpp>
 #include <SFML/Audio.hpp>
+#include <stdlib.h>
 #include <iostream>
 #include "headers/Player.h"
 #include "headers/TileMap.h"
@@ -32,7 +33,7 @@ private:
 	sf::Texture backgroundTexture;
 	sf::RectangleShape gameBar, chatBar, blackRect, jetpackIcon;
 	sf::Texture texture;
-	std::vector<Vector2> levelVector;
+	sf::Vector2f pixiLocation;
 
 	enum Mode {menu, game, paused};
 	Mode gameMode;
@@ -61,6 +62,7 @@ public:
 	void setWindowView(sf::RenderWindow &window, float width, float height);
 	void updateGame();
 	void updateMenu();
+	sf::Vector2f updatePixi();
 
 	void addEntities();
 };
