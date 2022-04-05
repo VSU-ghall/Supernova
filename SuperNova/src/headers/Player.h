@@ -16,17 +16,14 @@ class Player
 		sf::Sprite playerSprite;
 		sf::Texture texture;
 		sf::Music music;
-		bool stoppedLeft = false, stoppedRight = true, moving = false;
-		bool transitioningLeft;
-		bool transitioningRight;
-		bool transitioningTop;
-		bool transitioningBot;
-		bool jetPack;
+		bool stoppedLeft = false, stoppedRight = true, moving = false, jetPack = false;
+		bool transitioningLeft, transitioningRight, transitioningTop, transitioningBot;
+		bool* displayingText;
 		float getX();
 		float getY();
 		sf::FloatRect getBoundingBox();
 
-		void init();
+		void init(bool* displayingText);
 		void animate();
 		void draw(sf::RenderWindow& window);
 		bool checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vector2f botLeftHigh, sf::Vector2f topRight, sf::Vector2f topLeft, LevelManager::Level currentLevel);
