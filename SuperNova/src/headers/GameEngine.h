@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/window.hpp>
 #include <SFML/Audio.hpp>
+#include <stdlib.h>
 #include <iostream>
 #include "headers/Player.h"
 #include "headers/TileMap.h"
@@ -23,7 +24,7 @@ private:
 	// creates global window
 	sf::RenderWindow gameWindow, menuWindow;
 	sf::View view;
-	sf::Music music;
+	sf::Music music, soundEffect;
 	Sprite *btnMenu = new Sprite("src/resources/MenuButton.png"),
 		*pixiguide = new Sprite("src/resources/pixiguide.png", true, false, 6, 32, 48, 1.0f, 150),
 		*btnPlay = new Sprite("src/resources/MenuPlayButton.png"),
@@ -32,7 +33,7 @@ private:
 	sf::Texture backgroundTexture;
 	sf::RectangleShape gameBar, chatBar, blackRect, jetpackIcon;
 	sf::Texture texture;
-	std::vector<Vector2> levelVector;
+	sf::Vector2f pixiLocation;
 
 	enum Mode {menu, game, paused};
 	Mode gameMode;
@@ -57,9 +58,11 @@ public:
 	void handleEvent(sf::Event event);
 	void loadLevel(LevelManager::Level level);
 	void playMusic();
+	void playSoundEffect(const std::string& filePath);
 	void setWindowView(sf::RenderWindow &window, float width, float height);
 	void updateGame();
 	void updateMenu();
+	sf::Vector2f updatePixi();
 
 	void addEntities();
 };

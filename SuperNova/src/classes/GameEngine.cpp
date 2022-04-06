@@ -41,16 +41,14 @@ void GameEngine::run() {
 //
 void GameEngine::init() {
 	initMenu();
-
-	playMusic();
 }
 
 void GameEngine::initGame() {
 	gameWindow.setFramerateLimit(60);
 
 	if (gameMode != paused) {
-		loadLevel(levelManager.getLevel1());
 		player.init();
+		loadLevel(levelManager.getLevel1());
 
 		gameBar.setFillColor(sf::Color(59, 30, 11));
 		chatBar.setFillColor(sf::Color(0,0,0,200));
@@ -61,6 +59,8 @@ void GameEngine::initGame() {
 
 		//storyManager.playLogoIntro();
 		storyManager.playTextIntro();
+
+		addEntities();
 	}
 	else {
 		sf::Vector2u winSize = gameWindow.getSize();
@@ -71,7 +71,7 @@ void GameEngine::initGame() {
 	gameMode = game;
 	gameWindow.setVisible(true); menuWindow.setVisible(false);
 
-	addEntities();
+	playMusic();
 }
 
 void GameEngine::initMenu() {
@@ -95,6 +95,8 @@ void GameEngine::initMenu() {
 		gameMode = menu;
 		gameWindow.setVisible(false);
 	}
+
+	playMusic();
 	
 	menuWindow.setVisible(true);
 }
@@ -257,6 +259,18 @@ void GameEngine::handleEvent(sf::Event event) {
 		loadLevel(levelManager.getLevel4());
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5))
 		loadLevel(levelManager.getLevel5());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6))
+		loadLevel(levelManager.getLevel6());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7))
+		loadLevel(levelManager.getLevel7());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8))
+		loadLevel(levelManager.getLevel8());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num9))
+		loadLevel(levelManager.getLevel9());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0))
+		loadLevel(levelManager.getLevel10());
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Hyphen))
+		loadLevel(levelManager.getLevel11());
 
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(gameWindow);
 	sf::Vector2f worldPos = gameWindow.mapPixelToCoords(pixelPos);
@@ -294,6 +308,7 @@ void GameEngine::handleEvent(sf::Event event) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			btnPlay->getSprite()->setTextureRect(sf::IntRect(257, 0, 256, 75));
 		if (event.type == sf::Event::MouseButtonReleased) {
+			playSoundEffect("src/resources/sounds/main_menu_click.wav");
 			initGame();
 			btnPlay->getSprite()->setTextureRect(sf::IntRect(0, 0, 256, 75));
 		}
@@ -304,6 +319,7 @@ void GameEngine::handleEvent(sf::Event event) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			btnOptions->getSprite()->setTextureRect(sf::IntRect(449, 0, 448, 75));
 		if (event.type == sf::Event::MouseButtonReleased) {
+			playSoundEffect("src/resources/sounds/main_menu_click.wav");
 			btnOptions->getSprite()->setTextureRect(sf::IntRect(0, 0, 448, 75));
 		}
 	}
@@ -313,6 +329,7 @@ void GameEngine::handleEvent(sf::Event event) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			btnExit->getSprite()->setTextureRect(sf::IntRect(255, 0, 254, 75));
 		if (event.type == sf::Event::MouseButtonReleased) {
+			playSoundEffect("src/resources/sounds/main_menu_click.wav");
 			menuWindow.close();
 			btnExit->getSprite()->setTextureRect(sf::IntRect(0, 0, 254, 75));
 		}
@@ -339,6 +356,10 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 	sf::String title("SuperNova - Level " + std::to_string(level.levelNumber));
 	gameWindow.setTitle(title);
 	setWindowView(gameWindow, tileSize * level.width, tileSize * level.height);
+
+	sf::Vector2f pixiPos(player.getX() + 16, player.getY());
+
+	pixiguide->getSprite()->setPosition(sf::Vector2f(pixiPos.x - 64, pixiPos.y - 64));
 }
 
 //
@@ -348,16 +369,34 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 void GameEngine::playMusic()
 {
 	// Open the Background Music
-	if (!music.openFromFile("src/resources/sounds/background_sound.wav")) {
-		std::cout << "Could not load background_music" << std::endl;
-		return;
+	if (gameMode == menu || gameMode == paused) {
+		if (!music.openFromFile("src/resources/sounds/main_menu_sound.wav")) {
+			std::cout << "Could not load main_menu_sound" << std::endl;
+			return;
+		}
 	}
+	else
+		if (!music.openFromFile("src/resources/sounds/background_sound.wav")) {
+			std::cout << "Could not load background_music" << std::endl;
+			return;
+		}
 
 	music.setVolume(10);
 
 	music.setLoop(true);         // make it loop
 	// Play it
 	music.play();
+}
+
+void GameEngine::playSoundEffect(const std::string& filePath) {
+	if (!soundEffect.openFromFile(filePath)) {
+		std::cout << "Could not load " << filePath << std::endl;
+		return;
+	}
+
+	soundEffect.setVolume(10);
+
+	soundEffect.play();
 }
 
 //
@@ -390,13 +429,14 @@ void GameEngine::setWindowView(sf::RenderWindow& window, float width, float heig
 // Updates all game objects
 //
 void GameEngine::updateGame() {
+	Sprite::animateAll();
+
 	if (scenePlaying || displayingText) {
 		storyManager.update();
 		return;
 	}
 
 	if (player.transitioningLeft) {
-		std::cout << levelManager.getCurrentLevel().levelNumber << std::endl;
 		loadLevel(*levelManager.currentLevel.left);
 		player.transitioningLeft = false;
 	}
@@ -415,14 +455,6 @@ void GameEngine::updateGame() {
 
 	player.update(levelManager.getCurrentLevel());
 
-	Sprite::animateAll();
-
-	sf::Vector2i pixelPos(player.getX(), player.getY());
-	sf::Vector2f worldPos = gameWindow.mapPixelToCoords(pixelPos);
-	pixiguide->getSprite()->setPosition(sf::Vector2f((pixelPos.x - (4.5 * 64)) * 1.1, (pixelPos.y - (2*64))/1.2));
-	/*if (player.getBoundingBox().intersects(pixiguide->getBoundingBox())) {
-		pixiguide->getSprite()->move(100,0);
-	}*/
 	for (auto e : enemies.getEntitiesInteractable()) {
 		if (player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && !e->getSprite()->animating) {
 			e->getSprite()->animateOnce();

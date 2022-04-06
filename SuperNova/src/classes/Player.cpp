@@ -4,6 +4,7 @@
 
 float playerJumpSpeed, playerSpeed, playerSize, animationPerFrame = 1.0f / 8.0f, jumpHeight = 0;
 int frameCount = 0, offset = 0;
+int frameCountJetPack = 0, offsetJetPack = 0;
 const float gravity = 1.f;
 sf::Vector2f velocity(0, 0);
 bool grounded = true, jumping = false, ceilingBump = false, crouchPlayed = false;
@@ -34,7 +35,7 @@ void Player::init() {
 	//this is the Size of the player
 	//playerSize = 64/834.f;
 	playerSize = 2.f;
-	
+
 	//setting the initial size of the player.
 	playerSprite.setScale(playerSize, playerSize);
 
@@ -42,24 +43,32 @@ void Player::init() {
 		std::cout << "Could not load astronaut texture" << std::endl;
 	}
 	playerSprite.setTexture(texture);
-
-	//the set Origin will put a "point" in the middle of the sprite and the sprite will now rotate around that point when manipulated.
-	playerSprite.setOrigin((sf::Vector2f)texture.getSize() / 2.f);
 }
 
 void Player::animate() {
-	if (stoppedRight && !moving)
-		playerSprite.setTextureRect(sf::IntRect(0, 0, 32, 64));
-	else if (stoppedLeft && !moving)
-		playerSprite.setTextureRect(sf::IntRect(0, 32 * 2, 32, 64));
+	if (stoppedRight && !moving) {
+		if (jetPack && !grounded) playerSprite.setTextureRect(sf::IntRect(0, 322, 38, 64));
+		else playerSprite.setTextureRect(sf::IntRect(0, 0, 32, 64));
+	}
+	else if (stoppedLeft && !moving) {
+		if (jetPack && !grounded) playerSprite.setTextureRect(sf::IntRect(116, 322, 38, 64));
+		else playerSprite.setTextureRect(sf::IntRect(0, 32 * 2, 32, 64));
+	}
 
 	frameCount++;
+	frameCountJetPack++;
 	if ((int)(frameCount * animationPerFrame) > offset) offset++;
+	if ((int)(frameCountJetPack * animationPerFrame) > offsetJetPack) offsetJetPack++;
 
 	//There are 8 frames for walking now, this allows each frame to cycle and then reset when the last frame is projected onto the screen
 	if (offset == 8) {
 		frameCount = 0;
 		offset = 0;
+	}
+
+	if (offsetJetPack == 3) {
+		frameCountJetPack = 0;
+		offsetJetPack = 0;
 	}
 }
 
@@ -104,19 +113,18 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)) {
 		jetPack = true;
-
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
 		jetPack = false;
 	}
-	if(jetPack){
-		if(checkCollision(0, currentLevel))
+	if (jetPack) {
+		if (checkCollision(0, currentLevel))
 			if (!ceilingBump) {
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
 					velocity.y = -playerJumpSpeed;
 				}
 				if (!grounded || velocity.y < 0) {
-					velocity.y += gravity;
+					velocity.y = velocity.y * .9f + gravity;
 				}
 				else {
 					velocity.y = 0;
@@ -125,10 +133,11 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 			else {
 				velocity.y = 1;
 				ceilingBump = false;
+				jumping = false;
 			}
 	}
 	else {
-		if (!jumping) {
+		if (!jumping && !ceilingBump) {
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && grounded) {
 				velocity.y = -playerJumpSpeed;
 				jumping = true;
@@ -137,14 +146,26 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 			}
 			else if (!grounded || velocity.y < 0) {
 				//if player is suspended in air, then the jumping animation is set depending on direction astronaut is facing
-				velocity.y = velocity.y * .9f + gravity;
+				velocity.y = velocity.y * .95f + gravity;
 			}
-			else
+			else {
+				//if s key is pressed, the astronaut crouches and cannot move along the x-axis 
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && stoppedRight) {
+					playerSprite.setTextureRect(sf::IntRect(0, 192, 44, 64));
+					velocity.x = 0;
+				}
+				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && stoppedLeft) {
+					playerSprite.setTextureRect(sf::IntRect(44, 192, 44 * 2, 64));
+					velocity.x = 0;
+				}
+
+				playCrouchSound();
 				velocity.y = 0;
+			}
 		}
 		else {
 			if (ceilingBump) {
-				velocity.y = 0;
+				velocity.y = 1;
 				ceilingBump = false;
 				jumping = false;
 			}
@@ -158,7 +179,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 			}
 		}
 	}
-	if (!grounded || jumping) {
+	if (!jetPack && (!grounded || jumping)) {
 		if (stoppedRight) {
 			playerSprite.setTextureRect(sf::IntRect(0, 128, 44, 64));
 		}
@@ -166,13 +187,20 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 			playerSprite.setTextureRect(sf::IntRect(44, 128, 44 * 2, 64));
 		}
 	}
+	else if (jetPack && !grounded) {
+		if (stoppedRight) {
+			playerSprite.setTextureRect(sf::IntRect(offsetJetPack * 38, 322, 38, 64));
+		}
+		else if (stoppedLeft) {
+			playerSprite.setTextureRect(sf::IntRect((offsetJetPack * 38)+114, 322, 38, 64));
+		}
+	}
 
 	// sets player's position to always be on top of a block (not a few pixels inside of it)
-	float bot = ceil(playerSprite.getGlobalBounds().top + 128);
-	if (grounded && !jumping && (int)bot % 64 != 0) {
+	sf::Vector2f pos = playerSprite.getPosition();
+	if (grounded && !jumping && (int)(pos.y+128) % 64 != 0) {
 
-		sf::Vector2f pos = playerSprite.getPosition();
-		pos.y = (int)(floor(bot / 64) * 64) + 128;
+		pos.y = (int)((pos.y + 10) / 64) * 64;
 
 		playerSprite.setPosition(pos);
 	}
@@ -242,25 +270,23 @@ bool Player::checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vecto
 }
 
 /*void Player::checkTransitionCollision(sf::Vector2f topRight, sf::Vector2f botRight, sf::Vector2f topLeft, sf::Vector2f botLeft, LevelManager::Level currentLevel) {
-
 	bool blockTopLeftHigh = checkTile(currentLevel, topRight, currentLevel.transitionTile), blockBotLeftHigh = checkTile(currentLevel, botRight, currentLevel.transitionTile),
 		blockTopRightHigh = checkTile(currentLevel, topLeft, currentLevel.transitionTile), blockBotRightHigh = checkTile(currentLevel, botLeft, currentLevel.transitionTile);
-
 	if (blockBotRightHigh || blockTopRightHigh || blockBotLeftHigh || blockTopLeftHigh) {
 		readyToTransition = true;*/
 
 bool Player::checkTransitionCollision(float left, float right, float top, float bot, float velo, sf::Vector2f botRightHigh, sf::Vector2f botLeftHigh, sf::Vector2f topRightHigh, sf::Vector2f topLeftHigh, LevelManager::Level currentLevel) {
 	bool checkLeftEdge = left + velo <= 6;
 	bool checkRightEdge = right + velo >= (currentLevel.width * 64) - 6;
-	bool checkBotEdge = bot + velo >= (currentLevel.height * 64) - 6;
+	bool checkBotEdge = bot + velo >= (currentLevel.height * 64) - 12;
 	bool checkTopEdge = top - velo <= 63;
 	//std::cout << top - velo << std::endl;
 
-	if (checkLeftEdge|| checkRightEdge || checkBotEdge || checkTopEdge) {
+	if (checkLeftEdge || checkRightEdge || checkBotEdge || checkTopEdge) {
 		if (checkLeftEdge)
 			transitioningLeft = true;
 		if (checkRightEdge)
-			transitioningRight= true;
+			transitioningRight = true;
 		if (checkBotEdge)
 			transitioningBot = true;
 		if (checkTopEdge)
@@ -307,7 +333,7 @@ void Player::playCrouchSound()
 	//sound for crouch
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && music.getStatus() == sf::SoundSource::Stopped && !crouchPlayed)
 	{
-		if (!music.openFromFile("src/resources/sounds/astronaut_crouch.wav")) 
+		if (!music.openFromFile("src/resources/sounds/astronaut_crouch.wav"))
 		{
 			std::cout << "Could not load astronaut crouch sound" << std::endl;
 			return;
@@ -331,4 +357,19 @@ void Player::playJumpSound() {
 	music.setVolume(5);
 
 	music.play();
+}
+
+void Player::playWalkSound()
+{
+	//sound for jump
+	if (music.getStatus() == sf::SoundSource::Stopped) {
+		if (!music.openFromFile("src/resources/sounds/astronaut_walking.wav"))
+		{
+			std::cout << "Could not load astronaut walk sound" << std::endl;
+			return;
+		}
+		music.setVolume(100);
+
+		music.play();
+	}
 }
