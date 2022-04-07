@@ -5,7 +5,6 @@ bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize, const int*
     // load the tileset texture
     if (!m_tileset.loadFromFile(tileset))
         return false;
-    colMap.clear();
     // resize the vertex array to fit the level size
     m_vertices.setPrimitiveType(sf::Quads);
     m_vertices.resize(width * height * 4);
@@ -52,7 +51,7 @@ void TileMap::draw(sf::RenderTarget & target, sf::RenderStates states) const
 std::vector<std::vector<int>> TileMap::loadColMap( const int* tiles, unsigned int width, unsigned int height)
 {
 
-    colMap.clear();
+    std::vector<std::vector<int>> colMap;
     
     for (int i = 0; i < height; i++) {
         std::vector<int> row;
@@ -60,13 +59,13 @@ std::vector<std::vector<int>> TileMap::loadColMap( const int* tiles, unsigned in
             // get the current tile number
             int tileNumber = tiles[(i*width)+j];
             if (tileNumber==31) {
-                row.push_back(4);
+                row.push_back(transitionTile);
             }
-            else if (tileNumber > 0) {
-                row.push_back(1);
+            else if (tileNumber > 1) {
+                row.push_back(collisionTile);
             }
             else {
-                row.push_back(0);
+                row.push_back(emptyTile);
             }
         }
         colMap.push_back(row);
@@ -74,12 +73,24 @@ std::vector<std::vector<int>> TileMap::loadColMap( const int* tiles, unsigned in
   
 
     //print out the colMap for debug purposes
-    //for (int i = 0; i < height; i++) {
-   //    for (int j = 0; j < width; j++) {
-    //       std::cout << colMap.at(i).at(j);
-    //    }
-    //    std::cout << std::endl;
-    //}
+    /*for (int i = 0; i < height; i++) {
+       for (int j = 0; j < width; j++) {
+           std::cout << colMap.at(i).at(j);
+        }
+        std::cout << std::endl;
+    }*/
     return colMap;
 
+}
+
+int TileMap::getTransitionTile() {
+    return transitionTile;
+}
+
+int TileMap::getCollisionTile() {
+    return collisionTile;
+}
+
+int TileMap::getEmptyTile() {
+    return emptyTile;
 }
