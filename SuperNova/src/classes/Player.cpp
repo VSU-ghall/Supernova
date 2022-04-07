@@ -9,6 +9,7 @@ const float gravity = 1.f;
 sf::Vector2f velocity(0, 0);
 bool grounded = true, jumping = false, ceilingBump = false, crouchPlayed = false;
 bool readyToTransition = false;
+int jetpackFuel;
 float Player::getX() {
 	return x;
 }
@@ -32,6 +33,7 @@ void Player::init() {
 	y = startPosition.y * tileSize;
 
 	jetPack = false;
+	jetpackFuel = JETPACK_MAXIMUM;
 	//this is the Size of the player
 	//playerSize = 64/834.f;
 	playerSize = 2.f;
@@ -80,7 +82,10 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 
 	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		crouchPlayed = false;
-
+	if (grounded && jetpackFuel < JETPACK_MAXIMUM) {
+		jetpackFuel++;
+		std::cout << jetpackFuel << std::endl;
+	}
 	if (grounded &&
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::D) &&
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::A) &&
@@ -117,23 +122,31 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
 		jetPack = false;
 	}
+
 	if (jetPack) {
+
 		if (checkCollision(0, currentLevel))
+			
 			if (!ceilingBump) {
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)&& jetpackFuel>0) {
 					velocity.y = -playerJumpSpeed;
+					jetpackFuel--;
 				}
+
 				if (!grounded || velocity.y < 0) {
 					velocity.y = velocity.y * .9f + gravity;
 				}
 				else {
 					velocity.y = 0;
+					
 				}
 			}
 			else {
 				velocity.y = 1;
 				ceilingBump = false;
 				jumping = false;
+				if (jetpackFuel > 0)
+				jetpackFuel--;
 			}
 	}
 	else {

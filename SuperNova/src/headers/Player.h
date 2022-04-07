@@ -40,5 +40,9 @@ class Player
 		void playCrouchSound();
 		void playJumpSound();
 		void playWalkSound();
+
+
+		//Constents
+		int const JETPACK_MAXIMUM = 75;
 };
 
