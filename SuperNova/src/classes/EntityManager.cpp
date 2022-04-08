@@ -26,33 +26,58 @@ void EntityManager::update() {
 	}
 }
 
+////helper method that iterates through a given vector and removes any entities that are not alive
+//void EntityManager::removeDeadEntities(EntityVector& vector) {
+//	for (auto iterator = vector.begin(); iterator != vector.end(); iterator++) {
+//		auto e = *iterator;
+//		if (e->getIsActive() == false) {
+//			vector.erase(iterator);
+//			if (!vector.empty()) {
+//				iterator--;
+//			}
+//			else {
+//				break;
+//			}
+//		}
+//	}
+//}
+
 //helper method that iterates through a given vector and removes any entities that are not alive
 void EntityManager::removeDeadEntities(EntityVector& vector) {
-	for (auto iterator = vector.begin(); iterator != vector.end(); iterator++) {
-		auto e = *iterator;
-		if (e->getIsActive() == false) {
-			vector.erase(iterator);
-			if (!vector.empty()) {
-				iterator--;
-			}
-			else {
-				break;
-			}
+	std::list<std::shared_ptr<Entity>>::iterator i = vector.begin();
+	while (i != vector.end()) {
+		if (i->get()->getIsActive() == false) {
+			vector.erase(i++);  // alternatively, i = items.erase(i);
+		}
+		else {
+			i++;
 		}
 	}
 }
 
+//void EntityManager::removeUninteractableEntities(EntityVector& vector) {
+//	for (auto iterator = vector.begin(); iterator != vector.end(); iterator++) {
+//		auto e = *iterator;
+//		if (e->getIsInteractable() == false) {
+//			vector.erase(iterator);
+//			if (!vector.empty()) {
+//				iterator--;
+//			}
+//			else {
+//				break;
+//			}
+//		}
+//	}
+//}
+
 void EntityManager::removeUninteractableEntities(EntityVector& vector) {
-	for (auto iterator = vector.begin(); iterator != vector.end(); iterator++) {
-		auto e = *iterator;
-		if (e->getIsInteractable() == false) {
-			vector.erase(iterator);
-			if (!vector.empty()) {
-				iterator--;
-			}
-			else {
-				break;
-			}
+	std::list<std::shared_ptr<Entity>>::iterator i = vector.begin();
+	while (i != vector.end()){
+		if (i->get()->getIsInteractable() == false){
+			vector.erase(i++);  // alternatively, i = items.erase(i);
+		}
+		else {
+			i++;
 		}
 	}
 }
@@ -69,6 +94,7 @@ std::shared_ptr<Entity> EntityManager::addEntity(const std::string& tag) {
 std::shared_ptr<Entity> EntityManager::addEntity(Entity e) {
 	auto entity = std::make_shared<Entity>(std::move(e));
 	entitiesToAdd.push_back(entity);
+	numEntities++;
 	return entity;
 
 }
