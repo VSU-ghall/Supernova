@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/window.hpp>
 #include <SFML/Audio.hpp>
+#include <stdlib.h>
 #include <iostream>
 #include "headers/Player.h"
 #include "headers/TileMap.h"
@@ -18,37 +19,50 @@ private:
 	StoryManager storyManager;
 	const int tileSize = 64;
 	float viewWidth, viewHeight;
-	bool scenePlaying = false;
+	bool scenePlaying = false, displayingText = false;
 
 	// creates global window
-	sf::RenderWindow window;
+	sf::RenderWindow gameWindow, menuWindow;
 	sf::View view;
-	sf::Music music;
-	Sprite *btnLevel1 = new Sprite("src/resources/Level1Button.png"), 
-		*btnLevel2 = new Sprite("src/resources/Level2Button.png"),
-		*pixiguide = new Sprite("src/resources/pixiguide.png", true, false, 6, 32, 48, 1.0f, 150);
+	sf::Music music, soundEffect;
+	Sprite *btnMenu = new Sprite("src/resources/MenuButton.png"),
+		*pixiguide = new Sprite("src/resources/pixiguide.png", true, false, 6, 32, 48, 1.0f, 150),
+		*btnPlay = new Sprite("src/resources/MenuPlayButton.png"),
+		*btnOptions = new Sprite("src/resources/MenuOptionsButton.png"),
+		*btnExit = new Sprite("src/resources/MenuExitButton.png");
 	sf::Texture backgroundTexture;
-	sf::RectangleShape gamebar;
+	sf::RectangleShape gameBar, chatBar, blackRect, jetpackIcon;
 	sf::Texture texture;
-	std::vector<Vector2> levelVector;
+	sf::Vector2f pixiLocation;
+
+	enum Mode {menu, game, paused};
+	Mode gameMode;
+
+	EntityManager enemies;
 
 public:
 	GameEngine();
 
 	LevelManager* getLevelManager() { return &levelManager; }
 	Player* getPlayer() { return &player; };
-	sf::RenderWindow* getWindow() { return &window; }
-	bool isScenePlaying() { return scenePlaying; }
+	sf::RenderWindow* getWindow() { return &gameWindow; }
 
 	void run();
 	void init();
-	void draw();
+	void initGame();
+	void initMenu();
+	void drawGame();
 	void drawGrid();
+	void drawMenu();
 	sf::View getViewport(float width, float height);
 	void handleEvent(sf::Event event);
 	void loadLevel(LevelManager::Level level);
 	void playMusic();
-	void startplayingScene() { scenePlaying = true; }
-	void stopPlayingScene() { scenePlaying = false; }
-	void update();
+	void playSoundEffect(const std::string& filePath);
+	void setWindowView(sf::RenderWindow &window, float width, float height);
+	void updateGame();
+	void updateMenu();
+	sf::Vector2f updatePixi();
+
+	void addEntities();
 };

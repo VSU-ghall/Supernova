@@ -25,7 +25,9 @@ Sprite::Sprite(const std::string& filePath, bool animated, bool random, int numF
 	this->frequency = frequency;
 
 	sprite.setScale(sf::Vector2f(scale, scale));
-	animating = true;
+	if (animated) animating = true;
+
+	if (!animated) sprite.setTextureRect(sf::IntRect(0,0, width, height));
 }
 
 void Sprite::animate() {
@@ -33,11 +35,27 @@ void Sprite::animate() {
 
 		if (random) {
 			offset = std::rand() % numFrames;
-			sprite.setTextureRect(sf::IntRect(offset * width, 0, width, height));
+			sprite.setTextureRect(sf::IntRect(offset * width, 0, width-boundWidth, height-boundHeight));
 		}
 		else {
-			sprite.setTextureRect(sf::IntRect(offset++ * width, 0, width, height));
+			sprite.setTextureRect(sf::IntRect(offset++ * width, 0, width-boundWidth, height-boundHeight));
 			if (offset == numFrames) offset = 0;
+		}
+
+		//std::cout << "offset: " << offset << std::endl;
+
+		timer.restart();
+	}
+}
+
+void Sprite::animateOnce() {
+	if (!animating) animating = true;
+	if (timer.getElapsedTime().asMilliseconds() >= frequency) {
+
+		sprite.setTextureRect(sf::IntRect(offset++ * width, 0, width, height));
+		if (offset == numFrames) {
+			offset = 0;
+			animating = false;
 		}
 
 		//std::cout << "offset: " << offset << std::endl;
@@ -50,6 +68,10 @@ void Sprite::animateAll() {
 	for (Sprite* s : sprites) {
 		if (s->animated && s->animating) {
 			s->animate();
+		}
+
+		if (!s->animated && s->animating) {
+			if (s->offset != s->numFrames) s->animateOnce();
 		}
 	}
 }
@@ -72,4 +94,13 @@ sf::Clock Sprite::getTimer()
 
 int Sprite::getWidth() {
 	return width;
+}
+
+sf::FloatRect Sprite::getBoundingBox() {
+	return sprite.getGlobalBounds();
+}
+
+void Sprite::setBounds(int width, int height) {
+	boundWidth = floor(floor(scale*this->width - width) / scale);
+	boundHeight = ceil((ceil(scale * this->height) - height) / scale);
 }
