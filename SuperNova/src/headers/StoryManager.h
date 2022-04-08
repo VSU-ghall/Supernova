@@ -37,8 +37,9 @@ private:
 
 	/*** Sprites and Textures ***/
 	sf::RectangleShape blackRect, logoImg;
-	Sprite* rocket, *astronaut, *planetSurfaceBackground = 
-		new Sprite("src/resources/planet_surface.png", false, false, 1, 200, 120, 7.0, 0);
+	Sprite* rocket, * astronaut, * planetSurfaceBackground =
+		new Sprite("src/resources/planet_surface.png", false, false, 1, 200, 120, 7.0, 0),
+		* pixiIcon = new Sprite("src/resources/pixiguide.png", false, false, 6, 32, 48, 3.0f, 150);
 	sf::Texture logoImgText;
 	sf::Text displayText; sf::Font font;
 

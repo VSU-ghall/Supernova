@@ -1,15 +1,18 @@
 #pragma once
 #include "Vector2.h"
 #include "iostream"
+#include <array>
 #include <headers/TileMap.h>
 #include <headers/Sprite.h>
 #include <vector>
 #include <headers/Entity.h>
+#include <headers/Object.h>
 
 static class LevelManager
 {
 	public:
 		int numberOfLevels = 0;
+		std::vector<Object*> icons;
 
 		struct Level {
 			LevelManager* levelManager;
@@ -30,6 +33,7 @@ static class LevelManager
 			Level* bot;
 
 			std::vector<Entity> enemies;
+			std::vector<Object*> objects;
 			std::string levelName;
 
 		} testLevel = {this}, 
@@ -63,6 +67,7 @@ static class LevelManager
 		Level getLevel11();
 		Level getTestLevel();
 		TileMap getMap();
+		void removeItem(Level level, Object item);
 		void setLevel(Level level);
 
 	private:

@@ -47,15 +47,12 @@ void GameEngine::initGame() {
 	gameWindow.setFramerateLimit(60);
 
 	if (gameMode != paused) {
-		player.init();
+		player.init(&displayingText);
 		loadLevel(levelManager.getLevel1());
 
 		gameBar.setFillColor(sf::Color(59, 30, 11));
 		chatBar.setFillColor(sf::Color(0,0,0,200));
 		btnMenu->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
-
-		jetpackIcon.setSize(sf::Vector2f(64, 64));
-		jetpackIcon.setFillColor(sf::Color::Red);
 
 		//storyManager.playLogoIntro();
 		storyManager.playTextIntro();
@@ -119,12 +116,11 @@ void GameEngine::drawGame() {
 	gameWindow.draw(*pixiguide->getSprite());
 
 	gameWindow.draw(gameBar);
-	gameWindow.draw(jetpackIcon);
+	for (auto obj : levelManager.icons) gameWindow.draw(*obj->getIcon()->getSprite());
 	gameWindow.draw(*btnMenu->getSprite());
 
 	if (displayingText) gameWindow.draw(chatBar);
 
-	enemies.update();
 	if (!scenePlaying) {
 		for (auto e : enemies.getEntities()) {
 			if (e->getTag() == levelManager.getCurrentLevel().levelName) {
@@ -133,6 +129,13 @@ void GameEngine::drawGame() {
 			}
 			
 		}
+
+		if (!levelManager.currentLevel.objects.empty())
+			for (auto obj : levelManager.currentLevel.objects) {
+
+				gameWindow.draw(*obj->getObject()->getSprite());
+				if (obj->hasIcon()) gameWindow.draw(*obj->getIcon()->getSprite());
+			}
 	}
 	
 	if (scenePlaying || displayingText) storyManager.draw();
@@ -229,10 +232,14 @@ void GameEngine::handleEvent(sf::Event event) {
 		if (gameMode == game) {
 			// Set the game bar and contents
 			gameBar.setSize(sf::Vector2f(view.getSize().x, 75));
-			jetpackIcon.setPosition(gameBar.getPosition().x + 10, 
-				gameBar.getPosition().y + ((gameBar.getSize().y - jetpackIcon.getSize().y)/2));
+
+			// Populate all the item icons
+			for (auto obj : levelManager.icons)
+				obj->getIcon()->getSprite()->setPosition(gameBar.getPosition().x + (10 * (obj->getIndex()+1) ) + (obj->getSize().x * obj->getIndex()),
+					gameBar.getPosition().y + ((gameBar.getSize().y - obj->getSize().y) / 2));
+
 			btnMenu->getSprite()->setPosition(gameBar.getSize().x - 
-				(btnMenu->getTexture().getSize().x/2) - 10, gameBar.getPosition().y + 5);
+								(btnMenu->getTexture().getSize().x/2) - 10, gameBar.getPosition().y + 5);
 			
 			// Set the text bar
 			chatBar.setSize(sf::Vector2f(view.getSize().x, 100));
@@ -273,20 +280,23 @@ void GameEngine::handleEvent(sf::Event event) {
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(gameWindow);
 	sf::Vector2f worldPos = gameWindow.mapPixelToCoords(pixelPos);
 
-	// Check if Jetpack Icon is clicked
-	if (gameMode == game && jetpackIcon.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
-		/*if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-			btnMenu->getSprite()->setTextureRect(sf::IntRect(149, 0, 150, 65));*/
-		if (event.type == sf::Event::MouseButtonReleased) {
-			if (player.jetPack) {
-				player.jetPack = false;
-				jetpackIcon.setFillColor(sf::Color::Red);
-			}else {
-				player.jetPack = true;
-				jetpackIcon.setFillColor(sf::Color::Green);
+	// Check if icons are clicked
+	if (gameMode == game && event.type == sf::Event::MouseButtonReleased)
+		for (auto obj : levelManager.icons) {
+			if (obj->getIcon()->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y) && !obj->hasHiddenIcon()) {
+				// Jetpack
+				if (obj->getIconIndex() == 0) {
+					if (player.jetPack) {
+						player.jetPack = false;
+						obj->getIcon()->getSprite()->setColor(sf::Color(100, 100, 100, 255));
+					}
+					else {
+						player.jetPack = true;
+						obj->getIcon()->getSprite()->setColor(sf::Color(255, 255, 255, 255));
+					}
+				}
 			}
 		}
-	}
 
 	// Check if game Menu Button is clicked
 	if (gameMode == game && btnMenu->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y)) {
@@ -431,10 +441,12 @@ void GameEngine::setWindowView(sf::RenderWindow& window, float width, float heig
 void GameEngine::updateGame() {
 	Sprite::animateAll();
 
-	if (scenePlaying || displayingText) {
+	if (scenePlaying) {
 		storyManager.update();
 		return;
 	}
+
+	if (displayingText) storyManager.update();
 
 	if (player.transitioningLeft) {
 		loadLevel(*levelManager.currentLevel.left);
@@ -455,6 +467,7 @@ void GameEngine::updateGame() {
 
 	player.update(levelManager.getCurrentLevel());
 
+	enemies.update();
 	for (auto e : enemies.getEntitiesInteractable()) {
 		if (player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && !e->getSprite()->animating) {
 			e->getSprite()->animateOnce();
