@@ -56,7 +56,6 @@ void GameEngine::initGame() {
 
 		//storyManager.playLogoIntro();
 		storyManager.playTextIntro();
-
 		addEntities();
 	}
 	else {
@@ -370,6 +369,7 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 	sf::Vector2f pixiPos(player.getX() + 16, player.getY());
 
 	pixiguide->getSprite()->setPosition(sf::Vector2f(pixiPos.x - 64, pixiPos.y - 64));
+
 }
 
 //
