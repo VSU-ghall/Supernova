@@ -119,13 +119,12 @@ void LevelManager::init() {
 
 		level4.top = &level3;
 
-		Object* jetpack = new Object(level4.objects.size(), new Sprite("src/resources/jetpack_icon.png", false, false, 1, 32, 32, 2.f, 0));
+		Object* jetpack = new Object(level4.objects.size(), icons.size(), new Sprite("src/resources/jetpack_icon.png", false, false, 1, 32, 32, 2.f, 0));
 		jetpack->setIcon(true);
 		jetpack->getObject()->getSprite()->setPosition(15 * 64, 8 * 64);
 		
 		level4.objects.push_back(jetpack);
 		icons.push_back(jetpack);
-
 
 	level5.map = new int[level5.width * level5.height]{
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,

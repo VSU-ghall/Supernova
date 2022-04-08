@@ -236,9 +236,9 @@ void GameEngine::handleEvent(sf::Event event) {
 			gameBar.setSize(sf::Vector2f(view.getSize().x, 75));
 
 			// Populate all the item icons
-			for (auto i : levelManager.icons)
-				i->getIcon()->getSprite()->setPosition(gameBar.getPosition().x + 10, 
-					gameBar.getPosition().y + ((gameBar.getSize().y - i->getSize().y) / 2));
+			for (auto obj : levelManager.icons)
+				obj->getIcon()->getSprite()->setPosition(gameBar.getPosition().x + (10 * (obj->getIndex()+1) ) + (obj->getSize().x * obj->getIndex()),
+					gameBar.getPosition().y + ((gameBar.getSize().y - obj->getSize().y) / 2));
 
 			btnMenu->getSprite()->setPosition(gameBar.getSize().x - 
 								(btnMenu->getTexture().getSize().x/2) - 10, gameBar.getPosition().y + 5);
@@ -286,13 +286,16 @@ void GameEngine::handleEvent(sf::Event event) {
 	if (gameMode == game && event.type == sf::Event::MouseButtonReleased)
 		for (auto obj : levelManager.icons) {
 			if (obj->getIcon()->getSprite()->getGlobalBounds().contains(worldPos.x, worldPos.y) && !obj->hasHiddenIcon()) {
-				if (player.jetPack) {
-					player.jetPack = false;
-					obj->getIcon()->getSprite()->setColor(sf::Color(100, 100, 100, 255));
-				}
-				else {
-					player.jetPack = true;
-					obj->getIcon()->getSprite()->setColor(sf::Color(255, 255, 255, 255));
+				// Jetpack
+				if (obj->getIconIndex() == 0) {
+					if (player.jetPack) {
+						player.jetPack = false;
+						obj->getIcon()->getSprite()->setColor(sf::Color(100, 100, 100, 255));
+					}
+					else {
+						player.jetPack = true;
+						obj->getIcon()->getSprite()->setColor(sf::Color(255, 255, 255, 255));
+					}
 				}
 			}
 		}

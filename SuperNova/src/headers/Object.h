@@ -6,10 +6,11 @@ class Object
 {
 	public:
 		Object();
-		Object(int index, Sprite* sprite);
+		Object(int index, int iconIndex, Sprite* sprite);
 
 		Sprite* getObject();
 		Sprite* getIcon();
+		int getIconIndex();
 		int getIndex();
 		sf::Vector2i getSize();
 		bool isHidden();
@@ -27,7 +28,7 @@ class Object
 
 	private:
 		Sprite* sprite, *icon;
-		int index;
+		int index, iconIndex;
 		bool hidden = false, hiddenIcon = true, active = false, boolIcon = false;
 };
 

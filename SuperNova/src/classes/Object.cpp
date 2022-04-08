@@ -1,11 +1,12 @@
 #include "headers\Object.h"
 
-Object::Object(int index, Sprite* sprite) {
-	this->sprite = sprite; this->index = index;
+Object::Object(int index, int iconIndex, Sprite* sprite) {
+	this->sprite = sprite; this->index = index; this->iconIndex = iconIndex;
 }
 
 Sprite* Object::getObject() { return sprite; }
 Sprite* Object::getIcon() { return icon; }
+int Object::getIconIndex() { return iconIndex; }
 int Object::getIndex() { return index; }
 sf::Vector2i Object::getSize() { return sf::Vector2i(sprite->getTexture().getSize().x * sprite->getScale(),
 														sprite->getTexture().getSize().y * sprite->getScale()); }	
