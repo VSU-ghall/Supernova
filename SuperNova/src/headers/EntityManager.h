@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 #include "Entity.h"
+#include <list>
 #pragma once
 
 /***
@@ -12,7 +13,7 @@ The lecture provided an idea of how to structure the code and methods, but the c
 ***/
 
 //entityVector holds all entities
-typedef std::vector<std::shared_ptr<Entity>> EntityVector;
+typedef std::list<std::shared_ptr<Entity>> EntityVector;
 
 //String is tag. Each vector hold entities that share that tag.
 typedef std::map<std::string, EntityVector> EntityMap;

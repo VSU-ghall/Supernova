@@ -16,19 +16,17 @@ class Player
 		sf::Sprite playerSprite;
 		sf::Texture texture;
 		sf::Music music;
-		bool stoppedLeft = false, stoppedRight = true, moving = false;
-		bool transitioningLeft;
-		bool transitioningRight;
-		bool transitioningTop;
-		bool transitioningBot;
-		bool jetPack;
+		bool stoppedLeft = false, stoppedRight = true, moving = false, jetPack = false;
+		bool transitioningLeft, transitioningRight, transitioningTop, transitioningBot;
+		bool* displayingText;
 		float getX();
 		float getY();
 		sf::FloatRect getBoundingBox();
 
-		void init();
+		void init(bool* displayingText);
 		void animate();
 		void draw(sf::RenderWindow& window);
+		void checkItems(LevelManager::Level currentLevel);
 		bool checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vector2f botLeftHigh, sf::Vector2f topRight, sf::Vector2f topLeft, LevelManager::Level currentLevel);
 		bool checkTransitionCollision(float left, float right, float top, float bot, float velo, sf::Vector2f botRightHigh, sf::Vector2f botLeftHigh, sf::Vector2f topRight, sf::Vector2f topLeft, LevelManager::Level currentLevel);
 		void checkTopBotCollision(sf::Vector2f topRight, sf::Vector2f botRightHigh, sf::Vector2f botRight, sf::Vector2f botMidRight, sf::Vector2f botMid, sf::Vector2f botMidLeft, sf::Vector2f topLeft, sf::Vector2f botLeftHigh, sf::Vector2f botLeft, LevelManager::Level currentLevel);
