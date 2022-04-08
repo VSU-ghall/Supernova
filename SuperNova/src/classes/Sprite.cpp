@@ -9,6 +9,7 @@ Sprite::Sprite(const std::string& filePath) {
 		std::cout << "Could not load sprite at: " << filePath << std::endl;
 
 	sprite.setTexture(texture);
+	this->filePath = filePath;
 
 	sprites.push_back(this);
 }
@@ -76,36 +77,29 @@ void Sprite::animateAll() {
 	}
 }
 
-int Sprite::getHeight() {
-	return height;
-}
+std::string& Sprite::getFilePath() { return filePath; }
 
-float Sprite::getScale() {
-	return scale;
-}
+int Sprite::getFrequency() { return frequency; }
 
-sf::Sprite* Sprite::getSprite()
-{
-	return &sprite;
-}
+int Sprite::getHeight() { return height; }
 
-sf::Texture Sprite::getTexture()
-{
-	return texture;
-}
+int Sprite::getNumFrames() { return numFrames;  }
 
-sf::Clock Sprite::getTimer()
-{
-	return timer;
-}
+float Sprite::getScale() { return scale; }
 
-int Sprite::getWidth() {
-	return width;
-}
+sf::Sprite* Sprite::getSprite() { return &sprite; }
 
-sf::FloatRect Sprite::getBoundingBox() {
-	return sprite.getGlobalBounds();
-}
+sf::Texture Sprite::getTexture() { return texture; }
+
+sf::Clock Sprite::getTimer() { return timer; }
+
+int Sprite::getWidth() { return width; }
+
+sf::FloatRect Sprite::getBoundingBox() { return sprite.getGlobalBounds(); }
+
+bool Sprite::isAnimated() { return animated; }
+
+bool Sprite::isRandom() { return random; }
 
 void Sprite::setBounds(int width, int height) {
 	boundWidth = floor(floor(scale*this->width - width) / scale);
