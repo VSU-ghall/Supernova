@@ -56,6 +56,7 @@ void GameEngine::initGame() {
 
 		//storyManager.playLogoIntro();
 		storyManager.playTextIntro();
+		addEntities();
 	}
 	else {
 		sf::Vector2u winSize = gameWindow.getSize();
@@ -369,7 +370,6 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 
 	pixiguide->getSprite()->setPosition(sf::Vector2f(pixiPos.x - 64, pixiPos.y - 64));
 
-	addEntities();
 }
 
 //
