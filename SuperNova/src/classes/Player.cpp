@@ -225,6 +225,15 @@ void Player::respawn() {
 void Player::update(LevelManager::Level currentLevel) {
 	animate();
 	checkMovement(currentLevel);
+	checkItems(currentLevel);
+}
+
+void Player::checkItems(LevelManager::Level currentLevel) {
+	for (auto obj : currentLevel.objects) {
+		if (!obj->isHidden() && playerSprite.getGlobalBounds().intersects(obj->getObject()->getSprite()->getGlobalBounds())) {
+			if (obj->hasIcon()) obj->collect();
+		}
+	}
 }
 
 //returns false if movement will cause collision. returns true otherwise
