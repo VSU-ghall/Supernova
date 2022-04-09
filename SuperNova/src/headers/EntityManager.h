@@ -27,6 +27,7 @@ private:
 	EntityMap entityMap; //map that stores vectors. each vector stores entities that share the same tag
 	size_t numEntities = 0; //unsigned int used to create unique entity ids
 	EntityVector entitiesInteractable;
+	EntityMap entityMapInteractable;
 
 	void removeDeadEntities(EntityVector& vector); //helper method that iterates through a given vector and removes any entities that are not alive
 	void removeUninteractableEntities(EntityVector& vector);
@@ -41,6 +42,7 @@ public:
 	const EntityVector& getEntities(); //returns a vector containing all entities that are currently alive
 	const EntityVector& getEntitiesInteractable();
 	const EntityVector& getEntities(const std::string& tag); //returns a vector containing all entities that share the tag parameter
+	const EntityVector& getInteractableEntities(const std::string& tag);
 	size_t getNumEntities();
 
 };

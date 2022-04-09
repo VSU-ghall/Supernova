@@ -468,12 +468,15 @@ void GameEngine::updateGame() {
 	player.update(levelManager.getCurrentLevel());
 
 	enemies.update();
-	for (auto e : enemies.getEntitiesInteractable()) {
-		if (player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && !e->getSprite()->animating) {
-			e->getSprite()->animateOnce();
-			e->notInteractable();
+	if (!enemies.getInteractableEntities(levelManager.currentLevel.levelName).empty()) {
+		for (auto& e : enemies.getInteractableEntities(levelManager.currentLevel.levelName)) {
+			if (player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && !e->getSprite()->animating) {
+				e->getSprite()->animateOnce();
+				e->notInteractable();
+			}
 		}
 	}
+	
 }
 
 //
@@ -484,7 +487,7 @@ void GameEngine::updateMenu() {
 }
 
 void GameEngine::addEntities() {
-	for (auto e : levelManager.getCurrentLevel().enemies) {
+	for (auto& e : levelManager.getCurrentLevel().enemies) {
 		enemies.addEntity(e);
 	}
 }
