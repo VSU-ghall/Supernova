@@ -67,4 +67,5 @@ public:
 	sf::Vector2f updatePixi();
 
 	void addEntities();
+	void updateHpBar();
 };

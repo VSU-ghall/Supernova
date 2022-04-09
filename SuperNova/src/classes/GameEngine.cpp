@@ -254,7 +254,7 @@ void GameEngine::handleEvent(sf::Event event) {
 			hpBarBack.setFillColor(sf::Color(50, 50, 50, 200));
 			hpBarBack.setPosition(xPos, yPos);
 
-			hpBarInside.setSize(sf::Vector2f(width, height));
+			hpBarInside.setSize(sf::Vector2f(width * player.getHp(), height));
 			hpBarInside.setFillColor(sf::Color(250, 0, 0, 200));
 			hpBarInside.setPosition(xPos, yPos);
 			
@@ -489,6 +489,7 @@ void GameEngine::updateGame() {
 			if (player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && !e->getSprite()->animating) {
 				e->getSprite()->animateOnce();
 				e->notInteractable();
+				updateHpBar();
 			}
 		}
 	}
@@ -509,4 +510,8 @@ void GameEngine::addEntities() {
 		}
 	}
 	
+}
+
+void GameEngine::updateHpBar() {
+	hpBarInside.setSize(sf::Vector2f(300 *.9, 50));
 }
