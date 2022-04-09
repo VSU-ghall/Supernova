@@ -81,8 +81,11 @@ void LevelManager::init() {
 		Entity spicyFlowerEntity3 = Entity(3, "level2", spicyFlower3, sf::Vector2f(1086.f, 768.f));
 		level2.enemies.push_back(spicyFlowerEntity3);
 		Sprite* spicyFlower4 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 150);
-		Entity spicyFlowerEntity4 = Entity(3, "level2", spicyFlower4, sf::Vector2f(958.f, 768.f));
+		Entity spicyFlowerEntity4 = Entity(4, "level2", spicyFlower4, sf::Vector2f(958.f, 768.f));
 		level2.enemies.push_back(spicyFlowerEntity4);
+		Sprite* spicyFlower5 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 150);
+		Entity spicyFlowerEntity5 = Entity(5, "level2", spicyFlower5, sf::Vector2f(70.f, 384.f));
+		level2.enemies.push_back(spicyFlowerEntity5);
 		allLevels.push_back(level2);
 
 
