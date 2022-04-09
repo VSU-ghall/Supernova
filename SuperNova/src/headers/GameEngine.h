@@ -34,6 +34,8 @@ private:
 	sf::RectangleShape gameBar, chatBar, blackRect;
 	sf::Texture texture;
 	sf::Vector2f pixiLocation;
+	sf::RectangleShape hpBarBack;
+	sf::RectangleShape hpBarInside;
 
 	enum Mode {menu, game, paused};
 	Mode gameMode;
