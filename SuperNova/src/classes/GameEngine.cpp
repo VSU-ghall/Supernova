@@ -1,6 +1,6 @@
 #include "headers/GameEngine.h"
 
-GameEngine::GameEngine() 
+GameEngine::GameEngine()
 	:gameWindow(sf::VideoMode(), "SuperNova"), menuWindow(sf::VideoMode(), "SuperNova - Menu"), storyManager(&gameWindow, &scenePlaying, &displayingText)
 {}
 
@@ -19,20 +19,20 @@ void GameEngine::run() {
 				handleEvent(event);
 
 		switch (gameMode) {
-			case menu:
-				updateMenu();
-				drawMenu();
-				break;
-			case paused:
-				updateMenu();
-				drawMenu();
-				break;
-			case game:
-				updateGame();
-				drawGame();
-				break;
+		case menu:
+			updateMenu();
+			drawMenu();
+			break;
+		case paused:
+			updateMenu();
+			drawMenu();
+			break;
+		case game:
+			updateGame();
+			drawGame();
+			break;
 		}
-		
+
 	}
 }
 
@@ -42,15 +42,16 @@ void GameEngine::run() {
 void GameEngine::init() {
 	initMenu();
 }
-	void GameEngine::initGame() {
-		gameWindow.setFramerateLimit(60);
-	
+
+void GameEngine::initGame() {
+	gameWindow.setFramerateLimit(60);
+
 	if (gameMode != paused) {
 		player.init(&displayingText);
 		loadLevel(levelManager.getLevel1());
 
 		gameBar.setFillColor(sf::Color(59, 30, 11));
-		chatBar.setFillColor(sf::Color(0,0,0,200));
+		chatBar.setFillColor(sf::Color(0, 0, 0, 200));
 		btnMenu->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
 
 		//storyManager.playLogoIntro();
@@ -92,7 +93,7 @@ void GameEngine::initMenu() {
 	}
 
 	playMusic();
-	
+
 	menuWindow.setVisible(true);
 }
 
@@ -108,7 +109,7 @@ void GameEngine::drawGame() {
 		gameWindow.draw(*levelManager.getCurrentBackground().getSprite());
 	}
 
-	gamewindow.draw(levelManager.getMap());
+	gameWindow.draw(levelManager.getMap());
 
 	//drawGrid();
 
@@ -127,7 +128,7 @@ void GameEngine::drawGame() {
 				gameWindow.draw(*e->getSprite()->getSprite());
 				e->getSprite()->getSprite()->setPosition(e->getPosition());
 			}
-			
+
 		}
 
 		if (!levelManager.currentLevel.objects.empty())
@@ -137,7 +138,7 @@ void GameEngine::drawGame() {
 				if (obj->hasIcon()) gameWindow.draw(*obj->getIcon()->getSprite());
 			}
 	}
-	
+
 	if (scenePlaying || displayingText) storyManager.draw();
 
 	gameWindow.display();
@@ -174,7 +175,7 @@ void GameEngine::drawGrid() {
 void GameEngine::drawMenu() {
 	menuWindow.clear();
 	menuWindow.setView(view);
-	
+
 	menuWindow.draw(blackRect);
 
 	menuWindow.draw(*btnPlay->getSprite());
@@ -235,15 +236,15 @@ void GameEngine::handleEvent(sf::Event event) {
 
 			// Populate all the item icons
 			for (auto obj : levelManager.icons)
-				obj->getIcon()->getSprite()->setPosition(gameBar.getPosition().x + (10 * (obj->getIndex()+1) ) + (obj->getSize().x * obj->getIndex()),
+				obj->getIcon()->getSprite()->setPosition(gameBar.getPosition().x + (10 * (obj->getIndex() + 1)) + (obj->getSize().x * obj->getIndex()),
 					gameBar.getPosition().y + ((gameBar.getSize().y - obj->getSize().y) / 2));
 
-			btnMenu->getSprite()->setPosition(gameBar.getSize().x - 
-								(btnMenu->getTexture().getSize().x/2) - 10, gameBar.getPosition().y + 5);
-			
+			btnMenu->getSprite()->setPosition(gameBar.getSize().x -
+				(btnMenu->getTexture().getSize().x / 2) - 10, gameBar.getPosition().y + 5);
+
 			// Set the text bar
 			chatBar.setSize(sf::Vector2f(view.getSize().x, 100));
-			chatBar.setPosition(0, view.getSize().y-chatBar.getSize().y);
+			chatBar.setPosition(0, view.getSize().y - chatBar.getSize().y);
 		}
 	}
 
@@ -342,7 +343,7 @@ void GameEngine::handleEvent(sf::Event event) {
 			btnExit->getSprite()->setTextureRect(sf::IntRect(0, 0, 254, 75));
 		}
 	}
-	
+
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 		if (scenePlaying) scenePlaying = false;
 		if (displayingText) displayingText = false;
@@ -361,7 +362,7 @@ void GameEngine::loadLevel(LevelManager::Level level) {
 	levelManager.setLevel(level);
 
 
-	sf::String title("SuperNova - Level" + std::to_string(level.levelNumber));
+	sf::String title("SuperNova - Level " + std::to_string(level.levelNumber));
 	gameWindow.setTitle(title);
 	setWindowView(gameWindow, tileSize * level.width, tileSize * level.height);
 
@@ -475,7 +476,7 @@ void GameEngine::updateGame() {
 			}
 		}
 	}
-	
+
 }
 
 //

@@ -194,13 +194,13 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 			playerSprite.setTextureRect(sf::IntRect(offsetJetPack * 38, 322, 38, 64));
 		}
 		else if (stoppedLeft) {
-			playerSprite.setTextureRect(sf::IntRect((offsetJetPack * 38)+114, 322, 38, 64));
-		
+			playerSprite.setTextureRect(sf::IntRect((offsetJetPack * 38) + 114, 322, 38, 64));
+		}
 	}
 
 	// sets player's position to always be on top of a block (not a few pixels inside of it)
 	sf::Vector2f pos = playerSprite.getPosition();
-	if (grounded && !jumping && (int)(pos.y+128) % 64 != 0) {
+	if (grounded && !jumping && (int)(pos.y + 128) % 64 != 0) {
 
 		pos.y = (int)((pos.y + 10) / 64) * 64;
 
