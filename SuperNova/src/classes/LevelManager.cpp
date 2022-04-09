@@ -49,6 +49,7 @@ void LevelManager::init() {
 		Sprite* spicyFlower2 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 150);
 		Entity spicyFlowerEntity2 = Entity(2, "level1", spicyFlower2, sf::Vector2f(894.f, 512.f));
 		level1.enemies.push_back(spicyFlowerEntity2);
+		allLevels.push_back(level1);
 
 
 	level2.map = new int[level2.width * level2.height] {
@@ -76,6 +77,14 @@ void LevelManager::init() {
 		level2.left = &level1;
 		level2.right = &level3;
 
+		Sprite* spicyFlower3 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 150);
+		Entity spicyFlowerEntity3 = Entity(3, "level2", spicyFlower3, sf::Vector2f(1086.f, 768.f));
+		level2.enemies.push_back(spicyFlowerEntity3);
+		Sprite* spicyFlower4 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 150);
+		Entity spicyFlowerEntity4 = Entity(3, "level2", spicyFlower4, sf::Vector2f(958.f, 768.f));
+		level2.enemies.push_back(spicyFlowerEntity4);
+		allLevels.push_back(level2);
+
 
 	level3.map = new int[level3.width * level3.height]{
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
@@ -102,6 +111,7 @@ void LevelManager::init() {
 		level3.left = &level2;
 		level3.right = &level5;
 		level3.bot = &level4;
+		allLevels.push_back(level3);
 
 
 	level4.map = new int[level4.width * level4.height]{
@@ -131,6 +141,7 @@ void LevelManager::init() {
 		
 		level4.objects.push_back(jetpack);
 		icons.push_back(jetpack);
+		allLevels.push_back(level4);
 
 	level5.map = new int[level5.width * level5.height]{
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
@@ -151,6 +162,7 @@ void LevelManager::init() {
 		level5.background->setBounds(64 * level5.width, 64 * level5.height);
 		level5.left = &level3;
 		level5.right = &level6;
+		allLevels.push_back(level5);
 
 
 	level6.map = new int[level6.width * level6.height]
@@ -184,6 +196,7 @@ void LevelManager::init() {
 		level6.left = &level5;
 		level6.right = &level11;
 		level6.bot = &level7;
+		allLevels.push_back(level6);
 
 
 	level7.map = new int[level7.width * level7.height]
@@ -231,6 +244,7 @@ void LevelManager::init() {
 
 		level7.top = &level6;
 		level7.bot = &level8;
+		allLevels.push_back(level7);
 
 	level8.map = new int[level8.width * level8.height]
 	{
@@ -252,6 +266,7 @@ void LevelManager::init() {
 		level8.top = &level7;
 		level8.left = &level10;
 		level8.right = &level9;
+		allLevels.push_back(level8);
 
 	level9.map = new int[level9.width * level9.height]
 	{
@@ -271,6 +286,7 @@ void LevelManager::init() {
 		level9.background->setBounds(64 * level9.width, 64 * level9.height);
 
 		level9.left = &level8;
+		allLevels.push_back(level9);
 
 	level10.map = new int[level10.width * level10.height]
 	{
@@ -290,6 +306,7 @@ void LevelManager::init() {
 		level10.background->setBounds(64 * level10.width, 64 * level10.height);
 
 		level10.right = &level8;
+		allLevels.push_back(level10);
 
 	level11.map = new int[level11.width * level11.height]
 	{
@@ -318,6 +335,7 @@ void LevelManager::init() {
 
 		level11.left = &level6;
 		level11.right = &level11;
+		allLevels.push_back(level11);
 }
 
 Sprite LevelManager::getCurrentBackground() {
@@ -391,4 +409,8 @@ void LevelManager::setLevel(Level level) {
 
 	currentLevel = level;
 	loadLevel(&currentLevel);
+}
+
+std::vector<LevelManager::Level> LevelManager::getAllLevels() {
+	return allLevels;
 }
