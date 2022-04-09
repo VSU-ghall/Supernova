@@ -487,7 +487,10 @@ void GameEngine::updateMenu() {
 }
 
 void GameEngine::addEntities() {
-	for (auto& e : levelManager.getCurrentLevel().enemies) {
-		enemies.addEntity(e);
+	for (auto& level : levelManager.getAllLevels()) {
+		for (auto& e : level.enemies) {
+			enemies.addEntity(e);
+		}
 	}
+	
 }
