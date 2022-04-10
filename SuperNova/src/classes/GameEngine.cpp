@@ -276,25 +276,25 @@ void GameEngine::handleEvent(sf::Event event) {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
 		loadLevel(levelManager.getLevel1(),levelManager.getLevel1().leftStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
-		loadLevel(levelManager.getLevel2(), levelManager.getLevel1().leftStartPosition);
+		loadLevel(levelManager.getLevel2(), levelManager.getLevel2().leftStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
-		loadLevel(levelManager.getLevel3(), levelManager.getLevel1().leftStartPosition);
+		loadLevel(levelManager.getLevel3(), levelManager.getLevel3().leftStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
-		loadLevel(levelManager.getLevel4(), levelManager.getLevel1().leftStartPosition);
+		loadLevel(levelManager.getLevel4(), levelManager.getLevel4().topStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5))
-		loadLevel(levelManager.getLevel5(), levelManager.getLevel1().leftStartPosition);
+		loadLevel(levelManager.getLevel5(), levelManager.getLevel5().leftStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6))
-		loadLevel(levelManager.getLevel6(), levelManager.getLevel1().leftStartPosition);
+		loadLevel(levelManager.getLevel6(), levelManager.getLevel6().leftStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7))
-		loadLevel(levelManager.getLevel7(), levelManager.getLevel1().leftStartPosition);
+		loadLevel(levelManager.getLevel7(), levelManager.getLevel7().topStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8))
-		loadLevel(levelManager.getLevel8(), levelManager.getLevel1().leftStartPosition);
+		loadLevel(levelManager.getLevel8(), levelManager.getLevel8().topStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num9))
-		loadLevel(levelManager.getLevel9(), levelManager.getLevel1().leftStartPosition);
+		loadLevel(levelManager.getLevel9(), levelManager.getLevel9().leftStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0))
-		loadLevel(levelManager.getLevel10(), levelManager.getLevel1().leftStartPosition);
+		loadLevel(levelManager.getLevel10(), levelManager.getLevel10().leftStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Hyphen))
-		loadLevel(levelManager.getLevel11(), levelManager.getLevel1().leftStartPosition);
+		loadLevel(levelManager.getLevel11(), levelManager.getLevel11().leftStartPosition);
 
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(gameWindow);
 	sf::Vector2f worldPos = gameWindow.mapPixelToCoords(pixelPos);
@@ -498,7 +498,7 @@ void GameEngine::updateGame() {
 		}
 	}
 
-			levelManager.setLevel(levelManager.currentLevel);
+			//levelManager.setLevel(levelManager.currentLevel);
 
 }
 
