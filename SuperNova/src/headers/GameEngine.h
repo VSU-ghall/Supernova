@@ -31,9 +31,10 @@ private:
 		*btnOptions = new Sprite("src/resources/MenuOptionsButton.png"),
 		*btnExit = new Sprite("src/resources/MenuExitButton.png");
 	sf::Texture backgroundTexture;
-	sf::RectangleShape gameBar, chatBar, blackRect, hpBarBack, hpBarInside;
+	sf::RectangleShape gameBar, chatBar, blackRect, hpBarBack, hpBarInside, jetPackInside,jetPackBack;
 	sf::Texture texture;
 	sf::Vector2f pixiLocation;
+
 
 	enum Mode {menu, game, paused};
 	Mode gameMode;
@@ -67,5 +68,7 @@ public:
 
 	void addEntities();
 	void updateHpBar();
+	void updateJetPackBar();
+	void initJetPackBar();
 	float calculateDamage(Entity e);
 };

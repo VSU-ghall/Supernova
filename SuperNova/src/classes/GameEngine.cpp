@@ -133,6 +133,10 @@ void GameEngine::drawGame() {
 	gameWindow.draw(hpBarBack);
 	gameWindow.draw(hpBarInside);
 
+	if (player.jetPack) {
+		gameWindow.draw(jetPackBack);
+		gameWindow.draw(jetPackInside);
+	}
 	if (displayingText) gameWindow.draw(chatBar);
 
 	if (!scenePlaying) {
@@ -265,6 +269,8 @@ void GameEngine::handleEvent(sf::Event event) {
 			// Set the text bar
 			chatBar.setSize(sf::Vector2f(view.getSize().x, 100));
 			chatBar.setPosition(0, view.getSize().y-chatBar.getSize().y);
+
+
 		}
 	}
 
@@ -313,6 +319,17 @@ void GameEngine::handleEvent(sf::Event event) {
 					}
 					else {
 						player.jetPack = true;
+						obj->getIcon()->getSprite()->setColor(sf::Color(255, 255, 255, 255));
+					}
+				}
+				//drill
+				if (obj->getIconIndex() == 1) {
+					if (player.drilling) {
+						player.drilling = false;
+						obj->getIcon()->getSprite()->setColor(sf::Color(100, 100, 100, 255));
+					}
+					else {
+						player.drilling = true;
 						obj->getIcon()->getSprite()->setColor(sf::Color(255, 255, 255, 255));
 					}
 				}
@@ -486,7 +503,10 @@ void GameEngine::updateGame() {
 	}
 
 	player.update(levelManager.getCurrentLevel());
-
+	if (player.jetPack) {
+		initJetPackBar();
+		updateJetPackBar();
+	}
 	enemies.update();
 	if (!enemies.getInteractableEntities(levelManager.currentLevel.levelName).empty()) {
 		for (auto& e : enemies.getInteractableEntities(levelManager.currentLevel.levelName)) {
@@ -520,10 +540,22 @@ void GameEngine::addEntities() {
 	
 }
 
+void GameEngine::updateJetPackBar() {
+	jetPackInside.setSize(sf::Vector2f(50 , 300* player.getJetPackFuel()/player.JETPACK_MAXIMUM));
+}
+void GameEngine::initJetPackBar() {
+	jetPackInside.setSize(sf::Vector2f(50, 300 * player.getJetPackFuel() / player.JETPACK_MAXIMUM));
+	jetPackBack.setSize(sf::Vector2f(50, 300));
+	jetPackBack.setFillColor(sf::Color(50, 50, 50, 200));
+	jetPackBack.setPosition(10, 100 );
+
+	jetPackInside.setSize(sf::Vector2f(50, 300 * (player.getJetPackFuel() / player.JETPACK_MAXIMUM)));
+	jetPackInside.setFillColor(sf::Color(173, 255, 230, 200));
+	jetPackInside.setPosition(10, 100);
+}
 void GameEngine::updateHpBar() {
 	hpBarInside.setSize(sf::Vector2f(300 * player.getHp(), 50));
 }
-
 float GameEngine::calculateDamage(Entity e) {
 	float dist = std::sqrt(std::pow(e.getPosition().x - player.getX(), 2) + std::pow(e.getPosition().y - player.getY(), 2));
 	float damage = dist / 500;

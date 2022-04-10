@@ -9,13 +9,18 @@ const float gravity = 1.f;
 sf::Vector2f velocity(0, 0);
 bool grounded = true, jumping = false, ceilingBump = false, crouchPlayed = false;
 bool readyToTransition = false;
-int jetpackFuel;
+
 float Player::getX() {
 	return x;
 }
 
 float Player::getY() {
 	return y;
+}
+
+int Player::getJetPackFuel()
+{
+	return jetpackFuel;
 }
 
 float Player::getHp() {
@@ -85,6 +90,8 @@ void Player::animate() {
 // ( Movement is animated on a ratio (set by the variable animationPerFrame) )
 //
 void Player::checkMovement(LevelManager::Level currentLevel) {
+
+
 	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		crouchPlayed = false;
 	if (grounded && jetpackFuel < JETPACK_MAXIMUM) {
@@ -143,7 +150,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 					
 				}
 			}
-			else {
+			else{
 				velocity.y = 1;
 				ceilingBump = false;
 				jumping = false;
@@ -364,6 +371,36 @@ void Player::checkTopBotCollision(sf::Vector2f topRight, sf::Vector2f botRightHi
 	else {
 		ceilingBump = false;
 	}
+}
+
+void Player::DrillCollision(float velo, LevelManager::Level currentLevel) {
+
+	float bot = ceil(playerSprite.getGlobalBounds().top + 128);
+	float top = ceil(playerSprite.getGlobalBounds().top);
+	float left = ceil(playerSprite.getGlobalBounds().left);
+	float mid = ceil(playerSprite.getGlobalBounds().left + 32);
+	float right = ceil(playerSprite.getGlobalBounds().left + 64);
+
+
+
+	sf::Vector2f botLeftHigh(left + (-std::abs(velo)), bot - 32);
+	sf::Vector2f botRightHigh(right + velo, bot - 32);
+
+
+	if (checkTile(currentLevel, botLeftHigh, 4)) {
+		int i = floor(botLeftHigh.y / tileSize) * currentLevel.width + floor(botLeftHigh.x / tileSize);
+		
+		currentLevel.map[i- currentLevel.width] = 0;
+		currentLevel.map[i] = 0;
+
+	}
+	else if (checkTile(currentLevel, botRightHigh, 4)) {
+		int i = floor(botRightHigh.y / tileSize) * currentLevel.width + floor(botRightHigh.x / tileSize);
+
+		currentLevel.map[i - currentLevel.width] = 0;
+		currentLevel.map[i] = 0;
+	}
+
 }
 
 bool Player::checkTile(LevelManager::Level currentLevel, sf::Vector2f position, int remainder) {
