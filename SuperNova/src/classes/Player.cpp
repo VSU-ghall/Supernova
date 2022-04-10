@@ -128,8 +128,6 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 	else {
 		velocity.x = 0;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) drilling = true;
-	else if (drilling) drilling = false;
 
 
 	if (jetPack) {
