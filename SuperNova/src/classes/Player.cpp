@@ -22,7 +22,9 @@ sf::FloatRect Player::getBoundingBox() {
 	return playerSprite.getGlobalBounds();
 }
 
-void Player::init() {
+void Player::init(bool* displayingText) {
+
+	this->displayingText = displayingText;
 
 	//this is how fast we want the player. If we want to change their speed this can be changed.
 	playerSpeed = 6.0f;
@@ -237,6 +239,15 @@ void Player::respawn() {
 void Player::update(LevelManager::Level currentLevel) {
 	animate();
 	checkMovement(currentLevel);
+	checkItems(currentLevel);
+}
+
+void Player::checkItems(LevelManager::Level currentLevel) {
+	for (auto obj : currentLevel.objects) {
+		if (!obj->isHidden() && playerSprite.getGlobalBounds().intersects(obj->getObject()->getSprite()->getGlobalBounds())) {
+			if (obj->hasIcon()) obj->collect();
+		}
+	}
 }
 
 //returns false if movement will cause collision. returns true otherwise
@@ -297,21 +308,19 @@ bool Player::checkTransitionCollision(float left, float right, float top, float 
 	//std::cout << top - velo << std::endl;
 
 	if (checkLeftEdge || checkRightEdge || checkBotEdge || checkTopEdge) {
-		if (checkLeftEdge)
-			transitioningLeft = true;
-		if (checkRightEdge)
-			transitioningRight = true;
-		if (checkBotEdge)
-			transitioningBot = true;
-		if (checkTopEdge)
-			transitioningTop = true;
-		grounded = true;
-		velocity.y = 0;
+		if (!*displayingText) {
+			if (checkLeftEdge) transitioningLeft = true;
+			if (checkRightEdge) transitioningRight = true;
+			if (checkBotEdge) transitioningBot = true;
+			if (checkTopEdge) transitioningTop = true;
+
+			grounded = true;
+			velocity.y = 0;
+		}
+
 		return false;
 	}
-	else {
-		return checkSideCollision(velo, botRightHigh, botLeftHigh, topRightHigh, topLeftHigh, currentLevel);
-	}
+	else return checkSideCollision(velo, botRightHigh, botLeftHigh, topRightHigh, topLeftHigh, currentLevel);
 }
 
 void Player::checkTopBotCollision(sf::Vector2f topRight, sf::Vector2f botRightHigh, sf::Vector2f botRight, sf::Vector2f botMidRight, sf::Vector2f botMid, sf::Vector2f botMidLeft, sf::Vector2f topLeft, sf::Vector2f botLeftHigh, sf::Vector2f botLeft, LevelManager::Level currentLevel) {

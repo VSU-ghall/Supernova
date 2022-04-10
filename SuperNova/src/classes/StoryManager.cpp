@@ -29,6 +29,7 @@ void StoryManager::draw() {
 	}
 	if (playingTextIntro) {
 		window->draw(displayText);
+		window->draw(*pixiIcon->getSprite());
 	}
 }
 
@@ -104,21 +105,43 @@ void StoryManager::update() {
 		}
 	}
 	if (playingTextIntro) {
-		if (seconds >= 6) {
+		sf::String text;
+		if (seconds >= 55) {
 			playingTextIntro = false; *displayingText = false;
 		}
-		else if (seconds >= 4.5) {
-			displayText.setString("Enjoy the game . . .");
+		else if (seconds >= 45) {
+			text = "Use the A & D keys to move right & left, the S key to crouch, and the W key to jump!";
 		}
-		else if (seconds >= 4) {
-			displayText.setString("Enjoy the game . .");
+		else if (seconds >= 35) {
+			text = "Maybe we'll even find some cool weapons or gadgets to use along the way!";
 		}
-		else if (seconds >= 3.5) {
-			displayText.setString("Enjoy the game .");
+		else if (seconds >= 30) {
+			text = "Well, only one way to go anyway! I'm sure seeing will jog my memory.";
 		}
-		else if (seconds >= 3) {
-			displayText.setString("Enjoy the game");
+		else if (seconds >= 25) {
+			text = ". . .";
 		}
+		else if (seconds >= 24.5) {
+			text = ". .";
+		}
+		else if (seconds >= 24) {
+			text = ".";
+		}
+		else if (seconds >= 20) {
+			text = "It's been so long I don't quite remember";
+		}
+		else if (seconds >= 15) {
+			text = "What's this? You wanna know how to get out of here?";
+		}
+		else if (seconds >= 5) {
+			text = "You're the first soul I've seen in many years! These caverns have been abandoned";
+			text += "\nsince my creators mysteriously disappeared.";
+		}
+		else if (seconds >= 0) {
+			text = "Welcome traveler!";
+		}
+
+		displayText.setString(text);
 	}
 }
 
@@ -169,9 +192,10 @@ void StoryManager::playTextIntro() {
 	*displayingText = true; playingTextIntro = true;
 	timer.restart();
 
-	displayText.setString("Welcome traveler!");
+	sf::Vector2i pixiSize(pixiIcon->getWidth() * pixiIcon->getScale(), pixiIcon->getHeight() * pixiIcon->getScale());
 
-	if (displayText.getPosition().y == 0) displayText.setPosition(10, window->getSize().y - 100 + 10);
+	pixiIcon->getSprite()->setPosition(0, window->getSize().y - pixiSize.y + 25);
+	if (displayText.getPosition().y == 0) displayText.setPosition(pixiSize.x, window->getSize().y - 100 + 5);
 }
 
 /**************************************************************************/
