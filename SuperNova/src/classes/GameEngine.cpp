@@ -253,7 +253,7 @@ void GameEngine::handleEvent(sf::Event event) {
 
 			// Populate all the item icons
 			for (auto obj : levelManager.icons)
-				obj->getIcon()->getSprite()->setPosition(gameBar.getPosition().x + (10 * (obj->getIndex()+1) ) + (obj->getSize().x * obj->getIndex()),
+				obj->getIcon()->getSprite()->setPosition(gameBar.getPosition().x + (10 * (obj->getIconIndex()+1) ) + (obj->getSize().x * obj->getIconIndex()),
 					gameBar.getPosition().y + ((gameBar.getSize().y - obj->getSize().y) / 2));
 
 			btnMenu->getSprite()->setPosition(gameBar.getSize().x - 
@@ -322,7 +322,7 @@ void GameEngine::handleEvent(sf::Event event) {
 						obj->getIcon()->getSprite()->setColor(sf::Color(255, 255, 255, 255));
 					}
 				}
-				//drill
+				// Drill
 				if (obj->getIconIndex() == 1) {
 					if (player.drilling) {
 						player.drilling = false;
@@ -330,6 +330,17 @@ void GameEngine::handleEvent(sf::Event event) {
 					}
 					else {
 						player.drilling = true;
+						obj->getIcon()->getSprite()->setColor(sf::Color(255, 255, 255, 255));
+					}
+				}
+				//boots
+				if (obj->getIconIndex() == 2) {
+					if (player.dashBoots) {
+						player.dashBoots = false;
+						obj->getIcon()->getSprite()->setColor(sf::Color(100, 100, 100, 255));
+					}
+					else {
+						player.dashBoots = true;
 						obj->getIcon()->getSprite()->setColor(sf::Color(255, 255, 255, 255));
 					}
 				}
