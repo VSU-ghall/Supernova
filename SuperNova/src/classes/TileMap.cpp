@@ -58,8 +58,8 @@ std::vector<std::vector<int>> TileMap::loadColMap( const int* tiles, unsigned in
         for (int j = 0; j < width; j++) {
             // get the current tile number
             int tileNumber = tiles[(i*width)+j];
-            if (tileNumber==31) {
-                row.push_back(transitionTile);
+            if (tileNumber==BREAKABLE_BLOCK) {
+                row.push_back(breakableNum);
             }
             else if (tileNumber > 1) {
                 row.push_back(collisionTile);
@@ -83,8 +83,8 @@ std::vector<std::vector<int>> TileMap::loadColMap( const int* tiles, unsigned in
 
 }
 
-int TileMap::getTransitionTile() {
-    return transitionTile;
+int TileMap::getBreakableTile() {
+    return breakableNum;
 }
 
 int TileMap::getCollisionTile() {
