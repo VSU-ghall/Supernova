@@ -40,5 +40,6 @@ class Player
 		void playJumpSound();
 		void playWalkSound();
 		float getHp();
+		float takeDamage(float damage);
 };
 
