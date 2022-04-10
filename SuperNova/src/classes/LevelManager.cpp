@@ -21,7 +21,7 @@ void LevelManager::init() {
 		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 	};
-		testLevel.startPosition = Vector2(5, 11);
+		testLevel.leftStartPosition = Vector2(5, 11);
 
 
 	level1.map = new int[level1.width * level1.height] {
@@ -39,7 +39,8 @@ void LevelManager::init() {
 		 4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,
 	};
 	level1.levelName = "level1";
-		level1.startPosition = Vector2(2, 7);
+		level1.leftStartPosition = Vector2(2, 7);
+		level1.rightStartPosition = Vector2(18, 7);
 		level1.right = &level2;
 		level1.left = &level1;
 
@@ -67,7 +68,8 @@ void LevelManager::init() {
 		 4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 	};
-		level2.startPosition = Vector2(2, 11);
+		level2.leftStartPosition = Vector2(2, 11);
+		level2.rightStartPosition = Vector2(23, 11);
 		level2.background->setBounds(64 * level2.width, 64 * level2.height);
 		level2.left = &level1;
 		level2.right = &level3;
@@ -91,7 +93,9 @@ void LevelManager::init() {
 			 4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  0,  0,  0,  0,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,
 			 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 		};
-		level3.startPosition = Vector2(2, 10);
+		level3.leftStartPosition = Vector2(2, 10);
+		level3.rightStartPosition = Vector2(28, 5);
+		level3.botStartPosition = Vector2(16, 10);
 		level3.background->setBounds(64 * level3.width, 64 * level3.height);
 		
 		level3.left = &level2;
@@ -114,7 +118,7 @@ void LevelManager::init() {
 			10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
 		};
 
-		level4.startPosition = Vector2(2, 8);
+		level4.topStartPosition = Vector2(2, 8);
 		level4.background->setBounds(64 * level4.width, 64 * level4.height);
 
 		level4.top = &level3;
@@ -134,7 +138,8 @@ void LevelManager::init() {
 			 2,  2,  2,  2,  2,  2,  2,  2,  2,  2, 14,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,
 			 4,  4,  4,  4,  4,  4,  4,  4,  4,  4, 22, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
 		};
-		level5.startPosition = Vector2(2, 7);
+		level5.leftStartPosition = Vector2(2, 7);
+		level5.rightStartPosition = Vector2(18, 7);
 		level5.background->setBounds(64 * level5.width, 64 * level5.height);
 		level5.left = &level3;
 		level5.right = &level6;
@@ -164,7 +169,9 @@ void LevelManager::init() {
 			 //10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0,  0, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
 			 //1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 		};
-		level6.startPosition = Vector2(2, 10);
+		level6.leftStartPosition = Vector2(2, 10);
+		level6.botStartPosition = Vector2(17, 7);
+		level6.rightStartPosition = Vector2(28, 7);
 		level6.background->setBounds(64 * level6.width, 64 * level6.height);
 
 		level6.left = &level5;
@@ -210,7 +217,8 @@ void LevelManager::init() {
 			 8,  8,  8,  8,  8,  8,  8,  8,  8,  0,  0,  8,
 			 //1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 		};
-		level7.startPosition = Vector2(2, 3);
+		level7.topStartPosition = Vector2(2, 3);
+		level7.botStartPosition = Vector2(9, 25);
 		level7.background->setBounds(64 * level7.width, 64 * level7.height);
 		//level7.background->getSprite()->setPosition(0,0);
 
@@ -230,7 +238,9 @@ void LevelManager::init() {
 			10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
 		
 		};
-		level8.startPosition = Vector2(15, 4);
+		level8.topStartPosition = Vector2(15, 4);
+		level8.leftStartPosition = Vector2(2, 4);
+		level8.rightStartPosition = Vector2(28, 4);
 		level8.background->setBounds(64 * level8.width, 64 * level8.height);
 
 		level8.top = &level7;
@@ -250,7 +260,7 @@ void LevelManager::init() {
 			10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
 
 		};
-		level9.startPosition = Vector2(1, 4);
+		level9.leftStartPosition = Vector2(1, 4);
 		level9.background->setBounds(64 * level9.width, 64 * level9.height);
 
 		level9.left = &level8;
@@ -268,7 +278,7 @@ void LevelManager::init() {
 			10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
 
 		};
-		level10.startPosition = Vector2(28, 4);
+		level10.rightStartPosition = Vector2(28, 4);
 		level10.background->setBounds(64 * level10.width, 64 * level10.height);
 
 		level10.right = &level8;
@@ -294,7 +304,8 @@ void LevelManager::init() {
 			10, 10, 24,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,
 			 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 		};
-		level11.startPosition = Vector2(2, 7);
+		level11.leftStartPosition = Vector2(2, 7);
+		level11.rightStartPosition = Vector2(28, 5);
 		level11.background->setBounds(64 * level11.width, 64 * level11.height);
 
 		level11.left = &level6;
@@ -358,7 +369,7 @@ void LevelManager::loadLevel(Level* level) {
 
 	level->colMap = map.loadColMap(level->map, level->width, level->height);
 
-	level->transitionTile = map.getTransitionTile();
+	level->breakableNum = map.getBreakableTile();
 	level->collisionTile = map.getCollisionTile();
 	level->emptyTile = map.getEmptyTile();
 

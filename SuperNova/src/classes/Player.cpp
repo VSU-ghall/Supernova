@@ -31,7 +31,8 @@ void Player::init() {
 	playerSprite.setTextureRect(sf::IntRect(0, 0, 32, 64));
 	x = startPosition.x * tileSize;
 	y = startPosition.y * tileSize;
-
+	
+	drilling = true;
 	jetPack = false;
 	jetpackFuel = JETPACK_MAXIMUM;
 	//this is the Size of the player
@@ -79,6 +80,7 @@ void Player::animate() {
 // ( Movement is animated on a ratio (set by the variable animationPerFrame) )
 //
 void Player::checkMovement(LevelManager::Level currentLevel) {
+	std::cout << stoppedLeft << std::endl;
 
 	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		crouchPlayed = false;
@@ -90,7 +92,8 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::D) &&
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::A) &&
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::W) &&
-		!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		!sf::Keyboard::isKeyPressed(sf::Keyboard::S) &&
+		!sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 		return;
 
 	bool checkLeft = checkCollision(-playerSpeed, currentLevel),
@@ -116,12 +119,10 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 	else {
 		velocity.x = 0;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)) {
-		jetPack = true;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)&&drilling) {
+		DrillCollision(0, currentLevel);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
-		jetPack = false;
-	}
+
 
 	if (jetPack) {
 
@@ -336,7 +337,37 @@ void Player::checkTopBotCollision(sf::Vector2f topRight, sf::Vector2f botRightHi
 		ceilingBump = false;
 	}
 }
+void Player::DrillCollision(float velo, LevelManager::Level currentLevel) {
 
+	float bot = ceil(playerSprite.getGlobalBounds().top + 128);
+	float top = ceil(playerSprite.getGlobalBounds().top);
+	float left = ceil(playerSprite.getGlobalBounds().left);
+	float mid = ceil(playerSprite.getGlobalBounds().left + 32);
+	float right = ceil(playerSprite.getGlobalBounds().left + 64);
+
+
+
+	sf::Vector2f botLeftHigh(left + (-std::abs(velo)), bot - 32);
+	sf::Vector2f botRightHigh(right + velo, bot - 32);
+
+
+	if (checkTile(currentLevel, botLeftHigh, 4)) {
+		int i = floor(botLeftHigh.y / tileSize) * currentLevel.width + floor(botLeftHigh.x / tileSize);
+		
+		std::cout << currentLevel.map[i] << std::endl;
+		currentLevel.map[i- currentLevel.width] = 0;
+		currentLevel.map[i] = 0;
+
+	}
+	else if (checkTile(currentLevel, botRightHigh, 4)) {
+		int i = floor(botRightHigh.y / tileSize) * currentLevel.width + floor(botRightHigh.x / tileSize);
+
+		std::cout << currentLevel.map[i] << std::endl;
+		currentLevel.map[i - currentLevel.width] = 0;
+		currentLevel.map[i] = 0;
+	}
+
+}
 bool Player::checkTile(LevelManager::Level currentLevel, sf::Vector2f position, int remainder) {
 	return currentLevel.colMap.at(floor(position.y / tileSize)).at(floor(position.x / tileSize)) == remainder;
 }
@@ -386,3 +417,4 @@ void Player::playWalkSound()
 		music.play();
 	}
 }
+
