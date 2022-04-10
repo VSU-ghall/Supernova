@@ -66,6 +66,8 @@ public:
 	void updateMenu();
 	sf::Vector2f updatePixi();
 
+
 	void addEntities();
 	void updateHpBar();
+	float calculateDamage(Entity e);
 };

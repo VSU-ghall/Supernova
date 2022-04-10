@@ -488,8 +488,10 @@ void GameEngine::updateGame() {
 		for (auto& e : enemies.getInteractableEntities(levelManager.currentLevel.levelName)) {
 			if (player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && !e->getSprite()->animating) {
 				e->getSprite()->animateOnce();
+				player.takeDamage(calculateDamage(*e));
 				e->notInteractable();
 				updateHpBar();
+				//std::cout << player.getHp() << " hp\n";
 			}
 		}
 	}
@@ -513,5 +515,12 @@ void GameEngine::addEntities() {
 }
 
 void GameEngine::updateHpBar() {
-	hpBarInside.setSize(sf::Vector2f(300 *.9, 50));
+	hpBarInside.setSize(sf::Vector2f(300 * player.getHp(), 50));
+}
+
+float GameEngine::calculateDamage(Entity e) {
+	float dist = std::sqrt(std::pow(e.getPosition().x - player.getX(), 2) + std::pow(e.getPosition().y - player.getY(), 2));
+	float damage = dist / 500;
+	//std::cout << damage << " damage" << "\n";
+	return damage;
 }
