@@ -47,8 +47,10 @@ void GameEngine::initGame() {
 	gameWindow.setFramerateLimit(60);
 
 	if (gameMode != paused) {
+
 		player.init(&displayingText);
-		loadLevel(levelManager.getLevel1());
+		loadLevel(levelManager.getLevel1(), levelManager.getLevel1().leftStartPosition);
+
 
 		gameBar.setFillColor(sf::Color(59, 30, 11));
 		chatBar.setFillColor(sf::Color(0,0,0,200));
@@ -272,27 +274,27 @@ void GameEngine::handleEvent(sf::Event event) {
 
 	// Temporary key bindings for development
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
-		loadLevel(levelManager.getLevel1());
+		loadLevel(levelManager.getLevel1(),levelManager.getLevel1().leftStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
-		loadLevel(levelManager.getLevel2());
+		loadLevel(levelManager.getLevel2(), levelManager.getLevel1().leftStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
-		loadLevel(levelManager.getLevel3());
+		loadLevel(levelManager.getLevel3(), levelManager.getLevel1().leftStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
-		loadLevel(levelManager.getLevel4());
+		loadLevel(levelManager.getLevel4(), levelManager.getLevel1().leftStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5))
-		loadLevel(levelManager.getLevel5());
+		loadLevel(levelManager.getLevel5(), levelManager.getLevel1().leftStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6))
-		loadLevel(levelManager.getLevel6());
+		loadLevel(levelManager.getLevel6(), levelManager.getLevel1().leftStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7))
-		loadLevel(levelManager.getLevel7());
+		loadLevel(levelManager.getLevel7(), levelManager.getLevel1().leftStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8))
-		loadLevel(levelManager.getLevel8());
+		loadLevel(levelManager.getLevel8(), levelManager.getLevel1().leftStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num9))
-		loadLevel(levelManager.getLevel9());
+		loadLevel(levelManager.getLevel9(), levelManager.getLevel1().leftStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0))
-		loadLevel(levelManager.getLevel10());
+		loadLevel(levelManager.getLevel10(), levelManager.getLevel1().leftStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Hyphen))
-		loadLevel(levelManager.getLevel11());
+		loadLevel(levelManager.getLevel11(), levelManager.getLevel1().leftStartPosition);
 
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(gameWindow);
 	sf::Vector2f worldPos = gameWindow.mapPixelToCoords(pixelPos);
@@ -371,8 +373,8 @@ void GameEngine::handleEvent(sf::Event event) {
 //
 // Loads level from LevelManager
 //
-void GameEngine::loadLevel(LevelManager::Level level) {
-	player.startPosition = Vector2(level.startPosition);
+void GameEngine::loadLevel(LevelManager::Level level, Vector2 startp) {
+	player.startPosition = startp;
 	player.stoppedLeft = false; player.stoppedRight = true;
 	player.respawn();
 	levelManager.setLevel(level);
@@ -465,19 +467,19 @@ void GameEngine::updateGame() {
 	if (displayingText) storyManager.update();
 
 	if (player.transitioningLeft) {
-		loadLevel(*levelManager.currentLevel.left);
+		loadLevel(*levelManager.currentLevel.left, levelManager.currentLevel.left->rightStartPosition);
 		player.transitioningLeft = false;
 	}
 	else if (player.transitioningRight) {
-		loadLevel(*levelManager.currentLevel.right);
+		loadLevel(*levelManager.currentLevel.right, levelManager.currentLevel.right->leftStartPosition);
 		player.transitioningRight = false;
 	}
 	else if (player.transitioningTop) {
-		loadLevel(*levelManager.currentLevel.top);
+		loadLevel(*levelManager.currentLevel.top, levelManager.currentLevel.top->botStartPosition);
 		player.transitioningTop = false;
 	}
 	else if (player.transitioningBot) {
-		loadLevel(*levelManager.currentLevel.bot);
+		loadLevel(*levelManager.currentLevel.bot, levelManager.currentLevel.bot->topStartPosition);
 		player.transitioningBot = false;
 	}
 
@@ -495,7 +497,9 @@ void GameEngine::updateGame() {
 			}
 		}
 	}
-	
+
+			levelManager.setLevel(levelManager.currentLevel);
+
 }
 
 //

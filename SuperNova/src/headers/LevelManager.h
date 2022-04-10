@@ -20,10 +20,13 @@ static class LevelManager
 			bool hasBackground = false;
 			int width = 20, height = 12, levelNumber = (levelManager->numberOfLevels)++;
 			int* map;
-			Vector2 startPosition;
+			Vector2 leftStartPosition;
+			Vector2 rightStartPosition;
+			Vector2 botStartPosition;
+			Vector2 topStartPosition;
 			std::vector<std::vector<int>> colMap;
 
-			int transitionTile;
+			int breakableNum;
 			int collisionTile;
 			int emptyTile;
 

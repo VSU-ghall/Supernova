@@ -58,7 +58,7 @@ public:
 	void drawMenu();
 	sf::View getViewport(float width, float height);
 	void handleEvent(sf::Event event);
-	void loadLevel(LevelManager::Level level);
+	void loadLevel(LevelManager::Level level, Vector2 startp);
 	void playMusic();
 	void playSoundEffect(const std::string& filePath);
 	void setWindowView(sf::RenderWindow &window, float width, float height);
