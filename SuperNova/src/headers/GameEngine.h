@@ -31,11 +31,9 @@ private:
 		*btnOptions = new Sprite("src/resources/MenuOptionsButton.png"),
 		*btnExit = new Sprite("src/resources/MenuExitButton.png");
 	sf::Texture backgroundTexture;
-	sf::RectangleShape gameBar, chatBar, blackRect;
+	sf::RectangleShape gameBar, chatBar, blackRect, hpBarBack, hpBarInside;
 	sf::Texture texture;
 	sf::Vector2f pixiLocation;
-	sf::RectangleShape hpBarBack;
-	sf::RectangleShape hpBarInside;
 
 	enum Mode {menu, game, paused};
 	Mode gameMode;
