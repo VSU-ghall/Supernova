@@ -20,7 +20,6 @@ class Player
 
 		bool stoppedLeft = false, stoppedRight = true, moving = false, jetPack = false;
 		bool transitioningLeft, transitioningRight, transitioningTop, transitioningBot;
-  	bool jetPack;
 		bool drilling;
 		bool* displayingText;
 
