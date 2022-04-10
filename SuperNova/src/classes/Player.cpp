@@ -5,7 +5,7 @@
 float playerJumpSpeed, playerSpeed, playerSize, animationPerFrame = 1.0f / 8.0f, jumpHeight = 0;
 int frameCount = 0, offset = 0;
 int frameCountJetPack = 0, offsetJetPack = 0;
-const float gravity = 1.f;
+float gravity = 1.f;
 sf::Vector2f velocity(0, 0);
 bool grounded = true, jumping = false, ceilingBump = false, crouchPlayed = false;
 bool readyToTransition = false;
@@ -42,6 +42,9 @@ void Player::init(bool* displayingText) {
 	playerSprite.setTextureRect(sf::IntRect(0, 0, 32, 64));
 	x = startPosition.x * tileSize;
 	y = startPosition.y * tileSize;
+
+	dashBoots = false;
+	dashCooldown = DASH_COOLDOWN;
 	
 	jetPack = false;
 	jetpackFuel = JETPACK_MAXIMUM;
@@ -97,7 +100,10 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 	if (grounded && jetpackFuel < JETPACK_MAXIMUM) {
 		jetpackFuel++;
 	}
-	if (grounded &&
+	if (dashCooldown < DASH_COOLDOWN) {
+		dashCooldown++;
+	}
+	if (grounded && !dashing &&
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::D) &&
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::A) &&
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::W) &&
@@ -129,7 +135,28 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 		velocity.x = 0;
 	}
 
+	if (dashBoots && sf::Keyboard::isKeyPressed(sf::Keyboard::Space)&& dashCooldown==DASH_COOLDOWN) {
+		dashing = true;
+		dashDistance = 0;
+		dashCooldown = 0;
+		gravity = 0;
+	}
+	if (dashing && dashDistance < DASH_TOTAL_DISTANCE && checkCollision(DASH_SPEED, currentLevel) && stoppedRight) {
+		velocity.x = DASH_SPEED;
+		velocity.y = 0;
+		dashDistance += DASH_SPEED;
 
+	}
+	else if (dashing && dashDistance > -DASH_TOTAL_DISTANCE && checkCollision(-DASH_SPEED, currentLevel) && stoppedLeft) {
+		velocity.x = -DASH_SPEED;
+		velocity.y = 1;
+		dashDistance -= DASH_SPEED;
+
+	}
+	else {
+		dashing = false;
+		gravity = 1.f;
+	}
 	if (jetPack) {
 
 		if (checkCollision(0, currentLevel))
@@ -325,8 +352,8 @@ bool Player::checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vecto
 		readyToTransition = true;*/
 
 bool Player::checkTransitionCollision(float left, float right, float top, float bot, float velo, sf::Vector2f botRightHigh, sf::Vector2f botLeftHigh, sf::Vector2f topRightHigh, sf::Vector2f topLeftHigh, LevelManager::Level currentLevel) {
-	bool checkLeftEdge = left + velo <= 6;
-	bool checkRightEdge = right + velo >= (currentLevel.width * 64) - 6;
+	bool checkLeftEdge = left + velo <= 16;
+	bool checkRightEdge = right + velo >= (currentLevel.width * 64) - 16;
 	bool checkBotEdge = bot + velo >= (currentLevel.height * 64) - 12;
 	bool checkTopEdge = top - velo <= 63;
 	//std::cout << top - velo << std::endl;

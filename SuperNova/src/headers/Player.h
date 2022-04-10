@@ -11,8 +11,8 @@ class Player
 		float x, y;
 		int tileSize = 64;
 		float hp = 1.f;
-		int jetpackFuel;
-
+		int jetpackFuel, dashCooldown;
+		int dashDistance;
 
 	public:
 		Vector2 startPosition;
@@ -20,7 +20,7 @@ class Player
 		sf::Texture texture;
 		sf::Music music;
 
-		bool stoppedLeft = false, stoppedRight = true, moving = false, jetPack = false, drilling = false;
+		bool stoppedLeft = false, stoppedRight = true, moving = false, dashing = false, jetPack = false, drilling = false, dashBoots=false;
 		bool transitioningLeft, transitioningRight, transitioningTop, transitioningBot;
 
 
@@ -53,5 +53,8 @@ class Player
 		float takeDamage(float damage);
 
 		int const JETPACK_MAXIMUM = 75;
+		int const DASH_COOLDOWN = 120;
+		int const DASH_TOTAL_DISTANCE = 320;
+		int const DASH_SPEED = 16;
 };
 
