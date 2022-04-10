@@ -40,5 +40,6 @@ class Player
 		void playCrouchSound();
 		void playJumpSound();
 		void playWalkSound();
+		void playJetpackLaunch();
 };
 

@@ -113,6 +113,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)) {
 		jetPack = true;
+		playJetpackLaunch();
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
 		jetPack = false;
@@ -369,6 +370,21 @@ void Player::playWalkSound()
 			return;
 		}
 		music.setVolume(100);
+
+		music.play();
+	}
+}
+
+void Player::playJetpackLaunch()
+{
+	//sound for jetpack
+	if (jetPack) {
+		if (!music.openFromFile("src/resources/sounds/jetpack_sound.wav"))
+		{
+			std::cout << "Could not load jetpack_sound" << std::endl;
+			return;
+		}
+		music.setVolume(10);
 
 		music.play();
 	}
