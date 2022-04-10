@@ -13,7 +13,6 @@ class Player
 		float hp = 1.f;
 		int jetpackFuel;
 
-		int const JETPACK_MAXIMUM = 75;
 
 	public:
 		Vector2 startPosition;
