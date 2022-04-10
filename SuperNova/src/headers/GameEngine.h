@@ -34,6 +34,8 @@ private:
 	sf::RectangleShape gameBar, chatBar, blackRect;
 	sf::Texture texture;
 	sf::Vector2f pixiLocation;
+	sf::RectangleShape hpBarBack;
+	sf::RectangleShape hpBarInside;
 
 	enum Mode {menu, game, paused};
 	Mode gameMode;
@@ -64,5 +66,8 @@ public:
 	void updateMenu();
 	sf::Vector2f updatePixi();
 
+
 	void addEntities();
+	void updateHpBar();
+	float calculateDamage(Entity e);
 };

@@ -72,10 +72,13 @@ static class LevelManager
 		TileMap getMap();
 		void removeItem(Level level, Object item);
 		void setLevel(Level level);
+		std::vector<Level> getAllLevels();
 
 	private:
 		TileMap map;
 
 		void init();
 		void loadLevel(Level* level);
+
+		std::vector<Level> allLevels;
 };

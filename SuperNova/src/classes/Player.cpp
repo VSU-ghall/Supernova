@@ -18,6 +18,10 @@ float Player::getY() {
 	return y;
 }
 
+float Player::getHp() {
+	return hp;
+}
+
 sf::FloatRect Player::getBoundingBox() {
 	return playerSprite.getGlobalBounds();
 }
@@ -425,5 +429,13 @@ void Player::playWalkSound()
 
 		music.play();
 	}
+}
+
+float Player::takeDamage(float damage) {
+	hp -= damage;
+	if (hp <= 0) {
+		hp = 0;
+	}
+	return hp;
 }
 
