@@ -157,7 +157,7 @@ void LevelManager::init() {
 		level4.top = &level3;
 
 
-		Object* jetpack = new Object(icons.size(), icons.size(), new Sprite("src/resources/jetpack_icon.png", false, false, 1, 32, 32, 2.f, 0));
+		Object* jetpack = new Object(level4.objects.size(), icons.size(), new Sprite("src/resources/jetpack_icon.png", false, false, 1, 32, 32, 2.f, 0));
 		jetpack->setIcon(true);
 		jetpack->getObject()->getSprite()->setPosition(15 * 64, 8 * 64);
 		
@@ -322,7 +322,7 @@ void LevelManager::init() {
 
 		level9.left = &level8;
 
-		Object* drill = new Object(icons.size(), icons.size(), new Sprite("src/resources/drill_icon.png", false, false, 1, 32, 32, 2.f, 0));
+		Object* drill = new Object(level9.objects.size(), icons.size(), new Sprite("src/resources/drill_icon.png", false, false, 1, 32, 32, 2.f, 0));
 		drill->setIcon(true);
 		drill->getObject()->getSprite()->setPosition(27 * 64, 4 * 64);
 
