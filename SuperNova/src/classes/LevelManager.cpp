@@ -324,7 +324,7 @@ void LevelManager::init() {
 
 		Object* drill = new Object(icons.size(), icons.size(), new Sprite("src/resources/drill_icon.png", false, false, 1, 32, 32, 2.f, 0));
 		drill->setIcon(true);
-		drill->getObject()->getSprite()->setPosition(26 * 64, 4 * 64);
+		drill->getObject()->getSprite()->setPosition(27 * 64, 4 * 64);
 
 		level9.objects.push_back(drill);
 		icons.push_back(drill);
