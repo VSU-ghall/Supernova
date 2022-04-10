@@ -9,13 +9,18 @@ const float gravity = 1.f;
 sf::Vector2f velocity(0, 0);
 bool grounded = true, jumping = false, ceilingBump = false, crouchPlayed = false;
 bool readyToTransition = false;
-int jetpackFuel;
+
 float Player::getX() {
 	return x;
 }
 
 float Player::getY() {
 	return y;
+}
+
+int Player::getJetPackFuel()
+{
+	return jetpackFuel;
 }
 
 float Player::getHp() {
@@ -86,13 +91,11 @@ void Player::animate() {
 // ( Movement is animated on a ratio (set by the variable animationPerFrame) )
 //
 void Player::checkMovement(LevelManager::Level currentLevel) {
-	std::cout << stoppedLeft << std::endl;
 
 	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		crouchPlayed = false;
 	if (grounded && jetpackFuel < JETPACK_MAXIMUM) {
 		jetpackFuel++;
-		std::cout << jetpackFuel << std::endl;
 	}
 	if (grounded &&
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::D) &&
@@ -148,7 +151,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 					
 				}
 			}
-			else {
+			else{
 				velocity.y = 1;
 				ceilingBump = false;
 				jumping = false;
@@ -350,6 +353,8 @@ void Player::checkTopBotCollision(sf::Vector2f topRight, sf::Vector2f botRightHi
 		ceilingBump = false;
 	}
 }
+
+
 void Player::DrillCollision(float velo, LevelManager::Level currentLevel) {
 
 	float bot = ceil(playerSprite.getGlobalBounds().top + 128);
@@ -367,7 +372,6 @@ void Player::DrillCollision(float velo, LevelManager::Level currentLevel) {
 	if (checkTile(currentLevel, botLeftHigh, 4)) {
 		int i = floor(botLeftHigh.y / tileSize) * currentLevel.width + floor(botLeftHigh.x / tileSize);
 		
-		std::cout << currentLevel.map[i] << std::endl;
 		currentLevel.map[i- currentLevel.width] = 0;
 		currentLevel.map[i] = 0;
 
@@ -375,7 +379,6 @@ void Player::DrillCollision(float velo, LevelManager::Level currentLevel) {
 	else if (checkTile(currentLevel, botRightHigh, 4)) {
 		int i = floor(botRightHigh.y / tileSize) * currentLevel.width + floor(botRightHigh.x / tileSize);
 
-		std::cout << currentLevel.map[i] << std::endl;
 		currentLevel.map[i - currentLevel.width] = 0;
 		currentLevel.map[i] = 0;
 	}

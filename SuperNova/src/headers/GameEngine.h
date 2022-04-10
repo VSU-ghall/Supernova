@@ -36,7 +36,8 @@ private:
 	sf::Vector2f pixiLocation;
 	sf::RectangleShape hpBarBack;
 	sf::RectangleShape hpBarInside;
-
+	sf::RectangleShape jetPackBack;
+	sf::RectangleShape jetPackInside;
 	enum Mode {menu, game, paused};
 	Mode gameMode;
 
@@ -69,5 +70,7 @@ public:
 
 	void addEntities();
 	void updateHpBar();
+	void updateJetPackBar();
+	void initJetPackBar();
 	float calculateDamage(Entity e);
 };

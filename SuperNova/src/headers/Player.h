@@ -11,6 +11,7 @@ class Player
 		float x, y;
 		int tileSize = 64;
 		float hp = 1.f;
+		int jetpackFuel;
 
 	public:
 		Vector2 startPosition;
@@ -18,9 +19,9 @@ class Player
 		sf::Texture texture;
 		sf::Music music;
 
-		bool stoppedLeft = false, stoppedRight = true, moving = false, jetPack = false;
+		bool stoppedLeft = false, stoppedRight = true, moving = false, jetPack = false, drilling = false;
 		bool transitioningLeft, transitioningRight, transitioningTop, transitioningBot;
-		bool drilling;
+
 		bool* displayingText;
 
 		float getX();
@@ -44,9 +45,11 @@ class Player
 		void playCrouchSound();
 		void playJumpSound();
 		void playWalkSound();
-		int const JETPACK_MAXIMUM = 75;
 
+		int getJetPackFuel();
 		float getHp();
 		float takeDamage(float damage);
+
+		int const JETPACK_MAXIMUM = 75;
 };
 
