@@ -38,7 +38,6 @@ void Player::init(bool* displayingText) {
 	x = startPosition.x * tileSize;
 	y = startPosition.y * tileSize;
 	
-	drilling = true;
 	jetPack = false;
 	jetpackFuel = JETPACK_MAXIMUM;
 	//this is the Size of the player
@@ -86,13 +85,10 @@ void Player::animate() {
 // ( Movement is animated on a ratio (set by the variable animationPerFrame) )
 //
 void Player::checkMovement(LevelManager::Level currentLevel) {
-	std::cout << stoppedLeft << std::endl;
-
 	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		crouchPlayed = false;
 	if (grounded && jetpackFuel < JETPACK_MAXIMUM) {
 		jetpackFuel++;
-		std::cout << jetpackFuel << std::endl;
 	}
 	if (grounded &&
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::D) &&
@@ -125,9 +121,8 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 	else {
 		velocity.x = 0;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)&&drilling) {
-		DrillCollision(0, currentLevel);
-	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) drilling = true;
+	else if (drilling) drilling = false;
 
 
 	if (jetPack) {
@@ -291,7 +286,27 @@ bool Player::checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vecto
 	bool blockTopLeftHigh = checkTile(currentLevel, topLeftHigh, currentLevel.collisionTile), blockBotLeftHigh = checkTile(currentLevel, botLeftHigh, currentLevel.collisionTile),
 		blockTopRightHigh = checkTile(currentLevel, topRightHigh, currentLevel.collisionTile), blockBotRightHigh = checkTile(currentLevel, botRightHigh, currentLevel.collisionTile);
 
-	if (((blockTopLeftHigh || blockBotLeftHigh) && velo < 0) || ((blockTopRightHigh || blockBotRightHigh)) && velo > 0) {
+	if (((blockTopLeftHigh || blockBotLeftHigh) && velo < 0) || ((blockTopRightHigh || blockBotRightHigh)) && velo > 0) {		
+		if (drilling) {
+			if (checkTile(currentLevel, botLeftHigh, 4)) {
+				int i = floor(botLeftHigh.y / tileSize) * currentLevel.width + floor(botLeftHigh.x / tileSize);
+
+				currentLevel.map[i - currentLevel.width] = 0;
+				currentLevel.map[i] = 0;
+
+				currentLevel.levelManager->setLevel(currentLevel);
+
+			}
+			else if (checkTile(currentLevel, botRightHigh, 4)) {
+				int i = floor(botRightHigh.y / tileSize) * currentLevel.width + floor(botRightHigh.x / tileSize);
+
+				currentLevel.map[i - currentLevel.width] = 0;
+				currentLevel.map[i] = 0;
+
+				currentLevel.levelManager->setLevel(currentLevel);
+			}
+		}
+
 		return false;
 	}
 
@@ -350,39 +365,9 @@ void Player::checkTopBotCollision(sf::Vector2f topRight, sf::Vector2f botRightHi
 		ceilingBump = false;
 	}
 }
-void Player::DrillCollision(float velo, LevelManager::Level currentLevel) {
 
-	float bot = ceil(playerSprite.getGlobalBounds().top + 128);
-	float top = ceil(playerSprite.getGlobalBounds().top);
-	float left = ceil(playerSprite.getGlobalBounds().left);
-	float mid = ceil(playerSprite.getGlobalBounds().left + 32);
-	float right = ceil(playerSprite.getGlobalBounds().left + 64);
-
-
-
-	sf::Vector2f botLeftHigh(left + (-std::abs(velo)), bot - 32);
-	sf::Vector2f botRightHigh(right + velo, bot - 32);
-
-
-	if (checkTile(currentLevel, botLeftHigh, 4)) {
-		int i = floor(botLeftHigh.y / tileSize) * currentLevel.width + floor(botLeftHigh.x / tileSize);
-		
-		std::cout << currentLevel.map[i] << std::endl;
-		currentLevel.map[i- currentLevel.width] = 0;
-		currentLevel.map[i] = 0;
-
-	}
-	else if (checkTile(currentLevel, botRightHigh, 4)) {
-		int i = floor(botRightHigh.y / tileSize) * currentLevel.width + floor(botRightHigh.x / tileSize);
-
-		std::cout << currentLevel.map[i] << std::endl;
-		currentLevel.map[i - currentLevel.width] = 0;
-		currentLevel.map[i] = 0;
-	}
-
-}
 bool Player::checkTile(LevelManager::Level currentLevel, sf::Vector2f position, int remainder) {
-	return currentLevel.colMap.at(floor(position.y / tileSize)).at(floor(position.x / tileSize)) == remainder;
+	return currentLevel.colMap.at(floor(position.y / tileSize)).at(floor(position.x / tileSize)) >= remainder;
 }
 
 void Player::playCrouchSound()
