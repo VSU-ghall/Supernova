@@ -10,6 +10,7 @@ class Player
 	private:
 		float x, y;
 		int tileSize = 64;
+		float hp = 1.f;
 
 	public:
 		Vector2 startPosition;
@@ -38,5 +39,7 @@ class Player
 		void playCrouchSound();
 		void playJumpSound();
 		void playWalkSound();
+		float getHp();
+		float takeDamage(float damage);
 };
 

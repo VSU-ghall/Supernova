@@ -119,6 +119,8 @@ void GameEngine::drawGame() {
 	gameWindow.draw(gameBar);
 	for (auto obj : levelManager.icons) gameWindow.draw(*obj->getIcon()->getSprite());
 	gameWindow.draw(*btnMenu->getSprite());
+	gameWindow.draw(hpBarBack);
+	gameWindow.draw(hpBarInside);
 
 	if (displayingText) gameWindow.draw(chatBar);
 
@@ -241,6 +243,20 @@ void GameEngine::handleEvent(sf::Event event) {
 
 			btnMenu->getSprite()->setPosition(gameBar.getSize().x - 
 								(btnMenu->getTexture().getSize().x/2) - 10, gameBar.getPosition().y + 5);
+
+			float width = 300.f;
+			float height = 50.f;
+			float xPos = gameBar.getSize().x /2 - 150;
+			float yPos = gameBar.getSize().y / 5;
+			
+
+			hpBarBack.setSize(sf::Vector2f(width, height));
+			hpBarBack.setFillColor(sf::Color(50, 50, 50, 200));
+			hpBarBack.setPosition(xPos, yPos);
+
+			hpBarInside.setSize(sf::Vector2f(width * player.getHp(), height));
+			hpBarInside.setFillColor(sf::Color(250, 0, 0, 200));
+			hpBarInside.setPosition(xPos, yPos);
 			
 			// Set the text bar
 			chatBar.setSize(sf::Vector2f(view.getSize().x, 100));
@@ -472,7 +488,10 @@ void GameEngine::updateGame() {
 		for (auto& e : enemies.getInteractableEntities(levelManager.currentLevel.levelName)) {
 			if (player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && !e->getSprite()->animating) {
 				e->getSprite()->animateOnce();
+				player.takeDamage(calculateDamage(*e));
 				e->notInteractable();
+				updateHpBar();
+				//std::cout << player.getHp() << " hp\n";
 			}
 		}
 	}
@@ -487,7 +506,21 @@ void GameEngine::updateMenu() {
 }
 
 void GameEngine::addEntities() {
-	for (auto& e : levelManager.getCurrentLevel().enemies) {
-		enemies.addEntity(e);
+	for (auto& level : levelManager.getAllLevels()) {
+		for (auto& e : level.enemies) {
+			enemies.addEntity(e);
+		}
 	}
+	
+}
+
+void GameEngine::updateHpBar() {
+	hpBarInside.setSize(sf::Vector2f(300 * player.getHp(), 50));
+}
+
+float GameEngine::calculateDamage(Entity e) {
+	float dist = std::sqrt(std::pow(e.getPosition().x - player.getX(), 2) + std::pow(e.getPosition().y - player.getY(), 2));
+	float damage = dist / 500;
+	//std::cout << damage << " damage" << "\n";
+	return damage;
 }
