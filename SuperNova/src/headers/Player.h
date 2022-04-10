@@ -13,6 +13,8 @@ class Player
 		float hp = 1.f;
 		int jetpackFuel;
 
+		int const JETPACK_MAXIMUM = 75;
+
 	public:
 		Vector2 startPosition;
 		sf::Sprite playerSprite;
@@ -21,6 +23,7 @@ class Player
 
 		bool stoppedLeft = false, stoppedRight = true, moving = false, jetPack = false, drilling = false;
 		bool transitioningLeft, transitioningRight, transitioningTop, transitioningBot;
+
 
 		bool* displayingText;
 
