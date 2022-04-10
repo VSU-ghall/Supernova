@@ -31,9 +31,10 @@ private:
 		*btnOptions = new Sprite("src/resources/MenuOptionsButton.png"),
 		*btnExit = new Sprite("src/resources/MenuExitButton.png");
 	sf::Texture backgroundTexture;
-	sf::RectangleShape gameBar, chatBar, blackRect;
+	sf::RectangleShape gameBar, chatBar, blackRect, hpBarBack, hpBarInside, jetPackInside,jetPackBack;
 	sf::Texture texture;
 	sf::Vector2f pixiLocation;
+
 
 	enum Mode {menu, game, paused};
 	Mode gameMode;
@@ -56,7 +57,7 @@ public:
 	void drawMenu();
 	sf::View getViewport(float width, float height);
 	void handleEvent(sf::Event event);
-	void loadLevel(LevelManager::Level level);
+	void loadLevel(LevelManager::Level level, Vector2 startp);
 	void playMusic();
 	void playSoundEffect(const std::string& filePath);
 	void setWindowView(sf::RenderWindow &window, float width, float height);
@@ -64,5 +65,10 @@ public:
 	void updateMenu();
 	sf::Vector2f updatePixi();
 
+
 	void addEntities();
+	void updateHpBar();
+	void updateJetPackBar();
+	void initJetPackBar();
+	float calculateDamage(Entity e);
 };

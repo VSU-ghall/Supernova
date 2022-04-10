@@ -47,12 +47,23 @@ void GameEngine::initGame() {
 	gameWindow.setFramerateLimit(60);
 
 	if (gameMode != paused) {
+
 		player.init(&displayingText);
-		loadLevel(levelManager.getLevel1());
+		loadLevel(levelManager.getLevel1(), levelManager.getLevel1().leftStartPosition);
+
 
 		gameBar.setFillColor(sf::Color(59, 30, 11));
 		chatBar.setFillColor(sf::Color(0,0,0,200));
 		btnMenu->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
+
+		float width = 300.f;
+		float height = 50.f;
+
+		hpBarBack.setFillColor(sf::Color(50, 50, 50, 200));
+		hpBarInside.setFillColor(sf::Color(250, 0, 0, 200));
+
+		hpBarBack.setSize(sf::Vector2f(width, height));
+		hpBarInside.setSize(sf::Vector2f(width * player.getHp(), height));
 
 		//storyManager.playLogoIntro();
 		storyManager.playTextIntro();
@@ -119,7 +130,13 @@ void GameEngine::drawGame() {
 	gameWindow.draw(gameBar);
 	for (auto obj : levelManager.icons) gameWindow.draw(*obj->getIcon()->getSprite());
 	gameWindow.draw(*btnMenu->getSprite());
+	gameWindow.draw(hpBarBack);
+	gameWindow.draw(hpBarInside);
 
+	if (player.jetPack) {
+		gameWindow.draw(jetPackBack);
+		gameWindow.draw(jetPackInside);
+	}
 	if (displayingText) gameWindow.draw(chatBar);
 
 	if (!scenePlaying) {
@@ -241,10 +258,19 @@ void GameEngine::handleEvent(sf::Event event) {
 
 			btnMenu->getSprite()->setPosition(gameBar.getSize().x - 
 								(btnMenu->getTexture().getSize().x/2) - 10, gameBar.getPosition().y + 5);
+
+			float xPos = gameBar.getSize().x /2 - 150;
+			float yPos = gameBar.getSize().y / 5;
+			
+
+			hpBarBack.setPosition(xPos, yPos);
+			hpBarInside.setPosition(xPos, yPos);
 			
 			// Set the text bar
 			chatBar.setSize(sf::Vector2f(view.getSize().x, 100));
 			chatBar.setPosition(0, view.getSize().y-chatBar.getSize().y);
+
+
 		}
 	}
 
@@ -256,27 +282,27 @@ void GameEngine::handleEvent(sf::Event event) {
 
 	// Temporary key bindings for development
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
-		loadLevel(levelManager.getLevel1());
+		loadLevel(levelManager.getLevel1(),levelManager.getLevel1().leftStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
-		loadLevel(levelManager.getLevel2());
+		loadLevel(levelManager.getLevel2(), levelManager.getLevel2().leftStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
-		loadLevel(levelManager.getLevel3());
+		loadLevel(levelManager.getLevel3(), levelManager.getLevel3().leftStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
-		loadLevel(levelManager.getLevel4());
+		loadLevel(levelManager.getLevel4(), levelManager.getLevel4().topStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5))
-		loadLevel(levelManager.getLevel5());
+		loadLevel(levelManager.getLevel5(), levelManager.getLevel5().leftStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6))
-		loadLevel(levelManager.getLevel6());
+		loadLevel(levelManager.getLevel6(), levelManager.getLevel6().leftStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7))
-		loadLevel(levelManager.getLevel7());
+		loadLevel(levelManager.getLevel7(), levelManager.getLevel7().topStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8))
-		loadLevel(levelManager.getLevel8());
+		loadLevel(levelManager.getLevel8(), levelManager.getLevel8().topStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num9))
-		loadLevel(levelManager.getLevel9());
+		loadLevel(levelManager.getLevel9(), levelManager.getLevel9().leftStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0))
-		loadLevel(levelManager.getLevel10());
+		loadLevel(levelManager.getLevel10(), levelManager.getLevel10().rightStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Hyphen))
-		loadLevel(levelManager.getLevel11());
+		loadLevel(levelManager.getLevel11(), levelManager.getLevel11().leftStartPosition);
 
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(gameWindow);
 	sf::Vector2f worldPos = gameWindow.mapPixelToCoords(pixelPos);
@@ -293,6 +319,17 @@ void GameEngine::handleEvent(sf::Event event) {
 					}
 					else {
 						player.jetPack = true;
+						obj->getIcon()->getSprite()->setColor(sf::Color(255, 255, 255, 255));
+					}
+				}
+				//drill
+				if (obj->getIconIndex() == 1) {
+					if (player.drilling) {
+						player.drilling = false;
+						obj->getIcon()->getSprite()->setColor(sf::Color(100, 100, 100, 255));
+					}
+					else {
+						player.drilling = true;
 						obj->getIcon()->getSprite()->setColor(sf::Color(255, 255, 255, 255));
 					}
 				}
@@ -355,8 +392,8 @@ void GameEngine::handleEvent(sf::Event event) {
 //
 // Loads level from LevelManager
 //
-void GameEngine::loadLevel(LevelManager::Level level) {
-	player.startPosition = Vector2(level.startPosition);
+void GameEngine::loadLevel(LevelManager::Level level, Vector2 startp) {
+	player.startPosition = startp;
 	player.stoppedLeft = false; player.stoppedRight = true;
 	player.respawn();
 	levelManager.setLevel(level);
@@ -449,31 +486,42 @@ void GameEngine::updateGame() {
 	if (displayingText) storyManager.update();
 
 	if (player.transitioningLeft) {
-		loadLevel(*levelManager.currentLevel.left);
+		loadLevel(*levelManager.currentLevel.left, levelManager.currentLevel.left->rightStartPosition);
 		player.transitioningLeft = false;
 	}
 	else if (player.transitioningRight) {
-		loadLevel(*levelManager.currentLevel.right);
+		loadLevel(*levelManager.currentLevel.right, levelManager.currentLevel.right->leftStartPosition);
 		player.transitioningRight = false;
 	}
 	else if (player.transitioningTop) {
-		loadLevel(*levelManager.currentLevel.top);
+		loadLevel(*levelManager.currentLevel.top, levelManager.currentLevel.top->botStartPosition);
 		player.transitioningTop = false;
 	}
 	else if (player.transitioningBot) {
-		loadLevel(*levelManager.currentLevel.bot);
+		loadLevel(*levelManager.currentLevel.bot, levelManager.currentLevel.bot->topStartPosition);
 		player.transitioningBot = false;
 	}
 
 	player.update(levelManager.getCurrentLevel());
-
+	if (player.jetPack) {
+		initJetPackBar();
+		updateJetPackBar();
+	}
 	enemies.update();
-	for (auto e : enemies.getEntitiesInteractable()) {
-		if (player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && !e->getSprite()->animating) {
-			e->getSprite()->animateOnce();
-			e->notInteractable();
+	if (!enemies.getInteractableEntities(levelManager.currentLevel.levelName).empty()) {
+		for (auto& e : enemies.getInteractableEntities(levelManager.currentLevel.levelName)) {
+			if (player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && !e->getSprite()->animating) {
+				e->getSprite()->animateOnce();
+				player.takeDamage(calculateDamage(*e));
+				e->notInteractable();
+				updateHpBar();
+				//std::cout << player.getHp() << " hp\n";
+			}
 		}
 	}
+
+			//levelManager.setLevel(levelManager.currentLevel);
+
 }
 
 //
@@ -484,7 +532,33 @@ void GameEngine::updateMenu() {
 }
 
 void GameEngine::addEntities() {
-	for (auto e : levelManager.getCurrentLevel().enemies) {
-		enemies.addEntity(e);
+	for (auto& level : levelManager.getAllLevels()) {
+		for (auto& e : level.enemies) {
+			enemies.addEntity(e);
+		}
 	}
+	
+}
+
+void GameEngine::updateJetPackBar() {
+	jetPackInside.setSize(sf::Vector2f(50 , 300* player.getJetPackFuel()/player.JETPACK_MAXIMUM));
+}
+void GameEngine::initJetPackBar() {
+	jetPackInside.setSize(sf::Vector2f(50, 300 * player.getJetPackFuel() / player.JETPACK_MAXIMUM));
+	jetPackBack.setSize(sf::Vector2f(50, 300));
+	jetPackBack.setFillColor(sf::Color(50, 50, 50, 200));
+	jetPackBack.setPosition(10, 100 );
+
+	jetPackInside.setSize(sf::Vector2f(50, 300 * (player.getJetPackFuel() / player.JETPACK_MAXIMUM)));
+	jetPackInside.setFillColor(sf::Color(173, 255, 230, 200));
+	jetPackInside.setPosition(10, 100);
+}
+void GameEngine::updateHpBar() {
+	hpBarInside.setSize(sf::Vector2f(300 * player.getHp(), 50));
+}
+float GameEngine::calculateDamage(Entity e) {
+	float dist = std::sqrt(std::pow(e.getPosition().x - player.getX(), 2) + std::pow(e.getPosition().y - player.getY(), 2));
+	float damage = dist / 500;
+	//std::cout << damage << " damage" << "\n";
+	return damage;
 }
