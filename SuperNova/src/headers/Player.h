@@ -13,6 +13,7 @@ class Player
 		float hp = 1.f;
 		int jetpackFuel, dashCooldown, dashDistance;
 		sf::Clock damageTimer;
+		sf::RectangleShape rect;
 
 	public:
 		Vector2 startPosition;

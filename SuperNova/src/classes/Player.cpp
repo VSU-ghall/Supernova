@@ -59,6 +59,11 @@ void Player::init(bool* displayingText) {
 		std::cout << "Could not load astronaut texture" << std::endl;
 	}
 	playerSprite.setTexture(texture);
+
+	// Set global bounds rectangle data for troubleshooting
+	rect.setOutlineColor(sf::Color::Red);
+	rect.setOutlineThickness(2.0f);
+	rect.setFillColor(sf::Color(0, 0, 0, 0));
 }
 
 void Player::animate() {
@@ -202,7 +207,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 					velocity.x = 0;
 				}
 				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && stoppedLeft) {
-					playerSprite.setTextureRect(sf::IntRect(44, 192, 44 * 2, 64));
+					playerSprite.setTextureRect(sf::IntRect(44, 192, 44, 64));
 					velocity.x = 0;
 				}
 
@@ -231,7 +236,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 			playerSprite.setTextureRect(sf::IntRect(0, 128, 44, 64));
 		}
 		else if (stoppedLeft) {
-			playerSprite.setTextureRect(sf::IntRect(44, 128, 44 * 2, 64));
+			playerSprite.setTextureRect(sf::IntRect(44, 128, 44, 64));
 		}
 	}
 	else if (jetPack && !grounded) {
@@ -259,6 +264,13 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 
 void Player::draw(sf::RenderWindow& window) {
 	window.draw(playerSprite);
+
+	// Set global bounds rectangle data for troubleshooting
+	/*sf::FloatRect bounds = playerSprite.getGlobalBounds();
+	rect.setSize(sf::Vector2f(bounds.width, bounds.height));
+
+	rect.setPosition(playerSprite.getPosition());
+	window.draw(rect);*/
 }
 
 void Player::die() {
