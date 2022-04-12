@@ -12,8 +12,18 @@ class Player
 		int tileSize = 64;
 		float hp = 1.f;
 		int jetpackFuel, dashCooldown, dashDistance;
-		sf::Clock damageTimer;
+		sf::Clock walkTimer, jetTimer, damageTimer;
 		sf::RectangleShape rect;
+
+		sf::IntRect frameStoppedLeft = sf::IntRect(0, 32 * 2, 32, 64),
+			frameStoppedRight = sf::IntRect(0, 0, 32, 64),
+			frameJetpackLeft = sf::IntRect(114, 322, 38, 64),
+			frameJetpackRight = sf::IntRect(0, 322, 38, 64),
+			frameDamaged = sf::IntRect(0, 257, 36, 64),
+			frameJumpLeft = sf::IntRect(44, 128, 44, 64),
+			frameJumpRight = sf::IntRect(0, 128, 44, 64),
+			frameSquatLeft = sf::IntRect(44, 192, 44, 64),
+			frameSquatRight = sf::IntRect(0, 192, 44, 64);
 
 	public:
 		Vector2 startPosition;
