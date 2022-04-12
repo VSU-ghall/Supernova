@@ -73,6 +73,7 @@ void GameEngine::initGame() {
 			std::cout << "couldn't load game over display" << std::endl;
 
 		gameOver.setTexture(&gameOverText);
+		gameOverBackground.setFillColor(sf::Color(255, 0, 0, 100));
 
 		//storyManager.playLogoIntro();
 		//storyManager.playTextIntro();
@@ -167,7 +168,10 @@ void GameEngine::drawGame() {
 	
 	if (scenePlaying || displayingText) storyManager.draw();
 
-	if (player.dead) gameWindow.draw(gameOver);
+	if (player.dead) {
+		gameWindow.draw(gameOverBackground);
+		gameWindow.draw(gameOver);
+	}
 
 	gameWindow.display();
 }
@@ -561,8 +565,12 @@ void GameEngine::updateComponentView() {
 	chatBar.setSize(sf::Vector2f(view.getSize().x, 100));
 	chatBar.setPosition(0, view.getSize().y - chatBar.getSize().y);
 
-	gameOver.setSize(sf::Vector2f(view.getSize().x, view.getSize().y - gameBar.getSize().y));
-	gameOver.setPosition(0, gameBar.getSize().y);
+	gameOverBackground.setSize(sf::Vector2f(view.getSize().x, view.getSize().y - gameBar.getSize().y));
+	gameOverBackground.setPosition(0, gameBar.getSize().y);
+
+	float scale = (view.getSize().x / 2) / gameOverText.getSize().x;
+	gameOver.setSize(sf::Vector2f(gameOverText.getSize().x * scale, gameOverText.getSize().y * scale));
+	gameOver.setPosition(sf::Vector2f(view.getSize().x / 2 - gameOver.getSize().x / 2, view.getSize().y / 2 - gameOver.getSize().y / 2));
 }
 
 void GameEngine::updateJetPackBar() {
