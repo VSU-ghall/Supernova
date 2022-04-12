@@ -21,7 +21,7 @@ class Player
 		sf::Music music;
 
 		bool stoppedLeft = false, stoppedRight = true, moving = false, jetPack = false, drilling = false, dead = false,
-			takingDamage = false, dashBoots = false;
+			takingDamage = false, dashing = false, dashBoots = false;
 		bool transitioningLeft, transitioningRight, transitioningTop, transitioningBot;
 
 
