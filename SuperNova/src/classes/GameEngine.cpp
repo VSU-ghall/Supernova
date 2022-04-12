@@ -320,6 +320,17 @@ void GameEngine::handleEvent(sf::Event event) {
 						obj->getIcon()->getSprite()->setColor(sf::Color(255, 255, 255, 255));
 					}
 				}
+				//boots
+				if (obj->getIconIndex() == 2) {
+					if (player.dashBoots) {
+						player.dashBoots = false;
+						obj->getIcon()->getSprite()->setColor(sf::Color(100, 100, 100, 255));
+					}
+					else {
+						player.dashBoots = true;
+						obj->getIcon()->getSprite()->setColor(sf::Color(255, 255, 255, 255));
+					}
+				}
 			}
 		}
 
