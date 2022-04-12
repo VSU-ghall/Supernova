@@ -363,8 +363,8 @@ void LevelManager::init() {
 		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,
 		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,
 		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,
-		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,
-		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,  2,  2,  2,  2,
+		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  3,  0,  0,  2,
+		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  3,  3,  2,  3,  3,  2,
 		 9,  9, 17,  3,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  0,  0,  0,  0,  2,
 		 8,  8, 19,  2,  3,  3,  3,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		 8,  8, 19,  2,  2,  2,  2,  3,  3,  3,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
@@ -451,13 +451,12 @@ void LevelManager::init() {
 
 
 
-
 		//need to add boots here so that they are added after the drill to the lists...... this will probably need to be moved
-		Object* boots = new Object(level6.objects.size(), icons.size(), new Sprite("src/resources/dashboots_icon.png", false, false, 1, 32, 32, 2.f, 0));
+		Object* boots = new Object(level11.objects.size(), icons.size(), new Sprite("src/resources/dashboots_icon.png", false, false, 1, 32, 32, 2.f, 0));
 		boots->setIcon(true);
-		boots->getObject()->getSprite()->setPosition(28 * 64, 8 * 64);
+		boots->getObject()->getSprite()->setPosition(26 * 64, 6 * 64);
 
-		level6.objects.push_back(boots);
+		level11.objects.push_back(boots);
 		icons.push_back(boots);
 }
 
