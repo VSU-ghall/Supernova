@@ -67,6 +67,7 @@ public:
 
 
 	void addEntities();
+	void updateComponentView();
 	void updateHpBar();
 	void updateJetPackBar();
 	void initJetPackBar();
