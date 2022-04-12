@@ -234,6 +234,12 @@ void Player::draw(sf::RenderWindow& window) {
 	window.draw(playerSprite);
 }
 
+void Player::die() {
+	dead = true;
+
+	// Animate death here
+}
+
 void Player::respawn() {
 	playerSprite.setPosition(tileSize * startPosition.x, tileSize * startPosition.y);
 	x = startPosition.x * tileSize;
@@ -241,9 +247,13 @@ void Player::respawn() {
 }
 
 void Player::update(LevelManager::Level currentLevel) {
-	animate();
-	checkMovement(currentLevel);
+	if (!takingDamage) {
+		animate();
+		checkMovement(currentLevel);
+	}
 	checkItems(currentLevel);
+
+	if (damageTimer.getElapsedTime().asSeconds() >= 0.1) takingDamage = false;
 }
 
 void Player::checkItems(LevelManager::Level currentLevel) {
@@ -452,9 +462,15 @@ void Player::playWalkSound()
 }
 
 float Player::takeDamage(float damage) {
+	takingDamage = true; damageTimer.restart();
 	hp -= damage;
+
+	playerSprite.setTextureRect(sf::IntRect(0, 257, 36, 64));
+
 	if (hp <= 0) {
 		hp = 0;
+
+		die();
 	}
 	return hp;
 }

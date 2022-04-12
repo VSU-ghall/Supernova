@@ -12,6 +12,7 @@ class Player
 		int tileSize = 64;
 		float hp = 1.f;
 		int jetpackFuel;
+		sf::Clock damageTimer;
 
 
 	public:
@@ -20,7 +21,8 @@ class Player
 		sf::Texture texture;
 		sf::Music music;
 
-		bool stoppedLeft = false, stoppedRight = true, moving = false, jetPack = false, drilling = false;
+		bool stoppedLeft = false, stoppedRight = true, moving = false, jetPack = false, drilling = false, dead = false,
+			takingDamage = false;
 		bool transitioningLeft, transitioningRight, transitioningTop, transitioningBot;
 
 
@@ -32,6 +34,7 @@ class Player
 
 		void init(bool* displayingText);
 		void animate();
+		void die();
 		void draw(sf::RenderWindow& window);
 		void checkItems(LevelManager::Level currentLevel);
 		bool checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vector2f botLeftHigh, sf::Vector2f topRight, sf::Vector2f topLeft, LevelManager::Level currentLevel);

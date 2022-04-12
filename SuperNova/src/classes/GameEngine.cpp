@@ -28,6 +28,10 @@ void GameEngine::run() {
 				drawMenu();
 				break;
 			case game:
+				if (player.dead) {
+					drawGame();
+					break;
+				}
 				updateGame();
 				drawGame();
 				break;
@@ -64,6 +68,11 @@ void GameEngine::initGame() {
 
 		hpBarBack.setSize(sf::Vector2f(width, height));
 		hpBarInside.setSize(sf::Vector2f(width * player.getHp(), height));
+
+		if (!gameOverText.loadFromFile("src/resources/Game_Over_Screen.png"))
+			std::cout << "couldn't load game over display" << std::endl;
+
+		gameOver.setTexture(&gameOverText);
 
 		//storyManager.playLogoIntro();
 		//storyManager.playTextIntro();
@@ -157,6 +166,8 @@ void GameEngine::drawGame() {
 	}
 	
 	if (scenePlaying || displayingText) storyManager.draw();
+
+	if (player.dead) gameWindow.draw(gameOver);
 
 	gameWindow.display();
 }
@@ -538,6 +549,9 @@ void GameEngine::updateComponentView() {
 	// Set the text bar
 	chatBar.setSize(sf::Vector2f(view.getSize().x, 100));
 	chatBar.setPosition(0, view.getSize().y - chatBar.getSize().y);
+
+	gameOver.setSize(sf::Vector2f(view.getSize().x, view.getSize().y - gameBar.getSize().y));
+	gameOver.setPosition(0, gameBar.getSize().y);
 }
 
 void GameEngine::updateJetPackBar() {
