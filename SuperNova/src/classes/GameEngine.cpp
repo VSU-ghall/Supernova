@@ -66,7 +66,7 @@ void GameEngine::initGame() {
 		hpBarInside.setSize(sf::Vector2f(width * player.getHp(), height));
 
 		//storyManager.playLogoIntro();
-		storyManager.playTextIntro();
+		//storyManager.playTextIntro();
 		addEntities();
 	}
 	else {
