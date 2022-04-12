@@ -60,7 +60,7 @@ void GameEngine::initGame() {
 		float height = 50.f;
 
 		hpBarBack.setFillColor(sf::Color(50, 50, 50, 200));
-		hpBarInside.setFillColor(sf::Color(250, 0, 0, 200));
+		hpBarInside.setFillColor(sf::Color::Green);
 
 		hpBarBack.setSize(sf::Vector2f(width, height));
 		hpBarInside.setSize(sf::Vector2f(width * player.getHp(), height));
@@ -557,6 +557,12 @@ void GameEngine::initJetPackBar() {
 
 void GameEngine::updateHpBar() {
 	hpBarInside.setSize(sf::Vector2f(300 * player.getHp(), 50));
+	sf::Color color = hpBarInside.getFillColor();
+
+	color.r = 255 * (1 - player.getHp());
+	color.g = 255 * player.getHp();
+
+	hpBarInside.setFillColor(color);
 }
 
 float GameEngine::calculateDamage(Entity e) {
