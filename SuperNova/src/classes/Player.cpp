@@ -3,8 +3,7 @@
 #include <iostream>
 
 float playerJumpSpeed, playerSpeed, playerSize, animationPerFrame = 1.0f / 8.0f, jumpHeight = 0;
-int frameCount = 0, offset = 0;
-int frameCountJetPack = 0, offsetJetPack = 0;
+int offset = 0, offsetJetPack = 0;
 float gravity = 1.f;
 sf::Vector2f velocity(0, 0);
 bool grounded = true, jumping = false, ceilingBump = false, crouchPlayed = false;
@@ -39,7 +38,7 @@ void Player::init(bool* displayingText) {
 	playerSpeed = 6.0f;
 	playerJumpSpeed = 9.0f;
 	playerSprite.setPosition(tileSize * startPosition.x, tileSize * startPosition.y);
-	playerSprite.setTextureRect(sf::IntRect(0, 0, 32, 64));
+	playerSprite.setTextureRect(frameStoppedLeft);
 	x = startPosition.x * tileSize;
 	y = startPosition.y * tileSize;
 
@@ -59,31 +58,35 @@ void Player::init(bool* displayingText) {
 		std::cout << "Could not load astronaut texture" << std::endl;
 	}
 	playerSprite.setTexture(texture);
+
+	// Set global bounds rectangle data for troubleshooting
+	rect.setOutlineColor(sf::Color::Red);
+	rect.setOutlineThickness(2.0f);
+	rect.setFillColor(sf::Color(0, 0, 0, 0));
 }
 
 void Player::animate() {
 	if (stoppedRight && !moving) {
-		if (jetPack && !grounded) playerSprite.setTextureRect(sf::IntRect(0, 322, 38, 64));
-		else playerSprite.setTextureRect(sf::IntRect(0, 0, 32, 64));
+		if (jetPack && !grounded) playerSprite.setTextureRect(frameJetpackRight);
+		else playerSprite.setTextureRect(frameStoppedRight);
 	}
 	else if (stoppedLeft && !moving) {
-		if (jetPack && !grounded) playerSprite.setTextureRect(sf::IntRect(116, 322, 38, 64));
-		else playerSprite.setTextureRect(sf::IntRect(0, 32 * 2, 32, 64));
+		if (jetPack && !grounded) playerSprite.setTextureRect(frameJetpackLeft);
+		else playerSprite.setTextureRect(frameStoppedLeft);
 	}
 
-	frameCount++;
-	frameCountJetPack++;
-	if ((int)(frameCount * animationPerFrame) > offset) offset++;
-	if ((int)(frameCountJetPack * animationPerFrame) > offsetJetPack) offsetJetPack++;
+	if (walkTimer.getElapsedTime().asMilliseconds() >= 150 * offset) offset++;
+	if (jetTimer.getElapsedTime().asMilliseconds() >= 150 * offsetJetPack) offsetJetPack++;
+
 
 	//There are 8 frames for walking now, this allows each frame to cycle and then reset when the last frame is projected onto the screen
-	if (offset == 8) {
-		frameCount = 0;
+	if (offset == 8 || (!moving && grounded)) {
+		walkTimer.restart();
 		offset = 0;
 	}
 
-	if (offsetJetPack == 3) {
-		frameCountJetPack = 0;
+	if (offsetJetPack == 3 || grounded) {
+		jetTimer.restart();
 		offsetJetPack = 0;
 	}
 }
@@ -198,11 +201,11 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 			else {
 				//if s key is pressed, the astronaut crouches and cannot move along the x-axis 
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && stoppedRight) {
-					playerSprite.setTextureRect(sf::IntRect(0, 192, 44, 64));
+					playerSprite.setTextureRect(frameSquatRight);
 					velocity.x = 0;
 				}
 				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && stoppedLeft) {
-					playerSprite.setTextureRect(sf::IntRect(44, 192, 44 * 2, 64));
+					playerSprite.setTextureRect(frameSquatLeft);
 					velocity.x = 0;
 				}
 
@@ -228,10 +231,10 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 	}
 	if (!jetPack && (!grounded || jumping)) {
 		if (stoppedRight) {
-			playerSprite.setTextureRect(sf::IntRect(0, 128, 44, 64));
+			playerSprite.setTextureRect(frameJumpRight);
 		}
 		else if (stoppedLeft) {
-			playerSprite.setTextureRect(sf::IntRect(44, 128, 44 * 2, 64));
+			playerSprite.setTextureRect(frameJumpLeft);
 		}
 	}
 	else if (jetPack && !grounded) {
@@ -259,6 +262,13 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 
 void Player::draw(sf::RenderWindow& window) {
 	window.draw(playerSprite);
+
+	// Set global bounds rectangle data for troubleshooting
+	/*sf::FloatRect bounds = playerSprite.getGlobalBounds();
+	rect.setSize(sf::Vector2f(bounds.width, bounds.height));
+
+	rect.setPosition(playerSprite.getPosition());
+	window.draw(rect);*/
 }
 
 void Player::die() {
@@ -492,7 +502,7 @@ float Player::takeDamage(float damage) {
 	takingDamage = true; damageTimer.restart();
 	hp -= damage;
 
-	playerSprite.setTextureRect(sf::IntRect(0, 257, 36, 64));
+	playerSprite.setTextureRect(frameDamaged);
 
 	if (hp <= 0) {
 		hp = 0;
