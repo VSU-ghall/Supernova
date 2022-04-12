@@ -112,8 +112,8 @@ void LevelManager::init() {
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 	};
 	level3.levelName = "level3";
-			level3.leftStartPosition = Vector2(2, 10);
-		level3.rightStartPosition = Vector2(28, 5);
+		level3.leftStartPosition = Vector2(2, 10);
+		level3.rightStartPosition = Vector2(28, 4);
 		level3.botStartPosition = Vector2(16, 10);
 
 		level3.background->setBounds(64 * level3.width, 64 * level3.height);
@@ -157,7 +157,7 @@ void LevelManager::init() {
 		level4.top = &level3;
 
 
-		Object* jetpack = new Object(icons.size(), icons.size(), new Sprite("src/resources/jetpack_icon.png", false, false, 1, 32, 32, 2.f, 0));
+		Object* jetpack = new Object(level4.objects.size(), icons.size(), new Sprite("src/resources/jetpack_icon.png", false, false, 1, 32, 32, 2.f, 0));
 		jetpack->setIcon(true);
 		jetpack->getObject()->getSprite()->setPosition(15 * 64, 8 * 64);
 		
@@ -322,7 +322,7 @@ void LevelManager::init() {
 
 		level9.left = &level8;
 
-		Object* drill = new Object(icons.size(), icons.size(), new Sprite("src/resources/drill_icon.png", false, false, 1, 32, 32, 2.f, 0));
+		Object* drill = new Object(level9.objects.size(), icons.size(), new Sprite("src/resources/drill_icon.png", false, false, 1, 32, 32, 2.f, 0));
 		drill->setIcon(true);
 		drill->getObject()->getSprite()->setPosition(27 * 64, 4 * 64);
 
@@ -358,17 +358,17 @@ void LevelManager::init() {
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 		11, 11, 25,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,
 
-		13, 13, 21,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,
-		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-		 9,  9, 17,  3,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		13, 13, 21,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  2,
+		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,
+		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,
+		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,
+		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,
+		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,
+		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,  2,  2,  2,  2,
+		 9,  9, 17,  3,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  0,  0,  0,  0,  2,
 		 8,  8, 19,  2,  3,  3,  3,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		 8,  8, 19,  2,  2,  2,  2,  3,  3,  3,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-		 8,  8, 19,  2,  2,  2,  2,  2,  2,  2,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,
+		 8,  8, 19,  2,  2,  2,  2,  2,  2,  2,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  0,  0,  0,  0,  3,
 		 8,  8, 19,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,
 
 		10, 10, 24,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,
@@ -381,7 +381,84 @@ void LevelManager::init() {
 
 		level11.left = &level6;
 		level11.right = &level11;
+
+		Sprite* spicyFlower9 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
+		Entity spicyFlowerEntity9 = Entity(9, "level11", spicyFlower9, sf::Vector2f(25 * 64, (12 * 64) + 8));
+		level11.enemies.push_back(spicyFlowerEntity9);
+
+		Sprite* spicyFlower9up = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
+		Entity spicyFlowerEntity9up = Entity(9, "level11", spicyFlower9up, sf::Vector2f(25 * 64, (9 * 64) - 8));
+		level11.enemies.push_back(spicyFlowerEntity9up);
+
+		Sprite* spicyFlower10 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
+		Entity spicyFlowerEntity10 = Entity(10, "level11", spicyFlower10, sf::Vector2f(26 * 64, (12 * 64) + 8));
+		level11.enemies.push_back(spicyFlowerEntity10);
+
+		Sprite* spicyFlower10up = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
+		Entity spicyFlowerEntity10up = Entity(9, "level11", spicyFlower10up, sf::Vector2f(26 * 64, (9 * 64) - 8));
+		level11.enemies.push_back(spicyFlowerEntity10up);
+
+
+		Sprite* spicyFlower11 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
+		Entity spicyFlowerEntity11 = Entity(11, "level11", spicyFlower11, sf::Vector2f(27 * 64, (12 * 64) + 8));
+		level11.enemies.push_back(spicyFlowerEntity11);
+
+
+		Sprite* spicyFlower11up = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
+		Entity spicyFlowerEntity11up = Entity(9, "level11", spicyFlower11up, sf::Vector2f(27 * 64, (9 * 64) - 8));
+		level11.enemies.push_back(spicyFlowerEntity11up);
+
+
+		Sprite* spicyFlower12 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
+		Entity spicyFlowerEntity12 = Entity(12, "level11", spicyFlower12, sf::Vector2f(28 * 64, (12 * 64)+8));
+		level11.enemies.push_back(spicyFlowerEntity12);
+
+
+		Sprite* spicyFlower12up = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
+		Entity spicyFlowerEntity12up = Entity(9, "level11", spicyFlower12up, sf::Vector2f(28 * 64, (9 * 64) - 8));
+		level11.enemies.push_back(spicyFlowerEntity12up);
+
+		Sprite* spicyFlower13 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
+		Entity spicyFlowerEntity13 = Entity(9, "level11", spicyFlower13, sf::Vector2f(25 * 64+32, (12 * 64) + 8));
+		level11.enemies.push_back(spicyFlowerEntity13);
+
+		Sprite* spicyFlower13up = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
+		Entity spicyFlowerEntity13up = Entity(9, "level11", spicyFlower13up, sf::Vector2f(25 * 64+32, (9 * 64) - 8));
+		level11.enemies.push_back(spicyFlowerEntity13up);
+
+		Sprite* spicyFlower14 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
+		Entity spicyFlowerEntity14 = Entity(9, "level11", spicyFlower14, sf::Vector2f(26 * 64 + 32, (12 * 64) + 8));
+		level11.enemies.push_back(spicyFlowerEntity14);
+
+		Sprite* spicyFlower14up = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
+		Entity spicyFlowerEntity14up = Entity(9, "level11", spicyFlower14up, sf::Vector2f(26 * 64 + 32, (9 * 64) - 8));
+		level11.enemies.push_back(spicyFlowerEntity14up);
+		Sprite* spicyFlower15 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
+		Entity spicyFlowerEntity15 = Entity(9, "level11", spicyFlower15, sf::Vector2f(27 * 64 + 32, (12 * 64) + 8));
+		level11.enemies.push_back(spicyFlowerEntity15);
+
+		Sprite* spicyFlower15up = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
+		Entity spicyFlowerEntity15up = Entity(9, "level11", spicyFlower15up, sf::Vector2f(27 * 64 + 32, (9 * 64) - 8));
+		level11.enemies.push_back(spicyFlowerEntity15up);
+		Sprite* spicyFlower16 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
+		Entity spicyFlowerEntity16 = Entity(9, "level11", spicyFlower16, sf::Vector2f(28 * 64 + 32, (12 * 64) + 8));
+		level11.enemies.push_back(spicyFlowerEntity16);
+
+		Sprite* spicyFlower16up = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
+		Entity spicyFlowerEntity16up = Entity(9, "level11", spicyFlower16up, sf::Vector2f(28 * 64 + 32, (9 * 64) - 8));
+		level11.enemies.push_back(spicyFlowerEntity16up);
 		allLevels.push_back(level11);
+
+
+
+
+		//need to add boots here so that they are added after the drill to the lists...... this will probably need to be moved
+		Object* boots = new Object(level6.objects.size(), icons.size(), new Sprite("src/resources/dashboots_icon.png", false, false, 1, 32, 32, 2.f, 0));
+		boots->setIcon(true);
+		boots->getObject()->getSprite()->setPosition(28 * 64, 8 * 64);
+
+		level6.objects.push_back(boots);
+		icons.push_back(boots);
 }
 
 Sprite LevelManager::getCurrentBackground() {
