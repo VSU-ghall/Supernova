@@ -112,8 +112,8 @@ void LevelManager::init() {
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 	};
 	level3.levelName = "level3";
-			level3.leftStartPosition = Vector2(2, 10);
-		level3.rightStartPosition = Vector2(28, 5);
+		level3.leftStartPosition = Vector2(2, 10);
+		level3.rightStartPosition = Vector2(28, 4);
 		level3.botStartPosition = Vector2(16, 10);
 
 		level3.background->setBounds(64 * level3.width, 64 * level3.height);

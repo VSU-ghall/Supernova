@@ -110,7 +110,7 @@ void StoryManager::update() {
 			playingTextIntro = false; *displayingText = false;
 		}
 		else if (seconds >= 45) {
-			text = "Use the A & D keys to move right & left, the S key to crouch, and the W key to jump!";
+			text = "Use the A & D keys to move right & left, the S key to crouch, and the W key to \njump!";
 		}
 		else if (seconds >= 35) {
 			text = "Maybe we'll even find some cool weapons or gadgets to use along the way!";

@@ -28,6 +28,10 @@ void GameEngine::run() {
 				drawMenu();
 				break;
 			case game:
+				if (player.dead) {
+					drawGame();
+					break;
+				}
 				updateGame();
 				drawGame();
 				break;
@@ -60,13 +64,18 @@ void GameEngine::initGame() {
 		float height = 50.f;
 
 		hpBarBack.setFillColor(sf::Color(50, 50, 50, 200));
-		hpBarInside.setFillColor(sf::Color(250, 0, 0, 200));
+		hpBarInside.setFillColor(sf::Color::Green);
 
 		hpBarBack.setSize(sf::Vector2f(width, height));
 		hpBarInside.setSize(sf::Vector2f(width * player.getHp(), height));
 
+		if (!gameOverText.loadFromFile("src/resources/Game_Over_Screen.png"))
+			std::cout << "couldn't load game over display" << std::endl;
+
+		gameOver.setTexture(&gameOverText);
+
 		//storyManager.playLogoIntro();
-		storyManager.playTextIntro();
+		//storyManager.playTextIntro();
 		addEntities();
 	}
 	else {
@@ -158,6 +167,8 @@ void GameEngine::drawGame() {
 	
 	if (scenePlaying || displayingText) storyManager.draw();
 
+	if (player.dead) gameWindow.draw(gameOver);
+
 	gameWindow.display();
 }
 
@@ -247,31 +258,7 @@ void GameEngine::handleEvent(sf::Event event) {
 	// sets viewport when window is resized
 	if (event.type == sf::Event::Resized) {
 		view = getViewport(event.size.width, event.size.height);
-		if (gameMode == game) {
-			// Set the game bar and contents
-			gameBar.setSize(sf::Vector2f(view.getSize().x, 75));
-
-			// Populate all the item icons
-			for (auto obj : levelManager.icons)
-				obj->getIcon()->getSprite()->setPosition(gameBar.getPosition().x + (10 * (obj->getIconIndex()+1) ) + (obj->getSize().x * obj->getIconIndex()),
-					gameBar.getPosition().y + ((gameBar.getSize().y - obj->getSize().y) / 2));
-
-			btnMenu->getSprite()->setPosition(gameBar.getSize().x - 
-								(btnMenu->getTexture().getSize().x/2) - 10, gameBar.getPosition().y + 5);
-
-			float xPos = gameBar.getSize().x /2 - 150;
-			float yPos = gameBar.getSize().y / 5;
-			
-
-			hpBarBack.setPosition(xPos, yPos);
-			hpBarInside.setPosition(xPos, yPos);
-			
-			// Set the text bar
-			chatBar.setSize(sf::Vector2f(view.getSize().x, 100));
-			chatBar.setPosition(0, view.getSize().y-chatBar.getSize().y);
-
-
-		}
+		if (gameMode == game) updateComponentView();
 	}
 
 	if (event.type == sf::Event::KeyReleased) {
@@ -478,8 +465,7 @@ void GameEngine::setWindowView(sf::RenderWindow& window, float width, float heig
 		view.setSize(viewWidth, viewHeight);
 		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
 
-		gameBar.setSize(sf::Vector2f(view.getSize().x, 75));
-		btnMenu->getSprite()->setPosition(gameBar.getSize().x - 150 - 10, gameBar.getPosition().y + 5);
+		updateComponentView();
 	}
 }
 
@@ -551,9 +537,38 @@ void GameEngine::addEntities() {
 	
 }
 
+
+void GameEngine::updateComponentView() {
+	// Set the game bar and contents
+	gameBar.setSize(sf::Vector2f(view.getSize().x, 75));
+
+	// Populate all the item icons
+	for (auto obj : levelManager.icons)
+		obj->getIcon()->getSprite()->setPosition(gameBar.getPosition().x + (10 * (obj->getIconIndex() + 1)) + (obj->getSize().x * obj->getIconIndex()),
+			gameBar.getPosition().y + ((gameBar.getSize().y - obj->getSize().y) / 2));
+
+	btnMenu->getSprite()->setPosition(gameBar.getSize().x -
+		(btnMenu->getTexture().getSize().x / 2) - 10, gameBar.getPosition().y + 5);
+
+	float xPos = gameBar.getSize().x / 2 - 150;
+	float yPos = gameBar.getSize().y / 5;
+
+
+	hpBarBack.setPosition(xPos, yPos);
+	hpBarInside.setPosition(xPos, yPos);
+
+	// Set the text bar
+	chatBar.setSize(sf::Vector2f(view.getSize().x, 100));
+	chatBar.setPosition(0, view.getSize().y - chatBar.getSize().y);
+
+	gameOver.setSize(sf::Vector2f(view.getSize().x, view.getSize().y - gameBar.getSize().y));
+	gameOver.setPosition(0, gameBar.getSize().y);
+}
+
 void GameEngine::updateJetPackBar() {
 	jetPackInside.setSize(sf::Vector2f(50 , 300* player.getJetPackFuel()/player.JETPACK_MAXIMUM));
 }
+
 void GameEngine::initJetPackBar() {
 	jetPackInside.setSize(sf::Vector2f(50, 300 * player.getJetPackFuel() / player.JETPACK_MAXIMUM));
 	jetPackBack.setSize(sf::Vector2f(50, 300));
@@ -564,9 +579,17 @@ void GameEngine::initJetPackBar() {
 	jetPackInside.setFillColor(sf::Color(173, 255, 230, 200));
 	jetPackInside.setPosition(10, 100);
 }
+
 void GameEngine::updateHpBar() {
 	hpBarInside.setSize(sf::Vector2f(300 * player.getHp(), 50));
+	sf::Color color = hpBarInside.getFillColor();
+
+	color.r = 255 * (1 - player.getHp());
+	color.g = 255 * player.getHp();
+
+	hpBarInside.setFillColor(color);
 }
+
 float GameEngine::calculateDamage(Entity e) {
 	float dist = std::sqrt(std::pow(e.getPosition().x - player.getX(), 2) + std::pow(e.getPosition().y - player.getY(), 2));
 	float damage = dist / 500;
