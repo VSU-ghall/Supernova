@@ -19,13 +19,12 @@ Entity::Entity(const std::string& tag, Sprite* s, sf::Vector2f pos, sf::Vector2f
 	position2 = pos2;
 
 	if (position.x > position2.x) {
-		sf::Vector2f temp = position;
-		position = position2;
-		position2 = temp;
+		position2 = position;
+		position = pos2;
 	}
 
 	sprite->getSprite()->setPosition(position);
-	speed = sprite->getFrequency() / 64.0f;
+	speed = sprite->getFrequency() / 64.0f + (static_cast <float> (rand()) / static_cast <float> (RAND_MAX));
 }
 
 bool Entity::getIsActive() {
