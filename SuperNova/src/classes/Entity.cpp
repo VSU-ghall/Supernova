@@ -1,13 +1,20 @@
 #include "headers/Entity.h"
 #include <headers/Sprite.h>
 
-Entity::Entity(const size_t& id, const std::string& tag)
-	:id(id), tag(tag)
-{}
+Entity::Entity(const std::string& tag) 
+	: tag(tag) {}
 
-Entity::Entity(const size_t& id, const std::string& tag, Sprite *s, sf::Vector2f pos)
-	: id(id), tag(tag), sprite(s), position(pos)
-{}
+Entity::Entity(const std::string& tag, Sprite *s, sf::Vector2f pos)
+	: Entity(tag) 
+{
+	sprite = s; position = pos;
+}
+
+Entity::Entity(const std::string& tag, Sprite* s, sf::Vector2f pos, sf::Vector2f pos2)
+	: Entity(tag, s, pos)
+{
+	position2 = pos2;
+}
 
 bool Entity::getIsActive() {
 	return isActive;
@@ -17,8 +24,8 @@ std::string& Entity::getTag() {
 	return tag;
 }
 
-size_t Entity::getId() {
-	return id;
+bool Entity::isDynamic() {
+	return dynamic;
 }
 
 void Entity::destroy() {

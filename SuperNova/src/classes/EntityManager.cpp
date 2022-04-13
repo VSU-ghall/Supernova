@@ -58,7 +58,7 @@ void EntityManager::removeUninteractableEntities(EntityVector& vector) {
 
 //creates and returns an entity with the tag provided
 std::shared_ptr<Entity> EntityManager::addEntity(const std::string& tag) {
-	auto entity = std::shared_ptr<Entity>(new Entity(numEntities++, tag));
+	auto entity = std::shared_ptr<Entity>(new Entity(tag));
 	entitiesToAdd.push_back(entity);
 	return entity;
 
