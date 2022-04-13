@@ -44,12 +44,9 @@ void LevelManager::init() {
 		level1.right = &level2;
 		level1.left = &level1;
 
-		Sprite* spicyFlower = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
-		Entity spicyFlowerEntity = Entity(1, "level1", spicyFlower, sf::Vector2f(702.f, 512.f));
-		level1.enemies.push_back(spicyFlowerEntity);
-		Sprite* spicyFlower2 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
-		Entity spicyFlowerEntity2 = Entity(2, "level1", spicyFlower2, sf::Vector2f(894.f, 512.f));
-		level1.enemies.push_back(spicyFlowerEntity2);
+		addEntity(getSpicyFlower(), &level1, sf::Vector2f(11, 8));
+		addEntity(getSpicyFlower(), &level1, sf::Vector2f(14, 8));
+
 		allLevels.push_back(level1);
 
 
@@ -81,15 +78,12 @@ void LevelManager::init() {
 		level2.left = &level1;
 		level2.right = &level3;
 
-		Sprite* spicyFlower3 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
-		Entity spicyFlowerEntity3 = Entity(3, "level2", spicyFlower3, sf::Vector2f(1086.f, 768.f));
-		level2.enemies.push_back(spicyFlowerEntity3);
-		Sprite* spicyFlower4 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
-		Entity spicyFlowerEntity4 = Entity(4, "level2", spicyFlower4, sf::Vector2f(958.f, 768.f));
-		level2.enemies.push_back(spicyFlowerEntity4);
-		Sprite* spicyFlower5 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
-		Entity spicyFlowerEntity5 = Entity(5, "level2", spicyFlower5, sf::Vector2f(70.f, 384.f));
-		level2.enemies.push_back(spicyFlowerEntity5);
+		addEntity(getSpicyFlower(), &level2, sf::Vector2f(1, 6));
+		//addEntity(getSpicyFlower(), &level2, sf::Vector2f(15, 12));
+		//addEntity(getSpicyFlower(), &level2, sf::Vector2f(17, 12));
+		
+		addEntity(getScorpion(), &level2, sf::Vector2f(14, 12), sf::Vector2f(17, 12));
+
 		allLevels.push_back(level2);
 
 
@@ -122,15 +116,9 @@ void LevelManager::init() {
 		level3.right = &level5;
 		level3.bot = &level4;
 
-		Sprite* spicyFlower6 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
-		Entity spicyFlowerEntity6 = Entity(6, "level3", spicyFlower6, sf::Vector2f(1715.f, 704.f));
-		level3.enemies.push_back(spicyFlowerEntity6);
-		Sprite* spicyFlower7 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
-		Entity spicyFlowerEntity7 = Entity(7, "level3", spicyFlower7, sf::Vector2f(1598.f, 704.f));
-		level3.enemies.push_back(spicyFlowerEntity7);
-		Sprite* spicyFlower8 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
-		Entity spicyFlowerEntity8 = Entity(8, "level3", spicyFlower8, sf::Vector2f(1485.f, 704.f));
-		level3.enemies.push_back(spicyFlowerEntity8);
+		addEntity(getSpicyFlower(), &level3, sf::Vector2f(23, 11));
+		addEntity(getSpicyFlower(), &level3, sf::Vector2f(25, 11));
+		addEntity(getSpicyFlower(), &level3, sf::Vector2f(27, 11));
 
 		allLevels.push_back(level3);
 
@@ -382,76 +370,27 @@ void LevelManager::init() {
 		level11.left = &level6;
 		level11.right = &level11;
 
-		Sprite* spicyFlower9 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
-		Entity spicyFlowerEntity9 = Entity(9, "level11", spicyFlower9, sf::Vector2f(25 * 64, (12 * 64) + 8));
-		level11.enemies.push_back(spicyFlowerEntity9);
+		addEntity(getSpicyFlower(), &level11, sf::Vector2f(25, 12));
+		addEntity(getSpicyFlower(), &level11, sf::Vector2f(25.5, 12));
+		addEntity(getSpicyFlower(), &level11, sf::Vector2f(26, 12));
+		addEntity(getSpicyFlower(), &level11, sf::Vector2f(26.5, 12));
+		addEntity(getSpicyFlower(), &level11, sf::Vector2f(27, 12));
+		addEntity(getSpicyFlower(), &level11, sf::Vector2f(27.5, 12));
+		addEntity(getSpicyFlower(), &level11, sf::Vector2f(28, 12));
+		addEntity(getSpicyFlower(), &level11, sf::Vector2f(28.5, 12));
 
-		Sprite* spicyFlower9up = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
-		Entity spicyFlowerEntity9up = Entity(9, "level11", spicyFlower9up, sf::Vector2f(25 * 64, (9 * 64) - 8));
-		level11.enemies.push_back(spicyFlowerEntity9up);
+		addEntity(getSpicyFlower(), &level11, sf::Vector2f(25, 9));
+		addEntity(getSpicyFlower(), &level11, sf::Vector2f(25.5, 9));
+		addEntity(getSpicyFlower(), &level11, sf::Vector2f(26, 9));
+		addEntity(getSpicyFlower(), &level11, sf::Vector2f(26.5, 9));
+		addEntity(getSpicyFlower(), &level11, sf::Vector2f(27, 9));
+		addEntity(getSpicyFlower(), &level11, sf::Vector2f(27.5, 9));
+		addEntity(getSpicyFlower(), &level11, sf::Vector2f(28, 9));
+		addEntity(getSpicyFlower(), &level11, sf::Vector2f(28.5, 9));
 
-		Sprite* spicyFlower10 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
-		Entity spicyFlowerEntity10 = Entity(10, "level11", spicyFlower10, sf::Vector2f(26 * 64, (12 * 64) + 8));
-		level11.enemies.push_back(spicyFlowerEntity10);
-
-		Sprite* spicyFlower10up = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
-		Entity spicyFlowerEntity10up = Entity(9, "level11", spicyFlower10up, sf::Vector2f(26 * 64, (9 * 64) - 8));
-		level11.enemies.push_back(spicyFlowerEntity10up);
-
-
-		Sprite* spicyFlower11 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
-		Entity spicyFlowerEntity11 = Entity(11, "level11", spicyFlower11, sf::Vector2f(27 * 64, (12 * 64) + 8));
-		level11.enemies.push_back(spicyFlowerEntity11);
-
-
-		Sprite* spicyFlower11up = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
-		Entity spicyFlowerEntity11up = Entity(9, "level11", spicyFlower11up, sf::Vector2f(27 * 64, (9 * 64) - 8));
-		level11.enemies.push_back(spicyFlowerEntity11up);
-
-
-		Sprite* spicyFlower12 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
-		Entity spicyFlowerEntity12 = Entity(12, "level11", spicyFlower12, sf::Vector2f(28 * 64, (12 * 64)+8));
-		level11.enemies.push_back(spicyFlowerEntity12);
-
-
-		Sprite* spicyFlower12up = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
-		Entity spicyFlowerEntity12up = Entity(9, "level11", spicyFlower12up, sf::Vector2f(28 * 64, (9 * 64) - 8));
-		level11.enemies.push_back(spicyFlowerEntity12up);
-
-		Sprite* spicyFlower13 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
-		Entity spicyFlowerEntity13 = Entity(9, "level11", spicyFlower13, sf::Vector2f(25 * 64+32, (12 * 64) + 8));
-		level11.enemies.push_back(spicyFlowerEntity13);
-
-		Sprite* spicyFlower13up = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
-		Entity spicyFlowerEntity13up = Entity(9, "level11", spicyFlower13up, sf::Vector2f(25 * 64+32, (9 * 64) - 8));
-		level11.enemies.push_back(spicyFlowerEntity13up);
-
-		Sprite* spicyFlower14 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
-		Entity spicyFlowerEntity14 = Entity(9, "level11", spicyFlower14, sf::Vector2f(26 * 64 + 32, (12 * 64) + 8));
-		level11.enemies.push_back(spicyFlowerEntity14);
-
-		Sprite* spicyFlower14up = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
-		Entity spicyFlowerEntity14up = Entity(9, "level11", spicyFlower14up, sf::Vector2f(26 * 64 + 32, (9 * 64) - 8));
-		level11.enemies.push_back(spicyFlowerEntity14up);
-		Sprite* spicyFlower15 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
-		Entity spicyFlowerEntity15 = Entity(9, "level11", spicyFlower15, sf::Vector2f(27 * 64 + 32, (12 * 64) + 8));
-		level11.enemies.push_back(spicyFlowerEntity15);
-
-		Sprite* spicyFlower15up = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
-		Entity spicyFlowerEntity15up = Entity(9, "level11", spicyFlower15up, sf::Vector2f(27 * 64 + 32, (9 * 64) - 8));
-		level11.enemies.push_back(spicyFlowerEntity15up);
-		Sprite* spicyFlower16 = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
-		Entity spicyFlowerEntity16 = Entity(9, "level11", spicyFlower16, sf::Vector2f(28 * 64 + 32, (12 * 64) + 8));
-		level11.enemies.push_back(spicyFlowerEntity16);
-
-		Sprite* spicyFlower16up = new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
-		Entity spicyFlowerEntity16up = Entity(9, "level11", spicyFlower16up, sf::Vector2f(28 * 64 + 32, (9 * 64) - 8));
-		level11.enemies.push_back(spicyFlowerEntity16up);
 		allLevels.push_back(level11);
 
 
-
-		//need to add boots here so that they are added after the drill to the lists...... this will probably need to be moved
 		Object* boots = new Object(level11.objects.size(), icons.size(), new Sprite("src/resources/dashboots_icon.png", false, false, 1, 32, 32, 2.f, 0));
 		boots->setIcon(true);
 		boots->getObject()->getSprite()->setPosition(26 * 64, 6 * 64);
@@ -535,4 +474,25 @@ void LevelManager::setLevel(Level level) {
 
 std::vector<LevelManager::Level> LevelManager::getAllLevels() {
 	return allLevels;
+}
+
+// Entities Below
+
+void LevelManager::addEntity(Sprite* sprite, Level* level, sf::Vector2f position, sf::Vector2f position2) {
+	level->enemies.push_back(Entity(level->levelName, sprite, (position * 64.f), (position2 * 64.f)));
+}
+
+void LevelManager::addEntity(Sprite* sprite, Level* level,	sf::Vector2f position) {
+	level->enemies.push_back(Entity(level->levelName, sprite, (position * 64.f)));
+}
+
+Sprite* LevelManager::getScorpion() {
+	Sprite* sprite = new Sprite("src/resources/alien_scorpion.png", true, false, 3, 38, 41, 1.56f, 150);
+	sprite->setSpecial(2, 0, 42, 33, 41);
+
+	return sprite;
+}
+
+Sprite* LevelManager::getSpicyFlower() {
+	return new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 1);
 }
