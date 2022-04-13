@@ -1,7 +1,7 @@
 #include "headers\Object.h"
 
 Object::Object(int index, int iconIndex, Sprite* sprite) {
-	this->sprite = sprite; this->index = index; this->iconIndex = iconIndex;
+	this->index = index; this->iconIndex = iconIndex; this->sprite = sprite;
 }
 
 Sprite* Object::getObject() { return sprite; }
