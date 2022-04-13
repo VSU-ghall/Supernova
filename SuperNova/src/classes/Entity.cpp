@@ -10,6 +10,10 @@ Entity::Entity(const std::string& tag, Sprite *s, sf::Vector2f pos)
 	sprite = s; position = pos;
 
 	sprite->getSprite()->setPosition(position);
+
+	float area = (sprite->getScaledSize().x * sprite->getScaledSize().y) / (64 * 64); // gives # squares it takes up
+
+	damageDealt = area * 0.125 + 0.2; //remove the "+ 0.2" on easy difficulty
 }
 
 Entity::Entity(const std::string& tag, Sprite* s, sf::Vector2f pos, sf::Vector2f pos2)
@@ -34,6 +38,10 @@ bool Entity::getIsActive() {
 
 sf::Time Entity::getCooldown() {
 	return cooldownTime;
+}
+
+float Entity::getDamageDealt() {
+	return damageDealt;
 }
 
 Entity::Direction Entity::getDirection() {

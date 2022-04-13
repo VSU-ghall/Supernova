@@ -140,6 +140,8 @@ int Sprite::getNumFrames() { return numFrames;  }
 
 float Sprite::getScale() { return scale; }
 
+sf::Vector2f Sprite::getScaledSize() { return sf::Vector2f(width * scale, height * scale); }
+
 sf::Sprite* Sprite::getSprite() { return &sprite; }
 
 sf::Texture Sprite::getTexture() { return texture; }
