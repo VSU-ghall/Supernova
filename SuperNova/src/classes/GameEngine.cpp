@@ -514,7 +514,7 @@ void GameEngine::updateGame() {
 			// static enemies
 			if (player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && !e->isDynamic() && !e->getSprite()->animating) {
 				e->getSprite()->animateOnce();
-				player.takeDamage(calculateDamage(*e));
+				player.takeDamage(e->getDamageDealt());
 				e->notInteractable();
 				updateHpBar();
 				//std::cout << player.getHp() << " hp\n";
@@ -524,12 +524,12 @@ void GameEngine::updateGame() {
 			if (player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && e->isDynamic()) {
 				if (e->getSprite()->hasSpecial() && !e->getSprite()->animatingSpecial && !e->isInCooldown()) {
 					e->attack();
-					player.takeDamage(calculateDamage(*e));
+					player.takeDamage(e->getDamageDealt());
 					updateHpBar();
 				}
 				else if (!e->isInCooldown()) {
 					e->attack();
-					player.takeDamage(calculateDamage(*e));
+					player.takeDamage(e->getDamageDealt());
 					updateHpBar();
 				}
 			}
@@ -551,14 +551,6 @@ void GameEngine::addEntities() {
 		}
 	}
 	
-}
-
-
-float GameEngine::calculateDamage(Entity e) {
-	float dist = std::sqrt(std::pow(e.getCurrentPosition().x - player.getX(), 2) + std::pow(e.getCurrentPosition().y - player.getY(), 2));
-	float damage = dist / 500;
-	//std::cout << damage << " damage" << "\n";
-	return damage;
 }
 
 void GameEngine::initJetPackBar() {
