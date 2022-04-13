@@ -79,8 +79,6 @@ void LevelManager::init() {
 		level2.right = &level3;
 
 		addEntity(getSpicyFlower(), &level2, sf::Vector2f(1, 6));
-		//addEntity(getSpicyFlower(), &level2, sf::Vector2f(15, 12));
-		//addEntity(getSpicyFlower(), &level2, sf::Vector2f(17, 12));
 		
 		addEntity(getScorpion(), &level2, sf::Vector2f(14, 12), sf::Vector2f(17, 12));
 
@@ -143,6 +141,8 @@ void LevelManager::init() {
 		level4.background->setBounds(64 * level4.width, 64 * level4.height);
 
 		level4.top = &level3;
+
+		addEntity(getScorpion(), &level4, sf::Vector2f(5, 9), sf::Vector2f(12, 9));
 
 
 		Object* jetpack = new Object(level4.objects.size(), icons.size(), new Sprite("src/resources/jetpack_icon.png", false, false, 1, 32, 32, 2.f, 0));
@@ -227,24 +227,29 @@ void LevelManager::init() {
 		 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
 		 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
 		 8,  8,  8,  8,  8,  8,  8,  8,  8,  0,  0,  8,
+
 		 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
 		 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
 		 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
 		 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
 		 8,  8,  8,  8,  0,  0,  8,  8,  8,  8,  8,  8,
+
 		 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
 		 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
 		 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
 		 8,  0,  0,  8,  8,  8,  8,  8,  8,  8,  8,  8,
+
 		 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
 		 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
 		 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
 		 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
 		 8,  8,  8,  8,  8,  8,  8,  8,  0,  0,  8,  8,
+
 		 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
 		 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
 		 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
 		 8,  8,  8,  8,  8,  0,  0,  8,  8,  8,  8,  8,
+
 		 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
 		 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
 		 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
@@ -259,10 +264,14 @@ void LevelManager::init() {
 		level7.botStartPosition = Vector2(9, 25);
 
 		level7.background->setBounds(64 * level7.width, 64 * level7.height);
-		//level7.background->getSprite()->setPosition(0,0);
-
 		level7.top = &level6;
 		level7.bot = &level8;
+
+		addEntity(getMiningBot(), &level7, sf::Vector2f(4, 5), sf::Vector2f(8, 5));
+		addEntity(getMiningBot(), &level7, sf::Vector2f(3, 14), sf::Vector2f(9, 14));
+		addEntity(getMiningBot(), &level7, sf::Vector2f(2, 19), sf::Vector2f(7, 19));
+		addEntity(getMiningBot(), &level7, sf::Vector2f(1, 27), sf::Vector2f(7, 27));
+
 		allLevels.push_back(level7);
 
 	level8.map = new int[level8.width * level8.height]
@@ -484,6 +493,13 @@ void LevelManager::addEntity(Sprite* sprite, Level* level, sf::Vector2f position
 
 void LevelManager::addEntity(Sprite* sprite, Level* level,	sf::Vector2f position) {
 	level->enemies.push_back(Entity(level->levelName, sprite, (position * 64.f)));
+}
+
+Sprite* LevelManager::getMiningBot() {
+	Sprite* sprite = new Sprite("src/resources/mining_bot.png", true, false, 4, 29, 64, 2.5f, 150);
+	sprite->getSprite()->setOrigin(0, 64);
+
+	return sprite;
 }
 
 Sprite* LevelManager::getScorpion() {
