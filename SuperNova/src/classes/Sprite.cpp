@@ -48,11 +48,27 @@ void Sprite::animate() {
 	}
 }
 
+void Sprite::animateAll() {
+	for (Sprite* s : sprites) {
+		if (s->animated && s->animating) {
+			s->animate();
+		}
+
+		if (!s->animated && s->animating) {
+			if (s->offset != s->numFrames) s->animateOnce();
+		}
+
+		if (s->special && s->animatingSpecial) {
+			s->animateSpecial();
+		}
+	}
+}
+
 void Sprite::animateOnce() {
 	if (!animating) animating = true;
 	if (timer.getElapsedTime().asMilliseconds() >= frequency) {
 
-		sprite.setTextureRect(sf::IntRect(offset++ * (width + left), top, width, height));
+		sprite.setTextureRect(sf::IntRect(offset++ * abs(width) + left, top, width, height));
 		if (offset == numFrames) {
 			offset = 0;
 			animating = false;
@@ -64,22 +80,37 @@ void Sprite::animateOnce() {
 	}
 }
 
-void Sprite::animateAll() {
-	for (Sprite* s : sprites) {
-		if (s->animated && s->animating) {
-			s->animate();
+void Sprite::animateSpecial() {
+	if (!animatingSpecial) {
+		animating = false;
+		animatingSpecial = true;
+		offset = 0;
+	}
+
+	if (timer.getElapsedTime().asMilliseconds() >= frequency) {
+
+		sprite.setTextureRect(sf::IntRect(offset++ * abs(specialWidth) + specialLeft, specialTop, specialWidth, specialHeight));
+		if (offset == specialNumFrames) {
+			offset = 0;
+			animatingSpecial = false;
+			animating = true;
 		}
 
-		if (!s->animated && s->animating) {
-			if (s->offset != s->numFrames) s->animateOnce();
-		}
+		timer.restart();
 	}
 }
 
 void Sprite::flip() {
-	if (left == 0) left = width;
-	else left = 0;
+	if (left == 0) {
+		left = width;
+		specialLeft = specialWidth;
+	}
+	else {
+		left = 0;
+		specialLeft = 0;
+	}
 	width = -width;
+	specialWidth = -specialWidth;
 }
 
 std::string& Sprite::getFilePath() { return filePath; }
@@ -102,6 +133,8 @@ int Sprite::getWidth() { return width; }
 
 sf::FloatRect Sprite::getBoundingBox() { return sprite.getGlobalBounds(); }
 
+bool Sprite::hasSpecial() { return special; }
+
 bool Sprite::isAnimated() { return animated; }
 
 bool Sprite::isRandom() { return random; }
@@ -109,4 +142,14 @@ bool Sprite::isRandom() { return random; }
 void Sprite::setBounds(int width, int height) {
 	boundWidth = floor(floor(scale*this->width - width) / scale);
 	boundHeight = ceil((ceil(scale * this->height) - height) / scale);
+}
+
+void Sprite::setSpecial(int numFrames, int left, int top, int width, int height) {
+	specialNumFrames = numFrames;
+	specialLeft = left;
+	specialTop = top;
+	specialWidth = width;
+	specialHeight = height;
+
+	special = true;
 }
