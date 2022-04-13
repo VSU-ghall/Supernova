@@ -24,11 +24,16 @@ Entity::Entity(const std::string& tag, Sprite* s, sf::Vector2f pos, sf::Vector2f
 	}
 
 	sprite->getSprite()->setPosition(position);
-	speed = sprite->getFrequency() / 64.0f + (static_cast <float> (rand()) / static_cast <float> (RAND_MAX));
+	speed = 1 + 150.0f / sprite->getFrequency() + (static_cast <float> (rand()) / static_cast <float> (RAND_MAX));
+	cooldownTime = sf::Time(sf::seconds(0.5));
 }
 
 bool Entity::getIsActive() {
 	return isActive;
+}
+
+sf::Time Entity::getCooldown() {
+	return cooldownTime;
 }
 
 Entity::Direction Entity::getDirection() {
@@ -42,8 +47,22 @@ void Entity::reverseDirection() {
 	sprite->flipHorizontal();
 }
 
+void Entity::attack() {
+	if (sprite->hasSpecial()) sprite->animateSpecial();
+	cooldown = true;
+	cooldownTimer.restart();
+}
+
 std::string& Entity::getTag() {
 	return tag;
+}
+
+bool Entity::isInCooldown() {
+	return cooldown;
+}
+
+void Entity::isInCooldown(bool cooldown) {
+	this->cooldown = cooldown;
 }
 
 bool Entity::isDynamic() {
@@ -80,4 +99,8 @@ void Entity::notInteractable() {
 
 bool Entity::getIsInteractable() {
 	return isInteractable;
+}
+
+void Entity::setCooldown(sf::Time time) {
+	cooldownTime = time;
 }

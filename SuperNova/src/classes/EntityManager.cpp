@@ -35,6 +35,8 @@ void EntityManager::update() {
 	for (auto e : dynamicEntities) {
 		if (e->getSprite()->animatingSpecial) return;
 
+		if (e->isInCooldown() && e->cooldownTimer.getElapsedTime() >= e->getCooldown()) e->isInCooldown(false);
+
 		sf::Vector2f currentPosition = e->getCurrentPosition();
 
 		if (currentPosition.x > e->getPosition2().x ||
