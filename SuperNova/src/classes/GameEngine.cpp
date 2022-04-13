@@ -520,10 +520,15 @@ void GameEngine::updateGame() {
 				//std::cout << player.getHp() << " hp\n";
 			}
 
-			// dyamic enemies
+			// dynamic enemies
 			if (player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && e->isDynamic()) {
-				if (e->getSprite()->hasSpecial() && !e->getSprite()->animatingSpecial) {
-					e->getSprite()->animateSpecial();
+				if (e->getSprite()->hasSpecial() && !e->getSprite()->animatingSpecial && !e->isInCooldown()) {
+					e->attack();
+					player.takeDamage(calculateDamage(*e));
+					updateHpBar();
+				}
+				else if (!e->isInCooldown()) {
+					e->attack();
 					player.takeDamage(calculateDamage(*e));
 					updateHpBar();
 				}

@@ -100,17 +100,34 @@ void Sprite::animateSpecial() {
 	}
 }
 
-void Sprite::flip() {
-	if (left == 0) {
-		left = width;
-		specialLeft = specialWidth;
+void Sprite::flipHorizontal() {
+	if (!flippedHorizontal) {
+		left += width;
+		specialLeft += specialWidth;
+		flippedHorizontal = true;
 	}
 	else {
-		left = 0;
-		specialLeft = 0;
+		left += width;
+		specialLeft += specialWidth;
+		flippedHorizontal = false;
 	}
 	width = -width;
 	specialWidth = -specialWidth;
+}
+
+void Sprite::flipVertical() {
+	if (!flippedVertical) {
+		top += height;
+		specialTop += specialHeight;
+		flippedVertical = true;
+	}
+	else {
+		top += height;
+		specialTop += specialHeight;
+		flippedVertical = true;
+	}
+	height = -height;
+	specialHeight = -specialHeight;
 }
 
 std::string& Sprite::getFilePath() { return filePath; }

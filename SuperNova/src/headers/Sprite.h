@@ -18,7 +18,8 @@ extern class Sprite
 		static void animateAll();
 		void animateOnce();
 		void animateSpecial();
-		void flip();
+		void flipHorizontal();
+		void flipVertical();
 
 		std::string& getFilePath();
 		int getFrequency();
@@ -44,7 +45,7 @@ extern class Sprite
 			boundWidth = 0, boundHeight = 0,
 			specialLeft, specialTop, specialNumFrames, specialWidth, specialHeight;
 		float scale;
-		bool animated = false, random = false, special = false;
+		bool animated = false, random = false, special = false, flippedHorizontal = false, flippedVertical = false;;
 		sf::Clock timer;
 };
 static std::vector<Sprite*> sprites;
