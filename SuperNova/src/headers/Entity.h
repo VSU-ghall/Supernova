@@ -10,35 +10,51 @@
 
 class Entity
 {
+public:
+
+	enum Direction { right, left };
+	sf::Clock cooldownTimer;
+
+	Entity(const std::string& tag); //constructor requries a unique unsigned int as id and tag
+	Entity(const std::string& tag, Sprite* s, sf::Vector2f pos); //constructor for static entity
+	Entity(const std::string& tag, Sprite* s, sf::Vector2f pos, sf::Vector2f pos2); //constructor for dynamic entity
+	
+	void attack();
+	bool getIsActive();
+	std::string& getTag();
+	bool isInCooldown();
+	void isInCooldown(bool cooldown);
+	bool isDynamic();
+	void destroy(); //sets isActive to false
+	sf::Time getCooldown();
+	float getDamageDealt();
+	Direction getDirection();
+	void reverseDirection();
+	Sprite* getSprite();
+	float getSpeed();
+	sf::Vector2f getCurrentPosition();
+	sf::Vector2f getPosition();
+	sf::Vector2f getPosition2();
+	void notInteractable();
+	bool getIsInteractable();
+
+	void setCooldown(sf::Time time);
 
 private:
 
 	//Since the constructor is private EntityManager class needs this to create Entities
 	friend class EntityManager;
 
-	size_t id = 0; //unique id of the entity
+	bool dynamic = false; //dynamic or static enemy
 	std::string tag = "default"; //tag to allow similar entities to be gathered
 	bool isActive = true; //true if the entity is alive false if entity is dead
-	Sprite *sprite;
+	Sprite* sprite;
 	std::vector<Component> components;
-	sf::Vector2f position;
-	bool isInteractable = true;
-
-	
-
-public:
-
-	Entity(const size_t& id, const std::string& tag); //constructor requries a unique unsigned int as id and tag
-	Entity(const size_t& id, const std::string& tag, Sprite* s, sf::Vector2f pos);
-	
-	bool getIsActive();
-	std::string& getTag();
-	size_t getId();
-	void destroy(); //sets isActive to false
-	Sprite* getSprite();
-	sf::Vector2f getPosition();
-	void notInteractable();
-	bool getIsInteractable();
+	sf::Vector2f position, position2;
+	bool isInteractable = true, cooldown = false;
+	float speed, damageDealt;
+	sf::Time cooldownTime;
+	Direction direction = right;
 
 	//template <typename T>
 	//bool hasComponent() {

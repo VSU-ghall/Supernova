@@ -36,30 +36,13 @@ void Sprite::animate() {
 
 		if (random) {
 			offset = std::rand() % numFrames;
-			sprite.setTextureRect(sf::IntRect(offset * width, 0, width-boundWidth, height-boundHeight));
+			sprite.setTextureRect(sf::IntRect(offset * abs(width) + left, top, width-boundWidth, height-boundHeight));
 		}
 		else {
-			sprite.setTextureRect(sf::IntRect(offset++ * width, 0, width-boundWidth, height-boundHeight));
+			sprite.setTextureRect(sf::IntRect(offset++ * abs(width) + left, top, width-boundWidth, height-boundHeight));
+
 			if (offset == numFrames) offset = 0;
 		}
-
-		//std::cout << "offset: " << offset << std::endl;
-
-		timer.restart();
-	}
-}
-
-void Sprite::animateOnce() {
-	if (!animating) animating = true;
-	if (timer.getElapsedTime().asMilliseconds() >= frequency) {
-
-		sprite.setTextureRect(sf::IntRect(offset++ * width, 0, width, height));
-		if (offset == numFrames) {
-			offset = 0;
-			animating = false;
-		}
-
-		//std::cout << "offset: " << offset << std::endl;
 
 		timer.restart();
 	}
@@ -74,7 +57,77 @@ void Sprite::animateAll() {
 		if (!s->animated && s->animating) {
 			if (s->offset != s->numFrames) s->animateOnce();
 		}
+
+		if (s->special && s->animatingSpecial) {
+			s->animateSpecial();
+		}
 	}
+}
+
+void Sprite::animateOnce() {
+	if (!animating) animating = true;
+	if (timer.getElapsedTime().asMilliseconds() >= frequency) {
+
+		sprite.setTextureRect(sf::IntRect(offset++ * abs(width) + left, top, width, height));
+		if (offset == numFrames) {
+			offset = 0;
+			animating = false;
+		}
+
+		//std::cout << "offset: " << offset << std::endl;
+
+		timer.restart();
+	}
+}
+
+void Sprite::animateSpecial() {
+	if (!animatingSpecial) {
+		animating = false;
+		animatingSpecial = true;
+		offset = 0;
+	}
+
+	if (timer.getElapsedTime().asMilliseconds() >= frequency) {
+
+		sprite.setTextureRect(sf::IntRect(offset++ * abs(specialWidth) + specialLeft, specialTop, specialWidth, specialHeight));
+		if (offset == specialNumFrames) {
+			offset = 0;
+			animatingSpecial = false;
+			animating = true;
+		}
+
+		timer.restart();
+	}
+}
+
+void Sprite::flipHorizontal() {
+	if (!flippedHorizontal) {
+		left += width;
+		specialLeft += specialWidth;
+		flippedHorizontal = true;
+	}
+	else {
+		left += width;
+		specialLeft += specialWidth;
+		flippedHorizontal = false;
+	}
+	width = -width;
+	specialWidth = -specialWidth;
+}
+
+void Sprite::flipVertical() {
+	if (!flippedVertical) {
+		top += height;
+		specialTop += specialHeight;
+		flippedVertical = true;
+	}
+	else {
+		top += height;
+		specialTop += specialHeight;
+		flippedVertical = true;
+	}
+	height = -height;
+	specialHeight = -specialHeight;
 }
 
 std::string& Sprite::getFilePath() { return filePath; }
@@ -87,6 +140,8 @@ int Sprite::getNumFrames() { return numFrames;  }
 
 float Sprite::getScale() { return scale; }
 
+sf::Vector2f Sprite::getScaledSize() { return sf::Vector2f(width * scale, height * scale); }
+
 sf::Sprite* Sprite::getSprite() { return &sprite; }
 
 sf::Texture Sprite::getTexture() { return texture; }
@@ -97,6 +152,8 @@ int Sprite::getWidth() { return width; }
 
 sf::FloatRect Sprite::getBoundingBox() { return sprite.getGlobalBounds(); }
 
+bool Sprite::hasSpecial() { return special; }
+
 bool Sprite::isAnimated() { return animated; }
 
 bool Sprite::isRandom() { return random; }
@@ -104,4 +161,14 @@ bool Sprite::isRandom() { return random; }
 void Sprite::setBounds(int width, int height) {
 	boundWidth = floor(floor(scale*this->width - width) / scale);
 	boundHeight = ceil((ceil(scale * this->height) - height) / scale);
+}
+
+void Sprite::setSpecial(int numFrames, int left, int top, int width, int height) {
+	specialNumFrames = numFrames;
+	specialLeft = left;
+	specialTop = top;
+	specialWidth = width;
+	specialHeight = height;
+
+	special = true;
 }
