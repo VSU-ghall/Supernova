@@ -80,7 +80,7 @@ void LevelManager::init() {
 
 		addEntity(getSpicyFlower(), &level2, sf::Vector2f(1, 6));
 		
-		addEntity(getScorpion(), &level2, sf::Vector2f(14, 12), sf::Vector2f(17, 12));
+		addEntity(getScorpion(), &level2, sf::Vector2f(14, 12), sf::Vector2f(20, 12));
 
 		allLevels.push_back(level2);
 
@@ -496,7 +496,7 @@ void LevelManager::addEntity(Sprite* sprite, Level* level,	sf::Vector2f position
 }
 
 Sprite* LevelManager::getMiningBot() {
-	Sprite* sprite = new Sprite("src/resources/mining_bot.png", true, false, 4, 29, 64, 2.5f, 150);
+	Sprite* sprite = new Sprite("src/resources/mining_bot.png", true, false, 4, 29, 64, 2.5f, 300);
 	sprite->getSprite()->setOrigin(0, 64);
 
 	return sprite;
@@ -510,7 +510,7 @@ Sprite* LevelManager::getBigScorpion() {
 }
 
 Sprite* LevelManager::getScorpion() {
-	Sprite* sprite = new Sprite("src/resources/alien_scorpion.png", true, false, 3, 38, 41, 1.56f, 150);
+	Sprite* sprite = new Sprite("src/resources/alien_scorpion.png", true, false, 3, 38, 41, 1.56f, 75);
 	sprite->setSpecial(2, 0, 42, 33, 41);
 
 	return sprite;
