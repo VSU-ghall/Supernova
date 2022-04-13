@@ -142,7 +142,7 @@ void LevelManager::init() {
 
 		level4.top = &level3;
 
-		addEntity(getScorpion(), &level4, sf::Vector2f(5, 9), sf::Vector2f(12, 9));
+		addEntity(getBigScorpion(), &level4, sf::Vector2f(5, 8), sf::Vector2f(12, 8));
 
 
 		Object* jetpack = new Object(level4.objects.size(), icons.size(), new Sprite("src/resources/jetpack_icon.png", false, false, 1, 32, 32, 2.f, 0));
@@ -498,6 +498,13 @@ void LevelManager::addEntity(Sprite* sprite, Level* level,	sf::Vector2f position
 Sprite* LevelManager::getMiningBot() {
 	Sprite* sprite = new Sprite("src/resources/mining_bot.png", true, false, 4, 29, 64, 2.5f, 150);
 	sprite->getSprite()->setOrigin(0, 64);
+
+	return sprite;
+}
+
+Sprite* LevelManager::getBigScorpion() {
+	Sprite* sprite = new Sprite("src/resources/alien_scorpion.png", true, false, 3, 38, 41, 3.12f, 150);
+	sprite->setSpecial(2, 0, 42, 33, 41);
 
 	return sprite;
 }
