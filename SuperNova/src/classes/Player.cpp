@@ -502,7 +502,8 @@ float Player::takeDamage(float damage) {
 	takingDamage = true; damageTimer.restart();
 	hp -= damage;
 
-	playerSprite.setTextureRect(frameDamaged);
+	if(stoppedRight) playerSprite.setTextureRect(frameDamagedRight);
+	else if(stoppedLeft) playerSprite.setTextureRect(frameDamagedLeft);
 
 	if (hp <= 0) {
 		hp = 0;
