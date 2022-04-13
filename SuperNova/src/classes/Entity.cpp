@@ -40,7 +40,7 @@ void Entity::reverseDirection() {
 	if (direction == right) direction = left;
 	else direction = right;
 
-	sprite->flip();
+	sprite->flipHorizontal();
 }
 
 std::string& Entity::getTag() {
