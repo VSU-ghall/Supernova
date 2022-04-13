@@ -13,6 +13,7 @@ void EntityManager::update() {
 		entityMap[e->getTag()].push_back(e);
 		entitiesInteractable.push_back(e);
 		entityMapInteractable[e->getTag()].push_back(e);
+		if (e->isDynamic()) dynamicEntities.push_back(e);
 	}
 
 	entitiesToAdd.clear();
@@ -28,6 +29,27 @@ void EntityManager::update() {
 
 	for (auto& v : entityMapInteractable) {
 		removeUninteractableEntities(v.second);
+	}
+
+	//move dynamic enemies
+	for (auto e : dynamicEntities) {
+		if (e->getSprite()->animatingSpecial) return;
+
+		sf::Vector2f currentPosition = e->getCurrentPosition();
+
+		if (currentPosition.x > e->getPosition2().x ||
+			currentPosition.x < e->getPosition().x) {
+			e->reverseDirection();
+		}
+
+		if (e->getDirection() == Entity::Direction::right) {
+			currentPosition.x += e->getSpeed();
+		}
+		else {
+			currentPosition.x -= e->getSpeed();
+		}
+
+		e->getSprite()->getSprite()->setPosition(currentPosition);
 	}
 }
 

@@ -28,6 +28,7 @@ private:
 	size_t numEntities = 0; //unsigned int used to create unique entity ids
 	EntityVector entitiesInteractable;
 	EntityMap entityMapInteractable;
+	EntityVector dynamicEntities;
 
 	void removeDeadEntities(EntityVector& vector); //helper method that iterates through a given vector and removes any entities that are not alive
 	void removeUninteractableEntities(EntityVector& vector);
