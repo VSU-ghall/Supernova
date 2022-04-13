@@ -80,5 +80,8 @@ static class LevelManager
 		void init();
 		void loadLevel(Level* level);
 
+		void addEntity(Sprite* sprite, Level* level, sf::Vector2f position);
+		Sprite* getSpicyFlower();
+
 		std::vector<Level> allLevels;
 };
