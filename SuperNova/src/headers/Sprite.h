@@ -17,6 +17,7 @@ extern class Sprite
 		void animate();
 		void animateOnce();
 		static void animateAll();
+		void flip();
 		std::string& getFilePath();
 		int getFrequency();
 		int getHeight();
@@ -35,7 +36,7 @@ extern class Sprite
 		
 	private:
 		std::string filePath;
-		int width, height, frequency, numFrames, offset = 0,
+		int left = 0, top = 0, width, height, frequency, numFrames, offset = 0,
 			boundWidth = 0, boundHeight = 0;
 		float scale;
 		bool animated = false, random = false;

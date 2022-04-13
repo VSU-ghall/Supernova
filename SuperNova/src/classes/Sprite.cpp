@@ -36,14 +36,13 @@ void Sprite::animate() {
 
 		if (random) {
 			offset = std::rand() % numFrames;
-			sprite.setTextureRect(sf::IntRect(offset * width, 0, width-boundWidth, height-boundHeight));
+			sprite.setTextureRect(sf::IntRect(offset * abs(width) + left, top, width-boundWidth, height-boundHeight));
 		}
 		else {
-			sprite.setTextureRect(sf::IntRect(offset++ * width, 0, width-boundWidth, height-boundHeight));
+			sprite.setTextureRect(sf::IntRect(offset++ * abs(width) + left, top, width-boundWidth, height-boundHeight));
+
 			if (offset == numFrames) offset = 0;
 		}
-
-		//std::cout << "offset: " << offset << std::endl;
 
 		timer.restart();
 	}
@@ -53,7 +52,7 @@ void Sprite::animateOnce() {
 	if (!animating) animating = true;
 	if (timer.getElapsedTime().asMilliseconds() >= frequency) {
 
-		sprite.setTextureRect(sf::IntRect(offset++ * width, 0, width, height));
+		sprite.setTextureRect(sf::IntRect(offset++ * (width + left), top, width, height));
 		if (offset == numFrames) {
 			offset = 0;
 			animating = false;
@@ -75,6 +74,12 @@ void Sprite::animateAll() {
 			if (s->offset != s->numFrames) s->animateOnce();
 		}
 	}
+}
+
+void Sprite::flip() {
+	if (left == 0) left = width;
+	else left = 0;
+	width = -width;
 }
 
 std::string& Sprite::getFilePath() { return filePath; }
