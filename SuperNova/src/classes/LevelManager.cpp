@@ -78,9 +78,11 @@ void LevelManager::init() {
 		level2.left = &level1;
 		level2.right = &level3;
 
-		addEntity(getSpicyFlower(), &level2, sf::Vector2f(17, 12));
-		addEntity(getSpicyFlower(), &level2, sf::Vector2f(15, 12));
 		addEntity(getSpicyFlower(), &level2, sf::Vector2f(1, 6));
+		//addEntity(getSpicyFlower(), &level2, sf::Vector2f(15, 12));
+		//addEntity(getSpicyFlower(), &level2, sf::Vector2f(17, 12));
+		
+		addEntity(getScorpion(), &level2, sf::Vector2f(14, 12), sf::Vector2f(17, 12));
 
 		allLevels.push_back(level2);
 
@@ -114,9 +116,9 @@ void LevelManager::init() {
 		level3.right = &level5;
 		level3.bot = &level4;
 
-		addEntity(getSpicyFlower(), &level3, sf::Vector2f(27, 11));
-		addEntity(getSpicyFlower(), &level3, sf::Vector2f(25, 11));
 		addEntity(getSpicyFlower(), &level3, sf::Vector2f(23, 11));
+		addEntity(getSpicyFlower(), &level3, sf::Vector2f(25, 11));
+		addEntity(getSpicyFlower(), &level3, sf::Vector2f(27, 11));
 
 		allLevels.push_back(level3);
 
@@ -476,10 +478,21 @@ std::vector<LevelManager::Level> LevelManager::getAllLevels() {
 
 // Entities Below
 
+void LevelManager::addEntity(Sprite* sprite, Level* level, sf::Vector2f position, sf::Vector2f position2) {
+	level->enemies.push_back(Entity(level->levelName, sprite, (position * 64.f), (position2 * 64.f)));
+}
+
 void LevelManager::addEntity(Sprite* sprite, Level* level,	sf::Vector2f position) {
-	level->enemies.push_back(Entity(level->enemies.size(), level->levelName, sprite, (position * 64.f)));
+	level->enemies.push_back(Entity(level->levelName, sprite, (position * 64.f)));
+}
+
+Sprite* LevelManager::getScorpion() {
+	Sprite* sprite = new Sprite("src/resources/alien_scorpion.png", true, false, 3, 38, 41, 1.56f, 150);
+	sprite->setSpecial(2, 0, 42, 33, 41);
+
+	return sprite;
 }
 
 Sprite* LevelManager::getSpicyFlower() {
-	return new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
+	return new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 1);
 }
