@@ -50,6 +50,8 @@ void EntityManager::update() {
 		}
 
 		e->getSprite()->getSprite()->setPosition(currentPosition);
+
+		if (e->isInCooldown() && e->cooldownTimer.getElapsedTime() >= e->getCooldown()) e->isInCooldown(false);
 	}
 }
 
