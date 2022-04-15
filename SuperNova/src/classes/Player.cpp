@@ -3,7 +3,7 @@
 #include <iostream>
 
 float playerJumpSpeed, playerSpeed, playerSize, animationPerFrame = 1.0f / 8.0f, jumpHeight = 0;
-int offset = 0, offsetJetPack = 0;
+int offset = 0, offsetJetPack = 0, offsetDrill = 0;
 float gravity = 1.f;
 sf::Vector2f velocity(0, 0);
 bool grounded = true, jumping = false, ceilingBump = false, crouchPlayed = false;
@@ -77,6 +77,7 @@ void Player::animate() {
 
 	if (walkTimer.getElapsedTime().asMilliseconds() >= 150 * offset) offset++;
 	if (jetTimer.getElapsedTime().asMilliseconds() >= 150 * offsetJetPack) offsetJetPack++;
+	if (drillTimer.getElapsedTime().asMilliseconds() >= 150 * offsetDrill) offsetDrill++;
 
 
 	//There are 8 frames for walking now, this allows each frame to cycle and then reset when the last frame is projected onto the screen
@@ -88,6 +89,11 @@ void Player::animate() {
 	if (offsetJetPack == 3 || grounded) {
 		jetTimer.restart();
 		offsetJetPack = 0;
+	}
+
+	if (offsetDrill == 7 || !drilling) {
+		drillTimer.restart();
+		offsetDrill = 0;
 	}
 }
 
@@ -341,6 +347,8 @@ bool Player::checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vecto
 	if (((blockTopLeftHigh || blockBotLeftHigh) && velo < 0) || ((blockTopRightHigh || blockBotRightHigh)) && velo > 0) {		
 		if (drilling) {
 			if (checkTile(currentLevel, botLeftHigh, 4)) {
+				playerSprite.setTextureRect(sf::IntRect(offsetDrill * 51, 449, 51, 64));
+
 				int i = floor(botLeftHigh.y / tileSize) * currentLevel.width + floor(botLeftHigh.x / tileSize);
 
 				currentLevel.map[i - currentLevel.width] = 0;
@@ -350,6 +358,8 @@ bool Player::checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vecto
 
 			}
 			else if (checkTile(currentLevel, botRightHigh, 4)) {
+				playerSprite.setTextureRect(sf::IntRect(offsetDrill * 51, 386, 51, 64));
+
 				int i = floor(botRightHigh.y / tileSize) * currentLevel.width + floor(botRightHigh.x / tileSize);
 
 				currentLevel.map[i - currentLevel.width] = 0;
