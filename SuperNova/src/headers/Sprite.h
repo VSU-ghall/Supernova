@@ -26,6 +26,7 @@ extern class Sprite
 		int getHeight();
 		int getNumFrames();
 		float getScale();
+		sf::Vector2f getScaledSize();
 		sf::Sprite* getSprite();
 		sf::Texture getTexture();
 		sf::Clock getTimer();

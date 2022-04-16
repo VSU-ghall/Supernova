@@ -27,6 +27,7 @@ public:
 	bool isDynamic();
 	void destroy(); //sets isActive to false
 	sf::Time getCooldown();
+	float getDamageDealt();
 	Direction getDirection();
 	void reverseDirection();
 	Sprite* getSprite();
@@ -51,7 +52,7 @@ private:
 	std::vector<Component> components;
 	sf::Vector2f position, position2;
 	bool isInteractable = true, cooldown = false;
-	float speed;
+	float speed, damageDealt;
 	sf::Time cooldownTime;
 	Direction direction = right;
 

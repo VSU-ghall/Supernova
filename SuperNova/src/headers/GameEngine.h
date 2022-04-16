@@ -71,5 +71,4 @@ public:
 	void updateHpBar();
 	void updateJetPackBar();
 	void initJetPackBar();
-	float calculateDamage(Entity e);
 };
