@@ -509,6 +509,7 @@ void Player::playWalkSound()
 }
 
 float Player::takeDamage(float damage) {
+	//death frames are 64x64
 	takingDamage = true; damageTimer.restart();
 	hp -= damage;
 
