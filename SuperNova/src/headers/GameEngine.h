@@ -45,6 +45,7 @@ private:
 	float const HP_BAR_WIDTH = 300;
 	float const FUEL_BAR_HEIGHT = 300;
 	float const FUEL_BAR_WIDTH = 50;
+	float const HEALTH_PACK_HEAL_VALUE = 0.25;
 
 	void initGame();
 	void initMenu();
