@@ -54,7 +54,6 @@ public:
 	sf::RenderWindow* getWindow() { return &gameWindow; }
 
 	void run();
-	void init();
 	void initGame();
 	void initMenu();
 	void drawGame();
@@ -68,8 +67,6 @@ public:
 	void setWindowView(sf::RenderWindow &window, float width, float height);
 	void updateGame();
 	void updateMenu();
-	sf::Vector2f updatePixi();
-
 
 	void addEntities();
 	void updateComponentView();

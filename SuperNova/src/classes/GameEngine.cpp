@@ -5,7 +5,7 @@ GameEngine::GameEngine()
 {}
 
 void GameEngine::run() {
-	init();
+	initMenu();
 
 	// main loop --> continues each frame while window is open
 	while (gameWindow.isOpen() && menuWindow.isOpen()) {
@@ -38,13 +38,6 @@ void GameEngine::run() {
 		}
 		
 	}
-}
-
-//
-//	Initializes the game components
-//
-void GameEngine::init() {
-	initMenu();
 }
 
 void GameEngine::initGame() {
