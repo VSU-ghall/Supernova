@@ -41,6 +41,11 @@ private:
 
 	EntityManager enemies;
 
+	int const HP_BAR_HEIGHT = 50;
+	float const HP_BAR_WIDTH = 300;
+	int const FUEL_BAR_HEIGHT = 300;
+	int const FUEL_BAR_WIDTH = 50;
+
 public:
 	GameEngine();
 
