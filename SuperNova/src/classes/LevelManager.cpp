@@ -46,6 +46,7 @@ void LevelManager::init() {
 
 		addEntity(getSpicyFlower(), &level1, sf::Vector2f(11, 8));
 		addEntity(getSpicyFlower(), &level1, sf::Vector2f(14, 8));
+		addEntity(getHealthPack(), &level1, sf::Vector2f(13, 8));
 
 		allLevels.push_back(level1);
 
@@ -53,9 +54,9 @@ void LevelManager::init() {
 	level2.map = new int[level2.width * level2.height] {
 		 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 		 5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,
-		 6,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  6,  6,  6,  6,
-		 6,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  6,  6,  6,  6,
-		 6,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  7,  6,  6,  6,
+		 6,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  6,  6,
+		 6,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  6,  6,
+		 6,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  6,  6,
 		 6,  0,  0,  0,  0,  0,  0,  0,  3,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  7,  6,  6,
 		 6,  0,  0,  0,  0,  0,  0,  3,  2,  0,  0,  3,  3,  3,  0,  0,  0,  0,  0,  0,  0,  0,  0,  6,  6,
 		 6,  3,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  6,  6,
@@ -79,7 +80,7 @@ void LevelManager::init() {
 		level2.right = &level3;
 
 		addEntity(getSpicyFlower(), &level2, sf::Vector2f(1, 6));
-		
+		addEntity(getHealthPack(), &level2, sf::Vector2f(22, 4));
 		addEntity(getScorpion(), &level2, sf::Vector2f(14, 12), sf::Vector2f(20, 12));
 
 		allLevels.push_back(level2);
@@ -518,4 +519,8 @@ Sprite* LevelManager::getScorpion() {
 
 Sprite* LevelManager::getSpicyFlower() {
 	return new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 1);
+}
+
+Sprite* LevelManager::getHealthPack() {
+	return new Sprite("src/resources/health_pack.png", true, false, 6, 32, 32, 1.0f, 100);
 }

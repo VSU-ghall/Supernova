@@ -47,7 +47,8 @@ private:
 	Sprite* sprite;
 	sf::Vector2f position, position2;
 	bool isInteractable = true, cooldown = false;
-	float speed, damageDealt;
+	float speed = 0; 
+	float damageDealt = 0;
 	sf::Time cooldownTime;
 	Direction direction = right;
 

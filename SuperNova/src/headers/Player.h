@@ -12,7 +12,7 @@ class Player
 		int tileSize = 64;
 		float hp = 1.f;
 		int jetpackFuel, dashCooldown, dashDistance;
-		sf::Clock walkTimer, jetTimer, damageTimer;
+		sf::Clock walkTimer, jetTimer, drillTimer, damageTimer;
 		sf::RectangleShape rect;
 
 		sf::IntRect frameStoppedLeft = sf::IntRect(0, 32 * 2, 32, 64),
@@ -65,6 +65,7 @@ class Player
 		int getJetPackFuel();
 		float getHp();
 		float takeDamage(float damage);
+		float heal(float health);
 
 		int const JETPACK_MAXIMUM = 75;
 		int const DASH_COOLDOWN = 120;

@@ -41,19 +41,12 @@ private:
 
 	EntityManager enemies;
 
-	int const HP_BAR_HEIGHT = 50;
+	float const HP_BAR_HEIGHT = 50;
 	float const HP_BAR_WIDTH = 300;
-	int const FUEL_BAR_HEIGHT = 300;
-	int const FUEL_BAR_WIDTH = 50;
+	float const FUEL_BAR_HEIGHT = 300;
+	float const FUEL_BAR_WIDTH = 50;
+	float const HEALTH_PACK_HEAL_VALUE = 0.25;
 
-public:
-	GameEngine();
-
-	LevelManager* getLevelManager() { return &levelManager; }
-	Player* getPlayer() { return &player; };
-	sf::RenderWindow* getWindow() { return &gameWindow; }
-
-	void run();
 	void initGame();
 	void initMenu();
 	void drawGame();
@@ -64,7 +57,7 @@ public:
 	void loadLevel(LevelManager::Level level, Vector2 startp);
 	void playMusic();
 	void playSoundEffect(const std::string& filePath);
-	void setWindowView(sf::RenderWindow &window, float width, float height);
+	void setWindowView(sf::RenderWindow& window, float width, float height);
 	void updateGame();
 	void updateMenu();
 
@@ -73,4 +66,13 @@ public:
 	void updateHpBar();
 	void updateJetPackBar();
 	void initJetPackBar();
+
+public:
+	GameEngine();
+
+	LevelManager* getLevelManager() { return &levelManager; }
+	Player* getPlayer() { return &player; };
+	sf::RenderWindow* getWindow() { return &gameWindow; }
+
+	void run();
 };
