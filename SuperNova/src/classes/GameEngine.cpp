@@ -510,6 +510,11 @@ void GameEngine::updateGame() {
 				updateHpBar();
 				//std::cout << player.getHp() << " hp\n";
 			}
+			else if(player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && !e->isDynamic()) {
+				e->destroy();
+				player.heal(HEALTH_PACK_HEAL_VALUE);
+				updateHpBar();
+			}
 
 			// dynamic enemies
 			if (player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && e->isDynamic()) {
