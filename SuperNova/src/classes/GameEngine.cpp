@@ -72,7 +72,7 @@ void GameEngine::initGame() {
 	}
 	else {
 		sf::Vector2u winSize = gameWindow.getSize();
-		setWindowView(gameWindow, tileSize * levelManager.currentLevel.width, tileSize * levelManager.currentLevel.height);
+		setWindowView(gameWindow, static_cast<float>( tileSize * levelManager.currentLevel.width), static_cast<float>(tileSize * levelManager.currentLevel.height));
 		gameWindow.setSize(winSize);
 	}
 
@@ -170,7 +170,7 @@ void GameEngine::drawGame() {
 // Draws grid for development/testing purposes
 //
 void GameEngine::drawGrid() {
-	for (int x = 0; x <= gameWindow.getSize().x; x = x + tileSize) {
+	for (unsigned int x = 0; x <= gameWindow.getSize().x; x = x + tileSize) {
 		sf::VertexArray lines(sf::LinesStrip, 2);
 		lines[0].position = sf::Vector2f(x, 0);
 		lines[0].color = sf::Color::White;
@@ -180,7 +180,7 @@ void GameEngine::drawGrid() {
 		gameWindow.draw(lines);
 	}
 
-	for (int y = 0; y <= gameWindow.getSize().y; y = y + tileSize) {
+	for (unsigned int y = 0; y <= gameWindow.getSize().y; y = y + tileSize) {
 		sf::VertexArray lines(sf::LinesStrip, 2);
 		lines[0].position = sf::Vector2f(0, y);
 		lines[0].color = sf::Color::White;
@@ -251,7 +251,7 @@ void GameEngine::handleEvent(sf::Event event) {
 
 	// sets viewport when window is resized
 	if (event.type == sf::Event::Resized) {
-		view = getViewport(event.size.width, event.size.height);
+		view = getViewport(static_cast<float>(event.size.width), static_cast<float>(event.size.height));
 		if (gameMode == game) updateComponentView();
 	}
 
