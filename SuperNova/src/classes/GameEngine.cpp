@@ -5,7 +5,7 @@ GameEngine::GameEngine()
 {}
 
 void GameEngine::run() {
-	init();
+	initMenu();
 
 	// main loop --> continues each frame while window is open
 	while (gameWindow.isOpen() && menuWindow.isOpen()) {
@@ -40,13 +40,6 @@ void GameEngine::run() {
 	}
 }
 
-//
-//	Initializes the game components
-//
-void GameEngine::init() {
-	initMenu();
-}
-
 void GameEngine::initGame() {
 	gameWindow.setFramerateLimit(60);
 
@@ -60,14 +53,12 @@ void GameEngine::initGame() {
 		chatBar.setFillColor(sf::Color(0,0,0,200));
 		btnMenu->getSprite()->setTextureRect(sf::IntRect(0, 0, 150, 65));
 
-		float width = 300.f;
-		float height = 50.f;
 
 		hpBarBack.setFillColor(sf::Color(50, 50, 50, 200));
 		hpBarInside.setFillColor(sf::Color::Green);
 
-		hpBarBack.setSize(sf::Vector2f(width, height));
-		hpBarInside.setSize(sf::Vector2f(width * player.getHp(), height));
+		hpBarBack.setSize(sf::Vector2f(HP_BAR_WIDTH, HP_BAR_HEIGHT));
+		hpBarInside.setSize(sf::Vector2f(HP_BAR_WIDTH * player.getHp(), HP_BAR_HEIGHT));
 
 		if (!gameOverText.loadFromFile("src/resources/Game_Over_Screen.png"))
 			std::cout << "couldn't load game over display" << std::endl;
@@ -554,12 +545,12 @@ void GameEngine::addEntities() {
 }
 
 void GameEngine::initJetPackBar() {
-	jetPackInside.setSize(sf::Vector2f(50, 300 * player.getJetPackFuel() / player.JETPACK_MAXIMUM));
-	jetPackBack.setSize(sf::Vector2f(50, 300));
+	jetPackInside.setSize(sf::Vector2f(FUEL_BAR_WIDTH, FUEL_BAR_HEIGHT * player.getJetPackFuel() / player.JETPACK_MAXIMUM));
+	jetPackBack.setSize(sf::Vector2f(FUEL_BAR_WIDTH, FUEL_BAR_HEIGHT));
 	jetPackBack.setFillColor(sf::Color(50, 50, 50, 200));
 	jetPackBack.setPosition(10, 100);
 
-	jetPackInside.setSize(sf::Vector2f(50, 300 * (player.getJetPackFuel() / player.JETPACK_MAXIMUM)));
+	jetPackInside.setSize(sf::Vector2f(FUEL_BAR_WIDTH, FUEL_BAR_HEIGHT * (player.getJetPackFuel() / player.JETPACK_MAXIMUM)));
 	jetPackInside.setFillColor(sf::Color(173, 255, 230, 200));
 	jetPackInside.setPosition(10, 100);
 }
@@ -596,7 +587,7 @@ void GameEngine::updateComponentView() {
 }
 
 void GameEngine::updateHpBar() {
-	hpBarInside.setSize(sf::Vector2f(300 * player.getHp(), 50));
+	hpBarInside.setSize(sf::Vector2f(HP_BAR_WIDTH * player.getHp(), HP_BAR_HEIGHT));
 	sf::Color color = hpBarInside.getFillColor();
 
 	color.r = 255 * (1 - player.getHp());
@@ -606,5 +597,5 @@ void GameEngine::updateHpBar() {
 }
 
 void GameEngine::updateJetPackBar() {
-	jetPackInside.setSize(sf::Vector2f(50 , 300* player.getJetPackFuel()/player.JETPACK_MAXIMUM));
+	jetPackInside.setSize(sf::Vector2f(FUEL_BAR_WIDTH, FUEL_BAR_HEIGHT * player.getJetPackFuel()/player.JETPACK_MAXIMUM));
 }
