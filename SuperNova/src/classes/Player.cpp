@@ -524,3 +524,12 @@ float Player::takeDamage(float damage) {
 	return hp;
 }
 
+float Player::heal(float health) {
+	hp += health;
+
+	if (hp >= 1) {
+		hp = 1;
+	}
+	return hp;
+}
+
