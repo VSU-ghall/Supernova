@@ -84,7 +84,7 @@ void GameEngine::initGame() {
 
 void GameEngine::initMenu() {
 	menuWindow.setFramerateLimit(60);
-	setWindowView(menuWindow, tileSize * 20, tileSize * 20);
+	setWindowView(menuWindow, static_cast<float>(tileSize * 20), static_cast<float>(tileSize * 20));
 
 	if (gameMode != paused) {
 		blackRect.setFillColor(sf::Color(0, 10, 0, 255));
@@ -92,13 +92,13 @@ void GameEngine::initMenu() {
 
 		// All menu buttons are centered and linked together, so if you vertically move the first, the others with it.
 		btnPlay->getSprite()->setTextureRect(sf::IntRect(0, 0, 256, 75));
-		btnPlay->getSprite()->setPosition((menuWindow.getSize().x - 256) / 2, (menuWindow.getSize().y - 74 * 5) / 2);
+		btnPlay->getSprite()->setPosition((menuWindow.getSize().x - static_cast<float>(256)) / 2, (menuWindow.getSize().y - static_cast<float>(74 * 5)) / 2);
 
 		btnOptions->getSprite()->setTextureRect(sf::IntRect(0, 0, 448, 75));
-		btnOptions->getSprite()->setPosition((menuWindow.getSize().x - 448) / 2, btnPlay->getSprite()->getPosition().y + (74 * 2));
+		btnOptions->getSprite()->setPosition((menuWindow.getSize().x - static_cast<float>(448)) / 2, btnPlay->getSprite()->getPosition().y + (74 * 2));
 
 		btnExit->getSprite()->setTextureRect(sf::IntRect(0, 0, 254, 75));
-		btnExit->getSprite()->setPosition((menuWindow.getSize().x - 254) / 2, btnOptions->getSprite()->getPosition().y + (74 * 2));
+		btnExit->getSprite()->setPosition((menuWindow.getSize().x - static_cast<float>(254)) / 2, btnOptions->getSprite()->getPosition().y + (74 * 2));
 
 		gameMode = menu;
 		gameWindow.setVisible(false);
@@ -141,7 +141,7 @@ void GameEngine::drawGame() {
 	if (displayingText) gameWindow.draw(chatBar);
 
 	if (!scenePlaying) {
-		for (auto e : enemies.getEntities()) {
+		for (auto &e : enemies.getEntities()) {
 			if (e->getTag() == levelManager.getCurrentLevel().levelName) {
 				gameWindow.draw(*e->getSprite()->getSprite());
 			}
@@ -172,9 +172,9 @@ void GameEngine::drawGame() {
 void GameEngine::drawGrid() {
 	for (unsigned int x = 0; x <= gameWindow.getSize().x; x = x + tileSize) {
 		sf::VertexArray lines(sf::LinesStrip, 2);
-		lines[0].position = sf::Vector2f(x, 0);
+		lines[0].position = sf::Vector2f(static_cast<float>(x), 0);
 		lines[0].color = sf::Color::White;
-		lines[1].position = sf::Vector2f(x, gameWindow.getSize().y);
+		lines[1].position = sf::Vector2f(static_cast<float>(x), static_cast<float>(gameWindow.getSize().y));
 		lines[1].color = sf::Color::White;
 
 		gameWindow.draw(lines);
@@ -182,9 +182,9 @@ void GameEngine::drawGrid() {
 
 	for (unsigned int y = 0; y <= gameWindow.getSize().y; y = y + tileSize) {
 		sf::VertexArray lines(sf::LinesStrip, 2);
-		lines[0].position = sf::Vector2f(0, y);
+		lines[0].position = sf::Vector2f(0, static_cast<float>(y));
 		lines[0].color = sf::Color::White;
-		lines[1].position = sf::Vector2f(gameWindow.getSize().x, y);
+		lines[1].position = sf::Vector2f(static_cast<float>(gameWindow.getSize().x), static_cast<float>(y));
 		lines[1].color = sf::Color::White;
 
 		gameWindow.draw(lines);
@@ -393,7 +393,7 @@ void GameEngine::loadLevel(LevelManager::Level level, Vector2 startp) {
 
 	sf::String title("SuperNova - Level " + std::to_string(level.levelNumber));
 	gameWindow.setTitle(title);
-	setWindowView(gameWindow, tileSize * level.width, tileSize * level.height);
+	setWindowView(gameWindow, static_cast<float>(tileSize * level.width), static_cast<float>(tileSize * level.height));
 
 	sf::Vector2f pixiPos(player.getX() + 16, player.getY());
 
@@ -455,7 +455,7 @@ void GameEngine::setWindowView(sf::RenderWindow& window, float width, float heig
 		window.setPosition(sf::Vector2i(desktop.width / 2 - window.getSize().x / 2, desktop.height / 2 - window.getSize().y / 2));
 	}
 	else {
-		view = getViewport(window.getSize().x, window.getSize().y);
+		view = getViewport(static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y));
 		view.setSize(viewWidth, viewHeight);
 		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
 
@@ -565,7 +565,7 @@ void GameEngine::updateComponentView() {
 			gameBar.getPosition().y + ((gameBar.getSize().y - obj->getSize().y) / 2));
 
 	btnMenu->getSprite()->setPosition(gameBar.getSize().x -
-		(btnMenu->getTexture().getSize().x / 2) - 10, gameBar.getPosition().y + 5);
+		(btnMenu->getTexture().getSize().x / static_cast<float>(2)) - 10, gameBar.getPosition().y + 5);
 
 	float xPos = gameBar.getSize().x / 2 - 150;
 	float yPos = gameBar.getSize().y / 5;
@@ -590,8 +590,8 @@ void GameEngine::updateHpBar() {
 	hpBarInside.setSize(sf::Vector2f(HP_BAR_WIDTH * player.getHp(), HP_BAR_HEIGHT));
 	sf::Color color = hpBarInside.getFillColor();
 
-	color.r = 255 * (1 - player.getHp());
-	color.g = 255 * player.getHp();
+	color.r = static_cast <unsigned int>(255 * (1 - player.getHp()));
+	color.g = static_cast <unsigned int>(255 * player.getHp());
 
 	hpBarInside.setFillColor(color);
 }
