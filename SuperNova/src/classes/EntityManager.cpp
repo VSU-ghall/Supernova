@@ -29,6 +29,7 @@ void EntityManager::update() {
 
 	for (auto& v : entityMapInteractable) {
 		removeUninteractableEntities(v.second);
+		removeDeadEntities(v.second);
 	}
 
 	//move dynamic enemies
