@@ -65,6 +65,7 @@ class Player
 		int getJetPackFuel();
 		float getHp();
 		float takeDamage(float damage);
+		float heal(float health);
 
 		int const JETPACK_MAXIMUM = 75;
 		int const DASH_COOLDOWN = 120;
