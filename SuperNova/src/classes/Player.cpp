@@ -3,7 +3,7 @@
 #include <iostream>
 
 float playerJumpSpeed, playerSpeed, playerSize, animationPerFrame = 1.0f / 8.0f, jumpHeight = 0;
-int offset = 0, offsetJetPack = 0, offsetDrill = 0;
+int offset = 0, offsetJetPack = 0, offsetDrill = 0, offsetDeath;
 float gravity = 1.f;
 sf::Vector2f velocity(0, 0);
 bool grounded = true, jumping = false, ceilingBump = false, crouchPlayed = false;
@@ -78,6 +78,7 @@ void Player::animate() {
 	if (walkTimer.getElapsedTime().asMilliseconds() >= 150 * offset) offset++;
 	if (jetTimer.getElapsedTime().asMilliseconds() >= 150 * offsetJetPack) offsetJetPack++;
 	if (drillTimer.getElapsedTime().asMilliseconds() >= 150 * offsetDrill) offsetDrill++;
+	if (deathTimer.getElapsedTime().asMilliseconds() >= 150 * offsetDeath) offsetDeath++;
 
 
 	//There are 8 frames for walking now, this allows each frame to cycle and then reset when the last frame is projected onto the screen
@@ -94,6 +95,10 @@ void Player::animate() {
 	if (offsetDrill == 7 || !drilling) {
 		drillTimer.restart();
 		offsetDrill = 0;
+	}
+
+	if (offsetDeath == 4) {
+		offsetDeath = 0;
 	}
 }
 
@@ -278,9 +283,10 @@ void Player::draw(sf::RenderWindow& window) {
 }
 
 void Player::die() {
-	dead = true;
+	if (stoppedRight) playerSprite.setTextureRect(sf::IntRect(offsetDeath * 64, 513, 64, 64));
+	if (stoppedLeft) playerSprite.setTextureRect(sf::IntRect(offsetDeath * 64, 577, 64, 64));
 
-	// Animate death here
+	dead = true;
 }
 
 void Player::respawn() {
