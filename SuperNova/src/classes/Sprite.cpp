@@ -113,6 +113,8 @@ void Sprite::flipHorizontal() {
 	}
 	width = -width;
 	specialWidth = -specialWidth;
+
+	sprite.setTextureRect(sf::IntRect(offset * abs(width) + left, top, width - boundWidth, height - boundHeight));
 }
 
 void Sprite::flipVertical() {
@@ -128,6 +130,8 @@ void Sprite::flipVertical() {
 	}
 	height = -height;
 	specialHeight = -specialHeight;
+
+	sprite.setTextureRect(sf::IntRect(offset * abs(width) + left, top, width - boundWidth, height - boundHeight));
 }
 
 std::string& Sprite::getFilePath() { return filePath; }
