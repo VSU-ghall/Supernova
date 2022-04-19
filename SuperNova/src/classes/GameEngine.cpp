@@ -467,6 +467,11 @@ void GameEngine::setWindowView(sf::RenderWindow& window, float width, float heig
 // Updates all game objects
 //
 void GameEngine::updateGame() {
+	if (player.playingDeath) {
+		player.update(levelManager.getCurrentLevel());
+		return;
+	}
+
 	Sprite::animateAll();
 
 	if (scenePlaying) {
