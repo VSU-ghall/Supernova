@@ -340,6 +340,7 @@ void LevelManager::init() {
 	level10.levelName = "level10";
 		level10.rightStartPosition = Vector2(28, 4);
 		level10.background->setBounds(64 * level10.width, 64 * level10.height);
+		level10.background->flipHorizontal();
 
 		level10.right = &level8;
 		allLevels.push_back(level10);
