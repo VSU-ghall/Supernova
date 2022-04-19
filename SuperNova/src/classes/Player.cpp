@@ -3,7 +3,7 @@
 #include <iostream>
 
 float playerJumpSpeed, playerSpeed, playerSize, animationPerFrame = 1.0f / 8.0f, jumpHeight = 0;
-int offset = 0, offsetJetPack = 0, offsetDrill = 0;
+int offset = 0, offsetJetPack = 0, offsetDrill = 0, offsetDeath = 0;
 float gravity = 1.f;
 sf::Vector2f velocity(0, 0);
 bool grounded = true, jumping = false, ceilingBump = false, crouchPlayed = false;
@@ -66,7 +66,11 @@ void Player::init(bool* displayingText) {
 }
 
 void Player::animate() {
-	if (stoppedRight && !moving) {
+	if (playingDeath) {
+		if (stoppedRight) playerSprite.setTextureRect(sf::IntRect(offsetDeath * 64, 513, 64, 64));
+		if (stoppedLeft) playerSprite.setTextureRect(sf::IntRect(offsetDeath * 64, 577, 64, 64));
+	}
+	else if (stoppedRight && !moving) {
 		if (jetPack && !grounded) playerSprite.setTextureRect(frameJetpackRight);
 		else playerSprite.setTextureRect(frameStoppedRight);
 	}
@@ -78,6 +82,7 @@ void Player::animate() {
 	if (walkTimer.getElapsedTime().asMilliseconds() >= 150 * offset) offset++;
 	if (jetTimer.getElapsedTime().asMilliseconds() >= 150 * offsetJetPack) offsetJetPack++;
 	if (drillTimer.getElapsedTime().asMilliseconds() >= 150 * offsetDrill) offsetDrill++;
+	if (playingDeath && deathTimer.getElapsedTime().asMilliseconds() >= 400 * offsetDeath) offsetDeath++;
 
 
 	//There are 8 frames for walking now, this allows each frame to cycle and then reset when the last frame is projected onto the screen
@@ -94,6 +99,11 @@ void Player::animate() {
 	if (offsetDrill == 7 || !drilling) {
 		drillTimer.restart();
 		offsetDrill = 0;
+	}
+
+	if (offsetDeath == 4) {
+		offsetDeath = 0;
+		dead = true;
 	}
 }
 
@@ -274,12 +284,6 @@ void Player::draw(sf::RenderWindow& window) {
 	window.draw(rect);*/
 }
 
-void Player::die() {
-	dead = true;
-
-	// Animate death here
-}
-
 void Player::respawn() {
 	playerSprite.setPosition(tileSize * startPosition.x, tileSize * startPosition.y);
 	x = startPosition.x * tileSize;
@@ -289,7 +293,7 @@ void Player::respawn() {
 void Player::update(LevelManager::Level currentLevel) {
 	if (!takingDamage) {
 		animate();
-		checkMovement(currentLevel);
+		if (!playingDeath) checkMovement(currentLevel);
 	}
 	checkItems(currentLevel);
 
@@ -533,7 +537,8 @@ float Player::takeDamage(float damage) {
 	if (hp <= 0) {
 		hp = 0;
 
-		die();
+		deathTimer.restart();
+		playingDeath = true;
 	}
 	return hp;
 }
