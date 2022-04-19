@@ -91,6 +91,7 @@ static class LevelManager
 		Sprite* getHealthPack();
 		Sprite* getJetpack();
 		Sprite* getMiningBot();
+		Sprite* getRat();
 		Sprite* getScorpion();
 		Sprite* getSpicyFlower();
 		Sprite* getSpikes();

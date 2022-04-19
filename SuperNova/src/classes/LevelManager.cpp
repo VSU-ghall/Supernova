@@ -322,6 +322,8 @@ void LevelManager::init() {
 
 		level9.left = &level8;
 
+		addEntity(getRat(), &level9, sf::Vector2f(18, 8), sf::Vector2f(25, 8));
+
 		addIconObject(getDrill(), &level9, sf::Vector2f(27, 7));
 
 		allLevels.push_back(level9);
@@ -349,6 +351,7 @@ void LevelManager::init() {
 		level10.background->flipHorizontal();
 
 		level10.right = &level8;
+
 		allLevels.push_back(level10);
 
 
@@ -542,6 +545,12 @@ Sprite* LevelManager::getJetpack() {
 Sprite* LevelManager::getMiningBot() {
 	Sprite* sprite = new Sprite("src/resources/mining_bot.png", true, false, 4, 29, 64, 2.5f, 300);
 	sprite->getSprite()->setOrigin(0, 64);
+
+	return sprite;
+}
+
+Sprite* LevelManager::getRat() {
+	Sprite* sprite = new Sprite("src/resources/alien_rat.png", true, false, 4, 63, 32, 2.f, 75);
 
 	return sprite;
 }
