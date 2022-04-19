@@ -93,6 +93,8 @@ static class LevelManager
 		Sprite* getMiningBot();
 		Sprite* getScorpion();
 		Sprite* getSpicyFlower();
+		Sprite* getSpikes();
+		Sprite* getSpikesUpsideDown();
 
 		std::vector<Level> allLevels;
 };

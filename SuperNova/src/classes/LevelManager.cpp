@@ -380,8 +380,18 @@ void LevelManager::init() {
 
 		level11.left = &level6;
 		level11.right = &level11;
+		
+		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(25, 9));
+		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(26, 9));
+		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(27, 9));
+		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(28, 9));
 
-		addEntity(getSpicyFlower(), &level11, sf::Vector2f(25, 12));
+		addEntity(getSpikes(), &level11, sf::Vector2f(25, 12));
+		addEntity(getSpikes(), &level11, sf::Vector2f(26, 12));
+		addEntity(getSpikes(), &level11, sf::Vector2f(27, 12));
+		addEntity(getSpikes(), &level11, sf::Vector2f(28, 12));
+
+		/*addEntity(getSpicyFlower(), &level11, sf::Vector2f(25, 12));
 		addEntity(getSpicyFlower(), &level11, sf::Vector2f(25.5, 12));
 		addEntity(getSpicyFlower(), &level11, sf::Vector2f(26, 12));
 		addEntity(getSpicyFlower(), &level11, sf::Vector2f(26.5, 12));
@@ -397,7 +407,7 @@ void LevelManager::init() {
 		addEntity(getSpicyFlower(), &level11, sf::Vector2f(27, 9));
 		addEntity(getSpicyFlower(), &level11, sf::Vector2f(27.5, 9));
 		addEntity(getSpicyFlower(), &level11, sf::Vector2f(28, 9));
-		addEntity(getSpicyFlower(), &level11, sf::Vector2f(28.5, 9));
+		addEntity(getSpicyFlower(), &level11, sf::Vector2f(28.5, 9));*/
 
 		addIconObject(getDashBoots(), &level11, sf::Vector2f(26, 6));
 
@@ -545,4 +555,15 @@ Sprite* LevelManager::getScorpion() {
 
 Sprite* LevelManager::getSpicyFlower() {
 	return new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
+}
+
+Sprite* LevelManager::getSpikes() {
+	return new Sprite("src/resources/spikes.png", false, false, 1, 32, 32, 2.0f, 1);
+}
+
+Sprite* LevelManager::getSpikesUpsideDown() {
+	Sprite* spr = new Sprite("src/resources/spikes.png", false, false, 1, 32, 32, 2.0f, 1);
+	spr->flipVertical();
+
+	return spr;
 }
