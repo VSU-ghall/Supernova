@@ -87,6 +87,7 @@ static class LevelManager
 		Sprite* getBigScorpion();
 		Sprite* getScorpion();
 		Sprite* getSpicyFlower();
+		Sprite* getHealthPack();
 
 		std::vector<Level> allLevels;
 };

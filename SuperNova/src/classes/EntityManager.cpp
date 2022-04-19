@@ -29,10 +29,11 @@ void EntityManager::update() {
 
 	for (auto& v : entityMapInteractable) {
 		removeUninteractableEntities(v.second);
+		removeDeadEntities(v.second);
 	}
 
 	//move dynamic enemies
-	for (auto e : dynamicEntities) {
+	for (auto &e : dynamicEntities) {
 		if (e->getSprite()->animatingSpecial) return;
 
 		if (e->isInCooldown() && e->cooldownTimer.getElapsedTime() >= e->getCooldown()) e->isInCooldown(false);
