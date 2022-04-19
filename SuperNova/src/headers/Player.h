@@ -72,5 +72,6 @@ class Player
 		int const DASH_COOLDOWN = 120;
 		int const DASH_TOTAL_DISTANCE = 320;
 		int const DASH_SPEED = 16;
+		float const HEALTH_PACK_HEAL_VALUE = 0.25;
 };
 

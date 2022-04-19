@@ -507,13 +507,7 @@ void GameEngine::updateGame() {
 				e->getSprite()->animateOnce();
 				player.takeDamage(e->getDamageDealt());
 				e->notInteractable();
-				updateHpBar();
 				//std::cout << player.getHp() << " hp\n";
-			}
-			else if(player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && !e->isDynamic()) {
-				e->destroy();
-				player.heal(HEALTH_PACK_HEAL_VALUE);
-				updateHpBar();
 			}
 
 			// dynamic enemies
@@ -521,16 +515,16 @@ void GameEngine::updateGame() {
 				if (e->getSprite()->hasSpecial() && !e->getSprite()->animatingSpecial && !e->isInCooldown()) {
 					e->attack();
 					player.takeDamage(e->getDamageDealt());
-					updateHpBar();
 				}
 				else if (!e->isInCooldown()) {
 					e->attack();
 					player.takeDamage(e->getDamageDealt());
-					updateHpBar();
 				}
 			}
 		}
 	}
+
+	if (hpBarInside.getSize().y != HP_BAR_WIDTH * player.getHp()) updateHpBar();
 }
 
 //

@@ -299,7 +299,9 @@ void Player::update(LevelManager::Level currentLevel) {
 void Player::checkItems(LevelManager::Level currentLevel) {
 	for (auto obj : currentLevel.objects) {
 		if (!obj->isHidden() && playerSprite.getGlobalBounds().intersects(obj->getObject()->getSprite()->getGlobalBounds())) {
-			if (obj->hasIcon()) obj->collect();
+			obj->collect();
+
+			if (obj->isHealthPack()) heal(HEALTH_PACK_HEAL_VALUE);
 		}
 	}
 }
@@ -486,7 +488,7 @@ void Player::playJetpackLaunch()
 			std::cout << "Could not load jetpack_sound" << std::endl;
 			return;
 		}
-		music.setVolume(100);
+		music.setVolume(10);
 
 		music.play();
 	}
