@@ -59,6 +59,7 @@ class Player
 		void respawn();
 		void update(LevelManager::Level currentLevel);
 		void playCrouchSound();
+		void playJetpackLaunch();
 		void playJumpSound();
 		void playWalkSound();
 
