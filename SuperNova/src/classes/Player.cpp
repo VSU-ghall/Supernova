@@ -165,12 +165,12 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 		gravity = 1.f;
 	}
 	if (jetPack) {
-		playJetpackLaunch();
 		if (checkCollision(0, currentLevel))			
 			if (!ceilingBump) {
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)&& jetpackFuel>0) {
 					velocity.y = -playerJumpSpeed;
 					jetpackFuel--;
+					playJetpackLaunch();
 				}
 
 				if (!grounded || velocity.y < 0) {
@@ -178,7 +178,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 				}
 				else {
 					velocity.y = 0;
-					
+					if (music.getStatus() != sf::SoundSource::Stopped) music.stop();
 				}
 			}
 			else{
@@ -477,6 +477,21 @@ void Player::playCrouchSound()
 	}
 }
 
+void Player::playJetpackLaunch()
+{
+	//sound for jetpack
+	if (music.getStatus() == sf::SoundSource::Stopped) {
+		if (!music.openFromFile("src/resources/sounds/jetpack_sound.wav"))
+		{
+			std::cout << "Could not load jetpack_sound" << std::endl;
+			return;
+		}
+		music.setVolume(10);
+
+		music.play();
+	}
+}
+
 void Player::playJumpSound() {
 	//sound for jump
 	if (!music.openFromFile("src/resources/sounds/astronaut_jump.wav"))
@@ -519,19 +534,4 @@ float Player::takeDamage(float damage) {
 		die();
 	}
 	return hp;
-}
-
-void Player::playJetpackLaunch()
-{
-	//sound for jetpack
-	if (jetPack) {
-		if (!music.openFromFile("src/resources/sounds/jetpack_sound.wav"))
-		{
-			std::cout << "Could not load jetpack_sound" << std::endl;
-			return;
-		}
-		music.setVolume(10);
-
-		music.play();
-	}
 }
