@@ -82,12 +82,17 @@ static class LevelManager
 
 		void addEntity(Sprite* sprite, Level* level, sf::Vector2f position);
 		void addEntity(Sprite* sprite, Level* level, sf::Vector2f position, sf::Vector2f position2);
+		void addIconObject(Sprite* sprite, Level* level, sf::Vector2f position);
+		void addHealthPack(Level* level, sf::Vector2f position);
 
-		Sprite* getMiningBot();
 		Sprite* getBigScorpion();
+		Sprite* getDashBoots();
+		Sprite* getDrill();
+		Sprite* getHealthPack();
+		Sprite* getJetpack();
+		Sprite* getMiningBot();
 		Sprite* getScorpion();
 		Sprite* getSpicyFlower();
-		Sprite* getHealthPack();
 
 		std::vector<Level> allLevels;
 };
