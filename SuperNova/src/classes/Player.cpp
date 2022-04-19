@@ -106,7 +106,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 
 	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		crouchPlayed = false;
-	if (grounded && jetpackFuel < JETPACK_MAXIMUM) {
+	if (grounded && jetpackFuel < JETPACK_MAXIMUM && !sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
 		jetpackFuel++;
 	}
 	if (dashCooldown < DASH_COOLDOWN) {
@@ -167,10 +167,10 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 	if (jetPack) {
 		if (checkCollision(0, currentLevel))			
 			if (!ceilingBump) {
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)&& jetpackFuel>0) {
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && jetpackFuel>0) {
 					velocity.y = -playerJumpSpeed;
 					jetpackFuel--;
-					playJetpackLaunch();
+					if (jetpackFuel != 0) playJetpackLaunch();
 				}
 
 				if (!grounded || velocity.y < 0) {
@@ -486,7 +486,7 @@ void Player::playJetpackLaunch()
 			std::cout << "Could not load jetpack_sound" << std::endl;
 			return;
 		}
-		music.setVolume(10);
+		music.setVolume(100);
 
 		music.play();
 	}
