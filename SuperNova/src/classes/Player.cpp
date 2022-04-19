@@ -106,7 +106,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 
 	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		crouchPlayed = false;
-	if (grounded && jetpackFuel < JETPACK_MAXIMUM) {
+	if (grounded && jetpackFuel < JETPACK_MAXIMUM && !sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
 		jetpackFuel++;
 	}
 	if (dashCooldown < DASH_COOLDOWN) {
@@ -143,7 +143,6 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 	else {
 		velocity.x = 0;
 	}
-
 	if (dashBoots && sf::Keyboard::isKeyPressed(sf::Keyboard::Space)&& dashCooldown==DASH_COOLDOWN) {
 		dashing = true;
 		dashDistance = 0;
@@ -154,7 +153,6 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 		velocity.x = DASH_SPEED;
 		velocity.y = 0;
 		dashDistance += DASH_SPEED;
-
 	}
 	else if (dashing && dashDistance > -DASH_TOTAL_DISTANCE && checkCollision(-DASH_SPEED, currentLevel) && stoppedLeft) {
 		velocity.x = -DASH_SPEED;
@@ -167,13 +165,12 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 		gravity = 1.f;
 	}
 	if (jetPack) {
-
-		if (checkCollision(0, currentLevel))
-			
+		if (checkCollision(0, currentLevel))			
 			if (!ceilingBump) {
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)&& jetpackFuel>0) {
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && jetpackFuel>0) {
 					velocity.y = -playerJumpSpeed;
 					jetpackFuel--;
+					if (jetpackFuel != 0) playJetpackLaunch();
 				}
 
 				if (!grounded || velocity.y < 0) {
@@ -181,7 +178,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 				}
 				else {
 					velocity.y = 0;
-					
+					if (music.getStatus() != sf::SoundSource::Stopped) music.stop();
 				}
 			}
 			else{
@@ -302,7 +299,9 @@ void Player::update(LevelManager::Level currentLevel) {
 void Player::checkItems(LevelManager::Level currentLevel) {
 	for (auto obj : currentLevel.objects) {
 		if (!obj->isHidden() && playerSprite.getGlobalBounds().intersects(obj->getObject()->getSprite()->getGlobalBounds())) {
-			if (obj->hasIcon()) obj->collect();
+			obj->collect();
+
+			if (obj->isHealthPack()) heal(HEALTH_PACK_HEAL_VALUE);
 		}
 	}
 }
@@ -480,6 +479,21 @@ void Player::playCrouchSound()
 	}
 }
 
+void Player::playJetpackLaunch()
+{
+	//sound for jetpack
+	if (music.getStatus() == sf::SoundSource::Stopped) {
+		if (!music.openFromFile("src/resources/sounds/jetpack_sound.wav"))
+		{
+			std::cout << "Could not load jetpack_sound" << std::endl;
+			return;
+		}
+		music.setVolume(10);
+
+		music.play();
+	}
+}
+
 void Player::playJumpSound() {
 	//sound for jump
 	if (!music.openFromFile("src/resources/sounds/astronaut_jump.wav"))
@@ -532,4 +546,3 @@ float Player::heal(float health) {
 	}
 	return hp;
 }
-
