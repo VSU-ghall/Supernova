@@ -537,5 +537,5 @@ Sprite* LevelManager::getScorpion() {
 }
 
 Sprite* LevelManager::getSpicyFlower() {
-	return new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 1);
+	return new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
 }
