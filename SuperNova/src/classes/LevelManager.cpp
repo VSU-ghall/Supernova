@@ -46,7 +46,8 @@ void LevelManager::init() {
 
 		addEntity(getSpicyFlower(), &level1, sf::Vector2f(11, 8));
 		addEntity(getSpicyFlower(), &level1, sf::Vector2f(14, 8));
-		addEntity(getHealthPack(), &level1, sf::Vector2f(13, 8));
+
+		addHealthPack(&level1, sf::Vector2f(13, 8));
 
 		allLevels.push_back(level1);
 
@@ -80,8 +81,9 @@ void LevelManager::init() {
 		level2.right = &level3;
 
 		addEntity(getSpicyFlower(), &level2, sf::Vector2f(1, 6));
-		addEntity(getHealthPack(), &level2, sf::Vector2f(22, 4));
 		addEntity(getScorpion(), &level2, sf::Vector2f(14, 12), sf::Vector2f(20, 12));
+
+		addHealthPack(&level2, sf::Vector2f(22, 4));
 
 		allLevels.push_back(level2);
 
@@ -115,6 +117,8 @@ void LevelManager::init() {
 		level3.right = &level5;
 		level3.bot = &level4;
 
+		addHealthPack(&level3, sf::Vector2f(21, 11));
+
 		addEntity(getSpicyFlower(), &level3, sf::Vector2f(23, 11));
 		addEntity(getSpicyFlower(), &level3, sf::Vector2f(25, 11));
 		addEntity(getSpicyFlower(), &level3, sf::Vector2f(27, 11));
@@ -145,13 +149,8 @@ void LevelManager::init() {
 
 		addEntity(getBigScorpion(), &level4, sf::Vector2f(5, 8), sf::Vector2f(12, 8));
 
+		addIconObject(getJetpack(), &level4, sf::Vector2f(15, 8));
 
-		Object* jetpack = new Object(level4.objects.size(), icons.size(), new Sprite("src/resources/jetpack_icon.png", false, false, 1, 32, 32, 2.f, 0));
-		jetpack->setIcon(true);
-		jetpack->getObject()->getSprite()->setPosition(15 * 64, 8 * 64);
-		
-		level4.objects.push_back(jetpack);
-		icons.push_back(jetpack);
 		allLevels.push_back(level4);
 
 	level5.map = new int[level5.width * level5.height]{
@@ -308,7 +307,10 @@ void LevelManager::init() {
 		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 12,
 		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 12,
 		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
-		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  9,  0,  8,
+		 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
+		 8,  8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
+		 8,  8,  8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,
+		 8,  8,  8,  8,  8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  9,  0,  8,
 		 8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,
 		 8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,
 		10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
@@ -320,12 +322,9 @@ void LevelManager::init() {
 
 		level9.left = &level8;
 
-		Object* drill = new Object(level9.objects.size(), icons.size(), new Sprite("src/resources/drill_icon.png", false, false, 1, 32, 32, 2.f, 0));
-		drill->setIcon(true);
-		drill->getObject()->getSprite()->setPosition(27 * 64, 4 * 64);
+		addEntity(getRat(), &level9, sf::Vector2f(18, 8), sf::Vector2f(25, 8));
 
-		level9.objects.push_back(drill);
-		icons.push_back(drill);
+		addIconObject(getDrill(), &level9, sf::Vector2f(27, 7));
 
 		allLevels.push_back(level9);
 
@@ -338,6 +337,9 @@ void LevelManager::init() {
 		12,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,  8,
+		 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,  8,  8,  8,
+		 8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,  8,  8,  8,  8,
 		 8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,
 		 8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,
 		10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
@@ -346,8 +348,10 @@ void LevelManager::init() {
 	level10.levelName = "level10";
 		level10.rightStartPosition = Vector2(28, 4);
 		level10.background->setBounds(64 * level10.width, 64 * level10.height);
+		level10.background->flipHorizontal();
 
 		level10.right = &level8;
+
 		allLevels.push_back(level10);
 
 
@@ -379,8 +383,18 @@ void LevelManager::init() {
 
 		level11.left = &level6;
 		level11.right = &level11;
+		
+		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(25, 9));
+		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(26, 9));
+		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(27, 9));
+		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(28, 9));
 
-		addEntity(getSpicyFlower(), &level11, sf::Vector2f(25, 12));
+		addEntity(getSpikes(), &level11, sf::Vector2f(25, 12));
+		addEntity(getSpikes(), &level11, sf::Vector2f(26, 12));
+		addEntity(getSpikes(), &level11, sf::Vector2f(27, 12));
+		addEntity(getSpikes(), &level11, sf::Vector2f(28, 12));
+
+		/*addEntity(getSpicyFlower(), &level11, sf::Vector2f(25, 12));
 		addEntity(getSpicyFlower(), &level11, sf::Vector2f(25.5, 12));
 		addEntity(getSpicyFlower(), &level11, sf::Vector2f(26, 12));
 		addEntity(getSpicyFlower(), &level11, sf::Vector2f(26.5, 12));
@@ -396,17 +410,11 @@ void LevelManager::init() {
 		addEntity(getSpicyFlower(), &level11, sf::Vector2f(27, 9));
 		addEntity(getSpicyFlower(), &level11, sf::Vector2f(27.5, 9));
 		addEntity(getSpicyFlower(), &level11, sf::Vector2f(28, 9));
-		addEntity(getSpicyFlower(), &level11, sf::Vector2f(28.5, 9));
+		addEntity(getSpicyFlower(), &level11, sf::Vector2f(28.5, 9));*/
+
+		addIconObject(getDashBoots(), &level11, sf::Vector2f(26, 6));
 
 		allLevels.push_back(level11);
-
-
-		Object* boots = new Object(level11.objects.size(), icons.size(), new Sprite("src/resources/dashboots_icon.png", false, false, 1, 32, 32, 2.f, 0));
-		boots->setIcon(true);
-		boots->getObject()->getSprite()->setPosition(26 * 64, 6 * 64);
-
-		level11.objects.push_back(boots);
-		icons.push_back(boots);
 }
 
 Sprite LevelManager::getCurrentBackground() {
@@ -496,6 +504,44 @@ void LevelManager::addEntity(Sprite* sprite, Level* level,	sf::Vector2f position
 	level->enemies.push_back(Entity(level->levelName, sprite, (position * 64.f)));
 }
 
+void LevelManager::addIconObject(Sprite* sprite, Level* level, sf::Vector2f position) {
+	Object* obj = new Object(level->objects.size(), icons.size(), sprite, (position * 64.f));
+	obj->setIcon(true);
+
+	level->objects.push_back(obj);
+	icons.push_back(obj);
+}
+
+void LevelManager::addHealthPack(Level* level, sf::Vector2f position) {
+	Object* obj = new Object(level->objects.size(), icons.size(), getHealthPack(), (position * 64.f));
+	obj->isHealthPack(true);
+
+	level->objects.push_back(obj);
+}
+
+Sprite* LevelManager::getBigScorpion() {
+	Sprite* sprite = new Sprite("src/resources/alien_scorpion.png", true, false, 3, 38, 41, 3.12f, 150);
+	sprite->setSpecial(2, 0, 42, 33, 41);
+
+	return sprite;
+}
+
+Sprite* LevelManager::getDashBoots() {
+	return new Sprite("src/resources/dashboots_icon.png", false, false, 1, 32, 32, 2.f, 0);
+}
+
+Sprite* LevelManager::getDrill() {
+	return new Sprite("src/resources/drill_icon.png", false, false, 1, 32, 32, 2.f, 0);
+}
+
+Sprite* LevelManager::getHealthPack() {
+	return new Sprite("src/resources/health_pack.png", true, false, 6, 32, 32, 1.0f, 100);
+}
+
+Sprite* LevelManager::getJetpack() {
+	return new Sprite("src/resources/jetpack_icon.png", false, false, 1, 32, 32, 2.f, 0);
+}
+
 Sprite* LevelManager::getMiningBot() {
 	Sprite* sprite = new Sprite("src/resources/mining_bot.png", true, false, 4, 29, 64, 2.5f, 300);
 	sprite->getSprite()->setOrigin(0, 64);
@@ -503,9 +549,8 @@ Sprite* LevelManager::getMiningBot() {
 	return sprite;
 }
 
-Sprite* LevelManager::getBigScorpion() {
-	Sprite* sprite = new Sprite("src/resources/alien_scorpion.png", true, false, 3, 38, 41, 3.12f, 150);
-	sprite->setSpecial(2, 0, 42, 33, 41);
+Sprite* LevelManager::getRat() {
+	Sprite* sprite = new Sprite("src/resources/alien_rat.png", true, false, 4, 63, 32, 2.f, 75);
 
 	return sprite;
 }
@@ -518,9 +563,16 @@ Sprite* LevelManager::getScorpion() {
 }
 
 Sprite* LevelManager::getSpicyFlower() {
-	return new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 1);
+	return new Sprite("src/resources/spicy_flower.png", false, false, 10, 44, 64, 1.0f, 75);
 }
 
-Sprite* LevelManager::getHealthPack() {
-	return new Sprite("src/resources/health_pack.png", true, false, 6, 32, 32, 1.0f, 100);
+Sprite* LevelManager::getSpikes() {
+	return new Sprite("src/resources/spikes.png", false, false, 1, 32, 32, 2.0f, 1);
+}
+
+Sprite* LevelManager::getSpikesUpsideDown() {
+	Sprite* spr = new Sprite("src/resources/spikes.png", false, false, 1, 32, 32, 2.0f, 1);
+	spr->flipVertical();
+
+	return spr;
 }

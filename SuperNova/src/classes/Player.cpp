@@ -3,7 +3,7 @@
 #include <iostream>
 
 float playerJumpSpeed, playerSpeed, playerSize, animationPerFrame = 1.0f / 8.0f, jumpHeight = 0;
-int offset = 0, offsetJetPack = 0, offsetDrill = 0, offsetDeath;
+int offset = 0, offsetJetPack = 0, offsetDrill = 0, offsetDeath = 0;
 float gravity = 1.f;
 sf::Vector2f velocity(0, 0);
 bool grounded = true, jumping = false, ceilingBump = false, crouchPlayed = false;
@@ -66,7 +66,11 @@ void Player::init(bool* displayingText) {
 }
 
 void Player::animate() {
-	if (stoppedRight && !moving) {
+	if (playingDeath) {
+		if (stoppedRight) playerSprite.setTextureRect(sf::IntRect(offsetDeath * 64, 513, 64, 64));
+		if (stoppedLeft) playerSprite.setTextureRect(sf::IntRect(offsetDeath * 64, 577, 64, 64));
+	}
+	else if (stoppedRight && !moving) {
 		if (jetPack && !grounded) playerSprite.setTextureRect(frameJetpackRight);
 		else playerSprite.setTextureRect(frameStoppedRight);
 	}
@@ -78,7 +82,7 @@ void Player::animate() {
 	if (walkTimer.getElapsedTime().asMilliseconds() >= 150 * offset) offset++;
 	if (jetTimer.getElapsedTime().asMilliseconds() >= 150 * offsetJetPack) offsetJetPack++;
 	if (drillTimer.getElapsedTime().asMilliseconds() >= 150 * offsetDrill) offsetDrill++;
-	if (deathTimer.getElapsedTime().asMilliseconds() >= 150 * offsetDeath) offsetDeath++;
+	if (playingDeath && deathTimer.getElapsedTime().asMilliseconds() >= 400 * offsetDeath) offsetDeath++;
 
 
 	//There are 8 frames for walking now, this allows each frame to cycle and then reset when the last frame is projected onto the screen
@@ -99,6 +103,7 @@ void Player::animate() {
 
 	if (offsetDeath == 4) {
 		offsetDeath = 0;
+		dead = true;
 	}
 }
 
@@ -111,7 +116,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 
 	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		crouchPlayed = false;
-	if (grounded && jetpackFuel < JETPACK_MAXIMUM) {
+	if (grounded && jetpackFuel < JETPACK_MAXIMUM && !sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
 		jetpackFuel++;
 	}
 	if (dashCooldown < DASH_COOLDOWN) {
@@ -148,7 +153,6 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 	else {
 		velocity.x = 0;
 	}
-
 	if (dashBoots && sf::Keyboard::isKeyPressed(sf::Keyboard::Space)&& dashCooldown==DASH_COOLDOWN) {
 		dashing = true;
 		dashDistance = 0;
@@ -159,7 +163,6 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 		velocity.x = DASH_SPEED;
 		velocity.y = 0;
 		dashDistance += DASH_SPEED;
-
 	}
 	else if (dashing && dashDistance > -DASH_TOTAL_DISTANCE && checkCollision(-DASH_SPEED, currentLevel) && stoppedLeft) {
 		velocity.x = -DASH_SPEED;
@@ -172,13 +175,12 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 		gravity = 1.f;
 	}
 	if (jetPack) {
-
-		if (checkCollision(0, currentLevel))
-			
+		if (checkCollision(0, currentLevel))			
 			if (!ceilingBump) {
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)&& jetpackFuel>0) {
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && jetpackFuel>0) {
 					velocity.y = -playerJumpSpeed;
 					jetpackFuel--;
+					if (jetpackFuel != 0) playJetpackLaunch();
 				}
 
 				if (!grounded || velocity.y < 0) {
@@ -186,7 +188,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 				}
 				else {
 					velocity.y = 0;
-					
+					if (music.getStatus() != sf::SoundSource::Stopped) music.stop();
 				}
 			}
 			else{
@@ -282,13 +284,6 @@ void Player::draw(sf::RenderWindow& window) {
 	window.draw(rect);*/
 }
 
-void Player::die() {
-	if (stoppedRight) playerSprite.setTextureRect(sf::IntRect(offsetDeath * 64, 513, 64, 64));
-	if (stoppedLeft) playerSprite.setTextureRect(sf::IntRect(offsetDeath * 64, 577, 64, 64));
-
-	dead = true;
-}
-
 void Player::respawn() {
 	playerSprite.setPosition(tileSize * startPosition.x, tileSize * startPosition.y);
 	x = startPosition.x * tileSize;
@@ -298,7 +293,7 @@ void Player::respawn() {
 void Player::update(LevelManager::Level currentLevel) {
 	if (!takingDamage) {
 		animate();
-		checkMovement(currentLevel);
+		if (!playingDeath) checkMovement(currentLevel);
 	}
 	checkItems(currentLevel);
 
@@ -308,7 +303,9 @@ void Player::update(LevelManager::Level currentLevel) {
 void Player::checkItems(LevelManager::Level currentLevel) {
 	for (auto obj : currentLevel.objects) {
 		if (!obj->isHidden() && playerSprite.getGlobalBounds().intersects(obj->getObject()->getSprite()->getGlobalBounds())) {
-			if (obj->hasIcon()) obj->collect();
+			obj->collect();
+
+			if (obj->isHealthPack()) heal(HEALTH_PACK_HEAL_VALUE);
 		}
 	}
 }
@@ -486,6 +483,21 @@ void Player::playCrouchSound()
 	}
 }
 
+void Player::playJetpackLaunch()
+{
+	//sound for jetpack
+	if (music.getStatus() == sf::SoundSource::Stopped) {
+		if (!music.openFromFile("src/resources/sounds/jetpack_sound.wav"))
+		{
+			std::cout << "Could not load jetpack_sound" << std::endl;
+			return;
+		}
+		music.setVolume(10);
+
+		music.play();
+	}
+}
+
 void Player::playJumpSound() {
 	//sound for jump
 	if (!music.openFromFile("src/resources/sounds/astronaut_jump.wav"))
@@ -525,7 +537,8 @@ float Player::takeDamage(float damage) {
 	if (hp <= 0) {
 		hp = 0;
 
-		die();
+		deathTimer.restart();
+		playingDeath = true;
 	}
 	return hp;
 }
@@ -538,4 +551,3 @@ float Player::heal(float health) {
 	}
 	return hp;
 }
-
