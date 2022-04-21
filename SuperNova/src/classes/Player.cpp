@@ -114,13 +114,17 @@ void Player::animate() {
 void Player::checkMovement(LevelManager::Level* currentLevel) {
 
 	// Shoot
-	if (shootCooldownTimer.getElapsedTime().asMilliseconds() > SHOOT_COOLDOWN_MILLISECONDS && sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+	if (shootCooldownTimer.getElapsedTime().asMilliseconds() > SHOOT_COOLDOWN_MILLISECONDS*2 && sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
 		sf::Vector2f pos = playerSprite.getPosition();
 		if (stoppedRight) pos.x += playerSprite.getGlobalBounds().width;
 		pos.y += playerSprite.getGlobalBounds().height / 3;
 
 		currentLevel->levelManager->shootBullet(pos, stoppedRight);
 		shootCooldownTimer.restart();
+	}
+	else if (shootCooldownTimer.getElapsedTime().asMilliseconds() < SHOOT_COOLDOWN_MILLISECONDS) {
+		if (stoppedRight) playerSprite.setTextureRect(frameShootRight);
+		//else playerSprite.setTextureRect(frameShootLeft);
 	}
 
 	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
