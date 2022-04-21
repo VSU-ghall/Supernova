@@ -34,7 +34,7 @@ void EntityManager::update() {
 
 	//move dynamic enemies
 	for (auto &e : dynamicEntities) {
-		if (e->getSprite()->animatingSpecial) return;
+		if (e->getSprite()->animatingSpecial || e->getSprite()->animatingDamaged) continue;
 
 		if (e->isInCooldown() && e->cooldownTimer.getElapsedTime() >= e->getCooldown()) e->isInCooldown(false);
 

@@ -56,7 +56,7 @@ static class LevelManager
 		Level* currentLevelPtr;
 		LevelManager();
 		Sprite getCurrentBackground();
-		Level getCurrentLevel();
+		Level* getCurrentLevel();
 		Level getLevel1();
 		Level getLevel2();
 		Level getLevel3();
@@ -70,7 +70,8 @@ static class LevelManager
 		Level getLevel11();
 		Level getTestLevel();
 		TileMap getMap();
-		void removeItem(Level level, Object item);
+		void removeObject(Level* level, Object* obj);
+		void shootBullet(sf::Vector2f pos, bool goingRight);
 		void setLevel(Level level);
 		std::vector<Level> getAllLevels();
 
@@ -82,10 +83,13 @@ static class LevelManager
 
 		void addEntity(Sprite* sprite, Level* level, sf::Vector2f position);
 		void addEntity(Sprite* sprite, Level* level, sf::Vector2f position, sf::Vector2f position2);
-		void addIconObject(Sprite* sprite, Level* level, sf::Vector2f position);
+
+		void addBullet(Level* level, sf::Vector2f position, bool goingRight);
 		void addHealthPack(Level* level, sf::Vector2f position);
+		void addIconObject(Sprite* sprite, Level* level, sf::Vector2f position);
 
 		Sprite* getBigScorpion();
+		Sprite* getBullet();
 		Sprite* getDashBoots();
 		Sprite* getDrill();
 		Sprite* getHealthPack();
