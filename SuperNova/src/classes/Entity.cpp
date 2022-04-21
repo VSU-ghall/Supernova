@@ -55,6 +55,11 @@ void Entity::reverseDirection() {
 	sprite->flipHorizontal();
 }
 
+void Entity::takeDamage(float damage) {
+	if (dynamic) health -= damage;
+	if (health <= 0) destroy();
+}
+
 void Entity::attack() {
 	if (sprite->hasSpecial()) sprite->animateSpecial();
 	cooldown = true;
@@ -78,6 +83,7 @@ bool Entity::isDynamic() {
 }
 
 void Entity::destroy() {
+	Sprite::remove(sprite);
 	isActive = false;
 }
 

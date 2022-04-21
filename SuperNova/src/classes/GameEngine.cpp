@@ -526,6 +526,15 @@ void GameEngine::updateGame() {
 					player.takeDamage(e->getDamageDealt());
 				}
 			}
+
+			if (!levelManager.currentLevel.objects.empty()) {
+				for (auto obj : levelManager.currentLevel.objects) 
+					if (obj->isBullet()) 
+						if (obj->getObject()->getBoundingBox().intersects(e->getSprite()->getBoundingBox())) {
+							levelManager.removeObject(&levelManager.currentLevel, obj);
+							e->takeDamage(0.3);
+						}
+			}
 		}
 	}
 
