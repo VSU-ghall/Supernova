@@ -1,7 +1,9 @@
 #include "headers\Object.h"
 
-Object::Object(int index, int iconIndex, Sprite* sprite) {
+Object::Object(int index, int iconIndex, Sprite* sprite, sf::Vector2f pos) {
 	this->index = index; this->iconIndex = iconIndex; this->sprite = sprite;
+
+	sprite->getSprite()->setPosition(pos);
 }
 
 Sprite* Object::getObject() { return sprite; }
@@ -10,6 +12,8 @@ int Object::getIconIndex() { return iconIndex; }
 int Object::getIndex() { return index; }
 sf::Vector2i Object::getSize() { return sf::Vector2i(sprite->getTexture().getSize().x * sprite->getScale(),
 														sprite->getTexture().getSize().y * sprite->getScale()); }	
+bool Object::isHealthPack() { return healthPack; }
+void Object::isHealthPack(bool healthPack) { this->healthPack = healthPack; }
 bool Object::isHidden() { return hidden; }
 bool Object::hasHiddenIcon() { return hiddenIcon; }
 bool Object::hasIcon() { return boolIcon; }

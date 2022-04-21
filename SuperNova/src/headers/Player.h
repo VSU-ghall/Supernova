@@ -32,7 +32,7 @@ class Player
 		sf::Texture texture;
 		sf::Music music;
 
-		bool stoppedLeft = false, stoppedRight = true, moving = false, jetPack = false, drilling = false, dead = false,
+		bool stoppedLeft = false, stoppedRight = true, moving = false, jetPack = false, drilling = false, playingDeath = false, dead = false,
 			takingDamage = false, dashing = false, dashBoots = false;
 		bool transitioningLeft, transitioningRight, transitioningTop, transitioningBot;
 
@@ -45,7 +45,7 @@ class Player
 
 		void init(bool* displayingText);
 		void animate();
-		void die();
+		void checkDeath();
 		void draw(sf::RenderWindow& window);
 		void checkItems(LevelManager::Level currentLevel);
 		bool checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vector2f botLeftHigh, sf::Vector2f topRight, sf::Vector2f topLeft, LevelManager::Level currentLevel);
@@ -59,6 +59,7 @@ class Player
 		void respawn();
 		void update(LevelManager::Level currentLevel);
 		void playCrouchSound();
+		void playJetpackLaunch();
 		void playJumpSound();
 		void playWalkSound();
 
@@ -71,5 +72,6 @@ class Player
 		int const DASH_COOLDOWN = 120;
 		int const DASH_TOTAL_DISTANCE = 320;
 		int const DASH_SPEED = 16;
+		float const HEALTH_PACK_HEAL_VALUE = 0.25;
 };
 
