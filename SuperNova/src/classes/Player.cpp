@@ -113,13 +113,15 @@ void Player::animate() {
 //
 void Player::checkMovement(LevelManager::Level* currentLevel) {
 
-	// TEMP
-	// ************************
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)) {
-		currentLevel->levelManager->shootBullet(playerSprite.getPosition());
-		//temp = true;
+	// Shoot
+	if (shootCooldownTimer.getElapsedTime().asMilliseconds() > SHOOT_COOLDOWN_MILLISECONDS && sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+		sf::Vector2f pos = playerSprite.getPosition();
+		pos.x += playerSprite.getGlobalBounds().width;
+		pos.y += playerSprite.getGlobalBounds().height / 3;
+
+		currentLevel->levelManager->shootBullet(pos);
+		shootCooldownTimer.restart();
 	}
-	// ************************
 
 	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		crouchPlayed = false;
@@ -129,6 +131,7 @@ void Player::checkMovement(LevelManager::Level* currentLevel) {
 
 	if (dashCooldown < DASH_COOLDOWN)
 		dashCooldown++;
+
 
 	if (grounded && !dashing &&
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::D) &&
@@ -320,10 +323,9 @@ void Player::checkItems(LevelManager::Level* currentLevel) {
 			sf::Vector2f pos = obj->getObject()->getSprite()->getPosition();
 			pos.x += 32;
 
-			if ((temp && sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) || (temp && pos.x >= currentLevel->width * 64) || (temp && checkTile(currentLevel, pos, currentLevel->collisionTile))) {
+			if ((pos.x >= currentLevel->width * 64 - 5) || checkTile(currentLevel, pos, currentLevel->collisionTile)) {
 				//currentLevel.objects.erase(currentLevel.objects.begin() + 1);//obj->getIndex());
 				currentLevel->levelManager->removeObject(currentLevel, obj);
-				temp = false;
 			}
 
 			pos = obj->getObject()->getSprite()->getPosition();
@@ -331,8 +333,6 @@ void Player::checkItems(LevelManager::Level* currentLevel) {
 			obj->getObject()->getSprite()->setPosition(pos);
 		}
 	}
-
-	temp = true;
 }
 
 //returns false if movement will cause collision. returns true otherwise

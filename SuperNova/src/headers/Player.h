@@ -12,19 +12,23 @@ class Player
 		int tileSize = 64;
 		float hp = 1.f;
 		int jetpackFuel, dashCooldown, dashDistance;
-		sf::Clock walkTimer, jetTimer, drillTimer, damageTimer, deathTimer, dashTimer;
+		sf::Clock walkTimer, jetTimer, drillTimer, damageTimer, deathTimer, dashTimer,
+			shootCooldownTimer;
 		sf::RectangleShape rect;
 
-		sf::IntRect frameStoppedLeft = sf::IntRect(0, 32 * 2, 32, 64),
-			frameStoppedRight = sf::IntRect(0, 0, 32, 64),
-			frameJetpackLeft = sf::IntRect(114, 322, 38, 64),
-			frameJetpackRight = sf::IntRect(0, 322, 38, 64),
+		sf::IntRect
 			frameDamagedRight = sf::IntRect(0, 257, 36, 64),
 			frameDamagedLeft = sf::IntRect(36, 257, 36, 64),
+			frameJetpackLeft = sf::IntRect(114, 322, 38, 64),
+			frameJetpackRight = sf::IntRect(0, 322, 38, 64),
 			frameJumpLeft = sf::IntRect(44, 128, 44, 64),
 			frameJumpRight = sf::IntRect(0, 128, 44, 64),
+			frameShootRight = sf::IntRect(0, 642, 64, 63),
+			frameShootLeft = sf::IntRect(63, 642, 64, 63),
 			frameSquatLeft = sf::IntRect(44, 192, 44, 64),
-			frameSquatRight = sf::IntRect(0, 192, 44, 64);
+			frameSquatRight = sf::IntRect(0, 192, 44, 64),
+			frameStoppedLeft = sf::IntRect(0, 64, 32, 64),
+			frameStoppedRight = sf::IntRect(0, 0, 32, 64);
 
 	public:
 		Vector2 startPosition;
@@ -35,7 +39,6 @@ class Player
 		bool stoppedLeft = false, stoppedRight = true, moving = false, jetPack = false, drilling = false, playingDeath = false, dead = false,
 			takingDamage = false, dashing = false, dashBoots = false;
 		bool transitioningLeft, transitioningRight, transitioningTop, transitioningBot;
-		bool temp = false;
 
 
 		bool* displayingText;
@@ -69,10 +72,9 @@ class Player
 		float takeDamage(float damage);
 		float heal(float health);
 
-		int const JETPACK_MAXIMUM = 75;
-		int const DASH_COOLDOWN = 120;
-		int const DASH_TOTAL_DISTANCE = 320;
-		int const DASH_SPEED = 16;
+		int const JETPACK_MAXIMUM = 75,
+			DASH_COOLDOWN = 120, DASH_TOTAL_DISTANCE = 320, DASH_SPEED = 16,
+			SHOOT_COOLDOWN_MILLISECONDS = 100;
 		float const HEALTH_PACK_HEAL_VALUE = 0.25;
 };
 
