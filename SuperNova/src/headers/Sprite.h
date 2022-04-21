@@ -37,6 +37,7 @@ extern class Sprite
 		bool isAnimated();
 		bool isRandom();
 
+		static void remove(Sprite* spr);
 		void setBounds(int width, int height);
 		void setSpecial(int numFrames, int left, int top, int width, int height);
 		

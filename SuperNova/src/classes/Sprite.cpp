@@ -162,6 +162,11 @@ bool Sprite::isAnimated() { return animated; }
 
 bool Sprite::isRandom() { return random; }
 
+// Adapted code from: https://stackoverflow.com/questions/27306086/c-remove-object-from-vector
+void Sprite::remove(Sprite* spr) {
+	sprites.erase(std::remove(sprites.begin(), sprites.end(), spr));
+}
+
 void Sprite::setBounds(int width, int height) {
 	boundWidth = floor(floor(scale*this->width - width) / scale);
 	boundHeight = ceil((ceil(scale * this->height) - height) / scale);
