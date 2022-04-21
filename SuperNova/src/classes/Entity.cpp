@@ -57,6 +57,9 @@ void Entity::reverseDirection() {
 
 void Entity::takeDamage(float damage) {
 	if (dynamic) health -= damage;
+
+	if (sprite->hasDamaged()) sprite->animateDamaged();
+
 	if (health <= 0) destroy();
 }
 

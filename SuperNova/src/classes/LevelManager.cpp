@@ -542,8 +542,9 @@ void LevelManager::addIconObject(Sprite* sprite, Level* level, sf::Vector2f posi
 }
 
 Sprite* LevelManager::getBigScorpion() {
-	Sprite* sprite = new Sprite("src/resources/alien_scorpion.png", true, false, 3, 38, 41, 3.12f, 150);
-	sprite->setSpecial(2, 0, 42, 33, 41);
+
+	Sprite* sprite = getScorpion();
+	sprite->setScale(3.12f);
 
 	return sprite;
 }
@@ -571,12 +572,14 @@ Sprite* LevelManager::getJetpack() {
 Sprite* LevelManager::getMiningBot() {
 	Sprite* sprite = new Sprite("src/resources/mining_bot.png", true, false, 4, 29, 64, 2.5f, 300);
 	sprite->getSprite()->setOrigin(0, 64);
+	sprite->setDamaged(0, 64, 29, 64);
 
 	return sprite;
 }
 
 Sprite* LevelManager::getRat() {
 	Sprite* sprite = new Sprite("src/resources/alien_rat.png", true, false, 4, 63, 32, 2.f, 75);
+	sprite->setDamaged(0, 32, 63, 32);
 
 	return sprite;
 }
@@ -584,6 +587,7 @@ Sprite* LevelManager::getRat() {
 Sprite* LevelManager::getScorpion() {
 	Sprite* sprite = new Sprite("src/resources/alien_scorpion.png", true, false, 3, 38, 41, 1.56f, 75);
 	sprite->setSpecial(2, 0, 42, 33, 41);
+	sprite->setDamaged(0, 83, 38, 41);
 
 	return sprite;
 }

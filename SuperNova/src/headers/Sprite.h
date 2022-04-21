@@ -8,7 +8,7 @@ extern class Sprite
 	public:
 		sf::Sprite sprite;
 		sf::Texture texture;
-		bool animating = false, animatingSpecial = false;
+		bool animating = false, animatingSpecial = false, animatingDamaged = false;
 
 		Sprite();
 		Sprite(const std::string& filePath);
@@ -16,6 +16,7 @@ extern class Sprite
 
 		void animate();
 		static void animateAll();
+		void animateDamaged();
 		void animateOnce();
 		void animateSpecial();
 		void flipHorizontal();
@@ -33,21 +34,25 @@ extern class Sprite
 		int getWidth();
 		sf::FloatRect getBoundingBox();
 
+		bool hasDamaged();
 		bool hasSpecial();
 		bool isAnimated();
 		bool isRandom();
 
 		static void remove(Sprite* spr);
 		void setBounds(int width, int height);
+		void setDamaged(int left, int top, int width, int height);
+		void setScale(float scale);
 		void setSpecial(int numFrames, int left, int top, int width, int height);
 		
 	private:
 		std::string filePath;
 		int left = 0, top = 0, width, height, frequency, numFrames, offset = 0,
 			boundWidth = 0, boundHeight = 0,
-			specialLeft, specialTop, specialNumFrames, specialWidth, specialHeight;
+			specialLeft, specialTop, specialNumFrames, specialWidth, specialHeight,
+			damagedLeft, damagedTop, damagedWidth, damagedHeight;
 		float scale;
-		bool animated = false, random = false, special = false, flippedHorizontal = false, flippedVertical = false;;
+		bool animated = false, random = false, special = false, damaged = false, flippedHorizontal = false, flippedVertical = false;;
 		sf::Clock timer;
 };
 static std::vector<Sprite*> sprites;
