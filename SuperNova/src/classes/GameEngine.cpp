@@ -142,7 +142,7 @@ void GameEngine::drawGame() {
 
 	if (!scenePlaying) {
 		for (auto &e : enemies.getEntities()) {
-			if (e->getTag() == levelManager.getCurrentLevel().levelName) {
+			if (e->getTag() == levelManager.getCurrentLevel()->levelName) {
 				gameWindow.draw(*e->getSprite()->getSprite());
 			}
 			
