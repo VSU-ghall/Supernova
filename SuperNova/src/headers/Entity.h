@@ -29,7 +29,7 @@ public:
 	float getDamageDealt();
 	Direction getDirection();
 	void reverseDirection();
-	void takeDamage(float damage);
+	void takeDamage();
 
 	Sprite* getSprite();
 	float getSpeed();

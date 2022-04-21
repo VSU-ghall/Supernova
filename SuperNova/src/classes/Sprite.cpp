@@ -161,7 +161,7 @@ int Sprite::getNumFrames() { return numFrames;  }
 
 float Sprite::getScale() { return scale; }
 
-sf::Vector2f Sprite::getScaledSize() { return sf::Vector2f(width * scale, height * scale); }
+sf::Vector2f Sprite::getScaledSize() { return sf::Vector2f(abs(width) * scale, abs(height) * scale); }
 
 sf::Sprite* Sprite::getSprite() { return &sprite; }
 

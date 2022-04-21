@@ -532,7 +532,7 @@ void GameEngine::updateGame() {
 					if (obj->isBullet()) 
 						if (obj->getObject()->getBoundingBox().intersects(e->getSprite()->getBoundingBox())) {
 							levelManager.removeObject(&levelManager.currentLevel, obj);
-							e->takeDamage(0.3);
+							e->takeDamage();;
 						}
 			}
 		}

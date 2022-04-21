@@ -55,8 +55,15 @@ void Entity::reverseDirection() {
 	sprite->flipHorizontal();
 }
 
-void Entity::takeDamage(float damage) {
-	if (dynamic) health -= damage;
+void Entity::takeDamage() {
+	if (!dynamic) return;
+
+	float area = (sprite->getScaledSize().x * sprite->getScaledSize().y) / (64 * 64); // gives # squares it takes up
+
+	float damage = 1 - (area * 0.125 + 0.3); //remove the "+ 0.3" on easy difficulty
+	std::cout << damage << std::endl;
+
+	health -= damage;
 
 	if (sprite->hasDamaged()) sprite->animateDamaged();
 
