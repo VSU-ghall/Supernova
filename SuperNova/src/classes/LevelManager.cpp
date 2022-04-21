@@ -421,8 +421,8 @@ Sprite LevelManager::getCurrentBackground() {
 	return *currentLevel.background;
 }
 
-LevelManager::Level LevelManager::getCurrentLevel() {
-	return currentLevel;
+LevelManager::Level* LevelManager::getCurrentLevel() {
+	return &currentLevel;
 }
 
 LevelManager::Level LevelManager::getLevel1() {
@@ -482,6 +482,13 @@ void LevelManager::loadLevel(Level* level) {
 		level->background->animating = true;
 }
 
+// Adapted code from: https://stackoverflow.com/questions/27306086/c-remove-object-from-vector
+void LevelManager::removeObject(Level* level, Object* obj) {
+	obj->removeSprite();
+
+	level->objects.erase(std::remove(level->objects.begin(), level->objects.end(), obj));
+}
+
 void LevelManager::setLevel(Level level) {
 	if (currentLevel.hasBackground && currentLevel.background->animating)
 		currentLevel.background->animating = false;
@@ -490,11 +497,18 @@ void LevelManager::setLevel(Level level) {
 	loadLevel(&currentLevel);
 }
 
+void LevelManager::shootBullet(sf::Vector2f pos) {
+	addBullet(&currentLevel, (pos / 64.f));
+}
+
 std::vector<LevelManager::Level> LevelManager::getAllLevels() {
 	return allLevels;
 }
 
-// Entities Below
+
+//****************************************
+// Helper Methods Below
+//****************************************
 
 void LevelManager::addEntity(Sprite* sprite, Level* level, sf::Vector2f position, sf::Vector2f position2) {
 	level->enemies.push_back(Entity(level->levelName, sprite, (position * 64.f), (position2 * 64.f)));
@@ -502,6 +516,21 @@ void LevelManager::addEntity(Sprite* sprite, Level* level, sf::Vector2f position
 
 void LevelManager::addEntity(Sprite* sprite, Level* level,	sf::Vector2f position) {
 	level->enemies.push_back(Entity(level->levelName, sprite, (position * 64.f)));
+}
+
+void LevelManager::addBullet(Level* level, sf::Vector2f position) {
+	Object* obj = new Object(level->objects.size(), icons.size(), getBullet(), (position * 64.f));
+	obj->isBullet(true);
+	obj->isCollectible(false);
+
+	level->objects.push_back(obj);
+}
+
+void LevelManager::addHealthPack(Level* level, sf::Vector2f position) {
+	Object* obj = new Object(level->objects.size(), icons.size(), getHealthPack(), (position * 64.f));
+	obj->isHealthPack(true);
+
+	level->objects.push_back(obj);
 }
 
 void LevelManager::addIconObject(Sprite* sprite, Level* level, sf::Vector2f position) {
@@ -512,18 +541,15 @@ void LevelManager::addIconObject(Sprite* sprite, Level* level, sf::Vector2f posi
 	icons.push_back(obj);
 }
 
-void LevelManager::addHealthPack(Level* level, sf::Vector2f position) {
-	Object* obj = new Object(level->objects.size(), icons.size(), getHealthPack(), (position * 64.f));
-	obj->isHealthPack(true);
-
-	level->objects.push_back(obj);
-}
-
 Sprite* LevelManager::getBigScorpion() {
 	Sprite* sprite = new Sprite("src/resources/alien_scorpion.png", true, false, 3, 38, 41, 3.12f, 150);
 	sprite->setSpecial(2, 0, 42, 33, 41);
 
 	return sprite;
+}
+
+Sprite* LevelManager::getBullet() {
+	return new Sprite("src/resources/drill_icon.png", false, false, 1, 32, 32, 1.f, 0);
 }
 
 Sprite* LevelManager::getDashBoots() {

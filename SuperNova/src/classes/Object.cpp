@@ -12,6 +12,10 @@ int Object::getIconIndex() { return iconIndex; }
 int Object::getIndex() { return index; }
 sf::Vector2i Object::getSize() { return sf::Vector2i(sprite->getTexture().getSize().x * sprite->getScale(),
 														sprite->getTexture().getSize().y * sprite->getScale()); }	
+bool Object::isBullet() { return bullet; }
+void Object::isBullet(bool bullet) { this->bullet = bullet; }
+bool Object::isCollectible() { return collectible; }
+void Object::isCollectible(bool collectible) { this->collectible = collectible; }
 bool Object::isHealthPack() { return healthPack; }
 void Object::isHealthPack(bool healthPack) { this->healthPack = healthPack; }
 bool Object::isHidden() { return hidden; }
@@ -41,6 +45,11 @@ void Object::hide() {
 void Object::hideIcon() {
 	icon->getSprite()->setColor(sf::Color(255, 255, 255, 0));
 	hiddenIcon = true;
+}
+
+// Adapted code from: https://stackoverflow.com/questions/27306086/c-remove-object-from-vector
+void Object::removeSprite() {
+	Sprite::remove(sprite);
 }
 
 void Object::setIcon(bool boolIcon) {
