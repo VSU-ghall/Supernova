@@ -312,6 +312,7 @@ void Player::update(LevelManager::Level* currentLevel) {
 }
 
 void Player::checkItems(LevelManager::Level* currentLevel) {
+	bool removed = false;
 	for (auto obj : currentLevel->objects) {
 		if (!obj->isHidden() && playerSprite.getGlobalBounds().intersects(obj->getObject()->getSprite()->getGlobalBounds())) {
 			if (obj->isCollectible()) obj->collect();
@@ -323,9 +324,9 @@ void Player::checkItems(LevelManager::Level* currentLevel) {
 			sf::Vector2f pos = obj->getObject()->getSprite()->getPosition();
 			pos.x += 32;
 
-			if ((pos.x >= currentLevel->width * 64 - 5) || checkTile(currentLevel, pos, currentLevel->collisionTile)) {
-				//currentLevel.objects.erase(currentLevel.objects.begin() + 1);//obj->getIndex());
-				currentLevel->levelManager->removeObject(currentLevel, obj);
+			if (!removed && ((pos.x >= currentLevel->width * 64 - 5) || checkTile(currentLevel, pos, currentLevel->collisionTile))) {
+					currentLevel->levelManager->removeObject(currentLevel, obj);
+					removed = true;
 			}
 
 			pos = obj->getObject()->getSprite()->getPosition();
