@@ -16,6 +16,9 @@ bool Object::isBullet() { return bullet; }
 void Object::isBullet(bool bullet) { this->bullet = bullet; }
 bool Object::isCollectible() { return collectible; }
 void Object::isCollectible(bool collectible) { this->collectible = collectible; }
+bool Object::isGoingLeft() { return !right; }
+bool Object::isGoingRight() { return right; }
+void Object::isGoingRight(bool right) { this->right = right; }
 bool Object::isHealthPack() { return healthPack; }
 void Object::isHealthPack(bool healthPack) { this->healthPack = healthPack; }
 bool Object::isHidden() { return hidden; }

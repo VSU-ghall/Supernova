@@ -116,10 +116,10 @@ void Player::checkMovement(LevelManager::Level* currentLevel) {
 	// Shoot
 	if (shootCooldownTimer.getElapsedTime().asMilliseconds() > SHOOT_COOLDOWN_MILLISECONDS && sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
 		sf::Vector2f pos = playerSprite.getPosition();
-		pos.x += playerSprite.getGlobalBounds().width;
+		if (stoppedRight) pos.x += playerSprite.getGlobalBounds().width;
 		pos.y += playerSprite.getGlobalBounds().height / 3;
 
-		currentLevel->levelManager->shootBullet(pos);
+		currentLevel->levelManager->shootBullet(pos, stoppedRight);
 		shootCooldownTimer.restart();
 	}
 
@@ -322,15 +322,14 @@ void Player::checkItems(LevelManager::Level* currentLevel) {
 
 		if (obj->isBullet()) {
 			sf::Vector2f pos = obj->getObject()->getSprite()->getPosition();
-			pos.x += 32;
 
-			if (!removed && ((pos.x >= currentLevel->width * 64 - 5) || checkTile(currentLevel, pos, currentLevel->collisionTile))) {
+			if (!removed && ((pos.x <= 5) || (pos.x >= currentLevel->width * 64 - 5) || checkTile(currentLevel, pos, currentLevel->collisionTile))) {
 					currentLevel->levelManager->removeObject(currentLevel, obj);
 					removed = true;
 			}
 
-			pos = obj->getObject()->getSprite()->getPosition();
-			pos.x += 10;
+			if (obj->isGoingRight()) pos.x += 10;
+			else pos.x -= 10;
 			obj->getObject()->getSprite()->setPosition(pos);
 		}
 	}

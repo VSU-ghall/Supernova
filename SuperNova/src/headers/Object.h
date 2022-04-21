@@ -17,6 +17,9 @@ class Object
 		void isBullet(bool bullet);
 		bool isCollectible();
 		void isCollectible(bool collectible);
+		bool isGoingLeft();
+		bool isGoingRight();
+		void isGoingRight(bool right);
 		bool isHealthPack();
 		void isHealthPack(bool healthPack);
 		bool isHidden();
@@ -37,6 +40,6 @@ class Object
 		Sprite* sprite, *icon;
 		int index, iconIndex;
 		bool hidden = false, hiddenIcon = true, active = false, boolIcon = false, collectible = true,
-			healthPack = false, bullet = false;
+			healthPack = false, bullet = false, right = false;
 };
 

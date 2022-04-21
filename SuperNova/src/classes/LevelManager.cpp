@@ -497,8 +497,8 @@ void LevelManager::setLevel(Level level) {
 	loadLevel(&currentLevel);
 }
 
-void LevelManager::shootBullet(sf::Vector2f pos) {
-	addBullet(&currentLevel, (pos / 64.f));
+void LevelManager::shootBullet(sf::Vector2f pos, bool goingRight) {
+	addBullet(&currentLevel, (pos / 64.f), goingRight);
 }
 
 std::vector<LevelManager::Level> LevelManager::getAllLevels() {
@@ -518,10 +518,12 @@ void LevelManager::addEntity(Sprite* sprite, Level* level,	sf::Vector2f position
 	level->enemies.push_back(Entity(level->levelName, sprite, (position * 64.f)));
 }
 
-void LevelManager::addBullet(Level* level, sf::Vector2f position) {
+void LevelManager::addBullet(Level* level, sf::Vector2f position, bool goingRight) {
 	Object* obj = new Object(level->objects.size(), icons.size(), getBullet(), (position * 64.f));
 	obj->isBullet(true);
 	obj->isCollectible(false);
+	if (goingRight) obj->isGoingRight(true);
+	else obj->getObject()->flipHorizontal();
 
 	level->objects.push_back(obj);
 }
