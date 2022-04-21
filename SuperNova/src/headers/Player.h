@@ -12,7 +12,7 @@ class Player
 		int tileSize = 64;
 		float hp = 1.f;
 		int jetpackFuel, dashCooldown, dashDistance;
-		sf::Clock walkTimer, jetTimer, drillTimer, damageTimer, deathTimer;
+		sf::Clock walkTimer, jetTimer, drillTimer, damageTimer, deathTimer, dashTimer;
 		sf::RectangleShape rect;
 
 		sf::IntRect frameStoppedLeft = sf::IntRect(0, 32 * 2, 32, 64),

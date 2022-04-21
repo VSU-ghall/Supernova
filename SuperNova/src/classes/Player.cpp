@@ -135,7 +135,7 @@ void Player::checkMovement(LevelManager::Level* currentLevel) {
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::A) &&
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::W) &&
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::S) &&
-		!sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+		!sf::Keyboard::isKeyPressed(sf::Keyboard::F))
 		return;
 
 	bool checkLeft = checkCollision(-playerSpeed, currentLevel),
@@ -161,7 +161,7 @@ void Player::checkMovement(LevelManager::Level* currentLevel) {
 	else {
 		velocity.x = 0;
 	}
-	if (dashBoots && sf::Keyboard::isKeyPressed(sf::Keyboard::Space)&& dashCooldown==DASH_COOLDOWN) {
+	if (dashBoots && sf::Keyboard::isKeyPressed(sf::Keyboard::F) && dashCooldown == DASH_COOLDOWN) {
 		dashing = true;
 		dashDistance = 0;
 		dashCooldown = 0;
@@ -183,9 +183,9 @@ void Player::checkMovement(LevelManager::Level* currentLevel) {
 		gravity = 1.f;
 	}
 	if (jetPack) {
-		if (checkCollision(0, currentLevel))			
+		if (checkCollision(0, currentLevel))
 			if (!ceilingBump) {
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && jetpackFuel>0) {
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && jetpackFuel > 0) {
 					velocity.y = -playerJumpSpeed;
 					jetpackFuel--;
 					if (jetpackFuel != 0) playJetpackLaunch();
@@ -199,12 +199,12 @@ void Player::checkMovement(LevelManager::Level* currentLevel) {
 					if (music.getStatus() != sf::SoundSource::Stopped) music.stop();
 				}
 			}
-			else{
+			else {
 				velocity.y = 1;
 				ceilingBump = false;
 				jumping = false;
 				if (jetpackFuel > 0)
-				jetpackFuel--;
+					jetpackFuel--;
 			}
 	}
 	else {
@@ -263,7 +263,7 @@ void Player::checkMovement(LevelManager::Level* currentLevel) {
 			playerSprite.setTextureRect(sf::IntRect(offsetJetPack * 38, 322, 38, 64));
 		}
 		else if (stoppedLeft) {
-			playerSprite.setTextureRect(sf::IntRect((offsetJetPack * 38)+114, 322, 38, 64));
+			playerSprite.setTextureRect(sf::IntRect((offsetJetPack * 38) + 114, 322, 38, 64));
 		}
 	}
 
