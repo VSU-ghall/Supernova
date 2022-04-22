@@ -12,6 +12,7 @@ Sprite::Sprite(const std::string& filePath) {
 	this->filePath = filePath;
 
 	sprites.push_back(this);
+	image = texture.copyToImage();
 }
 
 Sprite::Sprite(const std::string& filePath, bool animated, bool random, int numFrames, int width, int height, float scale, int frequency)
@@ -29,6 +30,8 @@ Sprite::Sprite(const std::string& filePath, bool animated, bool random, int numF
 	if (animated) animating = true;
 
 	if (!animated) sprite.setTextureRect(sf::IntRect(0,0, width, height));
+
+	image = texture.copyToImage();
 }
 
 void Sprite::animate() {
@@ -214,4 +217,8 @@ void Sprite::setSpecial(int numFrames, int left, int top, int width, int height)
 	specialHeight = height;
 
 	special = true;
+}
+
+sf::Image Sprite::getImage() {
+	return image;
 }

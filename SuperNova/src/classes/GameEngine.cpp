@@ -80,6 +80,8 @@ void GameEngine::initGame() {
 	gameWindow.setVisible(true); menuWindow.setVisible(false);
 
 	playMusic();
+
+	bulletImage.loadFromFile("src/resources/drill_icon.png");
 }
 
 void GameEngine::initMenu() {
@@ -508,7 +510,7 @@ void GameEngine::updateGame() {
 	if (!enemies.getInteractableEntities(levelManager.currentLevel.levelName).empty()) {
 		for (auto& e : enemies.getInteractableEntities(levelManager.currentLevel.levelName)) {
 			// static enemies
-			if (!e->isDynamic() && !e->getSprite()->animating && checkCollision(*e->getSprite()->getSprite(), player.getSprite())) {
+			if (!e->isDynamic() && !e->getSprite()->animating && checkCollision(*e->getSprite()->getSprite(), player.getSprite(), e->getSprite()->getImage(), player.getImage())) {
 				e->getSprite()->animateOnce();
 				player.takeDamage(e->getDamageDealt());
 				e->notInteractable();
@@ -516,7 +518,7 @@ void GameEngine::updateGame() {
 			}
 
 			// dynamic enemies
-			if (e->isDynamic() && checkCollision(*e->getSprite()->getSprite(), player.getSprite())) {
+			if (e->isDynamic() && checkCollision(*e->getSprite()->getSprite(), player.getSprite(), e->getSprite()->getImage(), player.getImage())) {
 				if (e->getSprite()->hasSpecial() && !e->getSprite()->animatingSpecial && !e->isInCooldown()) {
 					e->attack();
 					player.takeDamage(e->getDamageDealt());
@@ -530,7 +532,7 @@ void GameEngine::updateGame() {
 			if (!levelManager.currentLevel.objects.empty()) {
 				for (auto obj : levelManager.currentLevel.objects)
 					if (obj->isBullet())
-						if (checkCollision(*e->getSprite()->getSprite(), *obj->getObject()->getSprite())) {
+						if (checkCollision(*e->getSprite()->getSprite(), *obj->getObject()->getSprite(), e->getSprite()->getImage(), bulletImage)) {
 							levelManager.removeObject(&levelManager.currentLevel, obj);
 							e->takeDamage();;
 						}
@@ -613,12 +615,14 @@ void GameEngine::updateJetPackBar() {
 	jetPackInside.setSize(sf::Vector2f(FUEL_BAR_WIDTH, FUEL_BAR_HEIGHT * player.getJetPackFuel()/player.JETPACK_MAXIMUM));
 }
 
-bool GameEngine::checkCollision(const sf::Sprite & a, const sf::Sprite & b) {
+bool GameEngine::checkCollision(const sf::Sprite & a, const sf::Sprite & b, sf::Image imgA, sf::Image imgB) {
 	sf::FloatRect intersection;
 
 	if (a.getGlobalBounds().intersects(b.getGlobalBounds(), intersection)) {
-		sf::Image imgA = a.getTexture()->copyToImage();
-		sf::Image imgB = b.getTexture()->copyToImage();
+		if (a.getTextureRect().width < 0) imgA.flipHorizontally();
+		if (a.getTextureRect().height < 0) imgA.flipVertically();
+		if (b.getTextureRect().width < 0) imgB.flipHorizontally();
+		if (b.getTextureRect().height < 0) imgB.flipVertically();
 
 		const sf::Transform& inverseA(a.getInverseTransform());
 		const sf::Transform& inverseB(b.getInverseTransform());

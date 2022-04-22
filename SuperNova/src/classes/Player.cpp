@@ -63,6 +63,8 @@ void Player::init(bool* displayingText) {
 	rect.setOutlineColor(sf::Color::Red);
 	rect.setOutlineThickness(2.0f);
 	rect.setFillColor(sf::Color(0, 0, 0, 0));
+
+	playerImage = texture.copyToImage();
 }
 
 void Player::animate() {
@@ -583,4 +585,8 @@ float Player::heal(float health) {
 
 sf::Sprite Player::getSprite() {
 	return playerSprite;
+}
+
+sf::Image Player::getImage() {
+	return playerImage;
 }

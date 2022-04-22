@@ -33,6 +33,7 @@ extern class Sprite
 		sf::Clock getTimer();
 		int getWidth();
 		sf::FloatRect getBoundingBox();
+		sf::Image getImage();
 
 		bool hasDamaged();
 		bool hasSpecial();
@@ -54,5 +55,6 @@ extern class Sprite
 		float scale;
 		bool animated = false, random = false, special = false, damaged = false, flippedHorizontal = false, flippedVertical = false;;
 		sf::Clock timer;
+		sf::Image image;
 };
 static std::vector<Sprite*> sprites;
