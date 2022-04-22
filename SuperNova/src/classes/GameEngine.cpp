@@ -614,11 +614,12 @@ void GameEngine::updateJetPackBar() {
 }
 
 bool GameEngine::checkCollision(const sf::Sprite & a, const sf::Sprite & b) {
-	sf::Image imgA = a.getTexture()->copyToImage();
-	sf::Image imgB = b.getTexture()->copyToImage();
 	sf::FloatRect intersection;
 
 	if (a.getGlobalBounds().intersects(b.getGlobalBounds(), intersection)) {
+		sf::Image imgA = a.getTexture()->copyToImage();
+		sf::Image imgB = b.getTexture()->copyToImage();
+
 		const sf::Transform& inverseA(a.getInverseTransform());
 		const sf::Transform& inverseB(b.getInverseTransform());
 
