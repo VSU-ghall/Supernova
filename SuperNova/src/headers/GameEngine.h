@@ -66,7 +66,8 @@ private:
 	void updateHpBar();
 	void updateJetPackBar();
 	void initJetPackBar();
-
+	bool pixelPerfectCollision(const sf::Sprite& a, const sf::Sprite& b);
+	inline sf::IntRect FToIRect(const sf::FloatRect& f);
 public:
 	GameEngine();
 
