@@ -508,7 +508,7 @@ void GameEngine::updateGame() {
 	if (!enemies.getInteractableEntities(levelManager.currentLevel.levelName).empty()) {
 		for (auto& e : enemies.getInteractableEntities(levelManager.currentLevel.levelName)) {
 			// static enemies
-			if (!e->isDynamic() && !e->getSprite()->animating && pixelPerfectCollision(*e->getSprite()->getSprite(), player.getSprite())) {
+			if (!e->isDynamic() && !e->getSprite()->animating && checkCollision(*e->getSprite()->getSprite(), player.getSprite())) {
 				e->getSprite()->animateOnce();
 				player.takeDamage(e->getDamageDealt());
 				e->notInteractable();
@@ -516,7 +516,7 @@ void GameEngine::updateGame() {
 			}
 
 			// dynamic enemies
-			if (e->isDynamic() && pixelPerfectCollision(*e->getSprite()->getSprite(), player.getSprite())) {
+			if (e->isDynamic() && checkCollision(*e->getSprite()->getSprite(), player.getSprite())) {
 				if (e->getSprite()->hasSpecial() && !e->getSprite()->animatingSpecial && !e->isInCooldown()) {
 					e->attack();
 					player.takeDamage(e->getDamageDealt());
@@ -530,7 +530,7 @@ void GameEngine::updateGame() {
 			if (!levelManager.currentLevel.objects.empty()) {
 				for (auto obj : levelManager.currentLevel.objects)
 					if (obj->isBullet())
-						if (pixelPerfectCollision(*e->getSprite()->getSprite(), *obj->getObject()->getSprite())) {
+						if (checkCollision(*e->getSprite()->getSprite(), *obj->getObject()->getSprite())) {
 							levelManager.removeObject(&levelManager.currentLevel, obj);
 							e->takeDamage();;
 						}
@@ -613,7 +613,7 @@ void GameEngine::updateJetPackBar() {
 	jetPackInside.setSize(sf::Vector2f(FUEL_BAR_WIDTH, FUEL_BAR_HEIGHT * player.getJetPackFuel()/player.JETPACK_MAXIMUM));
 }
 
-bool GameEngine::pixelPerfectCollision(const sf::Sprite & a, const sf::Sprite & b) {
+bool GameEngine::checkCollision(const sf::Sprite & a, const sf::Sprite & b) {
 	sf::Image imgA = a.getTexture()->copyToImage();
 	sf::Image imgB = b.getTexture()->copyToImage();
 	sf::FloatRect intersection;
