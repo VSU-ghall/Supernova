@@ -37,6 +37,8 @@ extern class Sprite
 		bool hasDamaged();
 		bool hasSpecial();
 		bool isAnimated();
+		bool isFlippedHorizontal();
+		bool isFlippedVertical();
 		bool isRandom();
 
 		static void remove(Sprite* spr);
