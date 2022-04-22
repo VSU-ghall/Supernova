@@ -47,6 +47,7 @@ class Player
 		float getY();
 		sf::FloatRect getBoundingBox();
 
+		sf::Sprite getSprite();
 		void init(bool* displayingText);
 		void animate();
 		void checkDeath();

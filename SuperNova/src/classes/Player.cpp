@@ -580,3 +580,7 @@ float Player::heal(float health) {
 	}
 	return hp;
 }
+
+sf::Sprite Player::getSprite() {
+	return playerSprite;
+}
