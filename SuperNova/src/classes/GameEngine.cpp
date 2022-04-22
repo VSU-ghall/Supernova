@@ -613,19 +613,12 @@ void GameEngine::updateJetPackBar() {
 	jetPackInside.setSize(sf::Vector2f(FUEL_BAR_WIDTH, FUEL_BAR_HEIGHT * player.getJetPackFuel()/player.JETPACK_MAXIMUM));
 }
 
-inline sf::IntRect GameEngine::FToIRect(const sf::FloatRect& f) {
-	return sf::IntRect((int)f.left, (int)f.top, (int)f.width, (int)f.height);
-}
-
-
 bool GameEngine::pixelPerfectCollision(const sf::Sprite & a, const sf::Sprite & b) {
 	sf::Image imgA = a.getTexture()->copyToImage();
 	sf::Image imgB = b.getTexture()->copyToImage();
-	sf::IntRect boundsA(FToIRect(a.getGlobalBounds()));
-	sf::IntRect boundsB(FToIRect(b.getGlobalBounds()));
-	sf::IntRect intersection;
+	sf::FloatRect intersection;
 
-	if (boundsA.intersects(boundsB, intersection)) {
+	if (a.getGlobalBounds().intersects(b.getGlobalBounds(), intersection)) {
 		const sf::Transform& inverseA(a.getInverseTransform());
 		const sf::Transform& inverseB(b.getInverseTransform());
 
