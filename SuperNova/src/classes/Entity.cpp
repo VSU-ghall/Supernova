@@ -61,7 +61,6 @@ void Entity::takeDamage() {
 	float area = (sprite->getScaledSize().x * sprite->getScaledSize().y) / (64 * 64); // gives # squares it takes up
 
 	float damage = 1 - (area * 0.125 + 0.3); //remove the "+ 0.3" on easy difficulty
-	std::cout << damage << std::endl;
 
 	health -= damage;
 
