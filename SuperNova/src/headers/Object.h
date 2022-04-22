@@ -13,6 +13,13 @@ class Object
 		int getIconIndex();
 		int getIndex();
 		sf::Vector2i getSize();
+		bool isBullet();
+		void isBullet(bool bullet);
+		bool isCollectible();
+		void isCollectible(bool collectible);
+		bool isGoingLeft();
+		bool isGoingRight();
+		void isGoingRight(bool right);
 		bool isHealthPack();
 		void isHealthPack(bool healthPack);
 		bool isHidden();
@@ -24,6 +31,7 @@ class Object
 		void deactivateIcon();
 		void hide();
 		void hideIcon();
+		void removeSprite();
 		void setIcon(bool boolIcon);
 		void show();
 
@@ -31,7 +39,7 @@ class Object
 	private:
 		Sprite* sprite, *icon;
 		int index, iconIndex;
-		bool hidden = false, hiddenIcon = true, active = false, boolIcon = false,
-			healthPack = false;
+		bool hidden = false, hiddenIcon = true, active = false, boolIcon = false, collectible = true,
+			healthPack = false, bullet = false, right = false;
 };
 

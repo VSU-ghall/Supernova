@@ -29,6 +29,8 @@ public:
 	float getDamageDealt();
 	Direction getDirection();
 	void reverseDirection();
+	void takeDamage();
+
 	Sprite* getSprite();
 	float getSpeed();
 	sf::Vector2f getCurrentPosition();
@@ -48,7 +50,8 @@ private:
 	sf::Vector2f position, position2;
 	bool isInteractable = true, cooldown = false;
 	float speed = 0; 
-	float damageDealt = 0;
+	float damageDealt = 0, health = 1.0f;
+
 	sf::Time cooldownTime;
 	Direction direction = right;
 

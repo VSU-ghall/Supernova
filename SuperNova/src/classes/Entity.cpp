@@ -55,6 +55,21 @@ void Entity::reverseDirection() {
 	sprite->flipHorizontal();
 }
 
+void Entity::takeDamage() {
+	if (!dynamic) return;
+
+	float area = (sprite->getScaledSize().x * sprite->getScaledSize().y) / (64 * 64); // gives # squares it takes up
+
+	float damage = 1 - (area * 0.125 + 0.3); //remove the "+ 0.3" on easy difficulty
+	std::cout << damage << std::endl;
+
+	health -= damage;
+
+	if (sprite->hasDamaged()) sprite->animateDamaged();
+
+	if (health <= 0) destroy();
+}
+
 void Entity::attack() {
 	if (sprite->hasSpecial()) sprite->animateSpecial();
 	cooldown = true;
@@ -78,6 +93,7 @@ bool Entity::isDynamic() {
 }
 
 void Entity::destroy() {
+	Sprite::remove(sprite);
 	isActive = false;
 }
 

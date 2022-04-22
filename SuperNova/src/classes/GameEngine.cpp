@@ -142,7 +142,7 @@ void GameEngine::drawGame() {
 
 	if (!scenePlaying) {
 		for (auto &e : enemies.getEntities()) {
-			if (e->getTag() == levelManager.getCurrentLevel().levelName) {
+			if (e->getTag() == levelManager.getCurrentLevel()->levelName) {
 				gameWindow.draw(*e->getSprite()->getSprite());
 			}
 			
@@ -508,7 +508,7 @@ void GameEngine::updateGame() {
 	if (!enemies.getInteractableEntities(levelManager.currentLevel.levelName).empty()) {
 		for (auto& e : enemies.getInteractableEntities(levelManager.currentLevel.levelName)) {
 			// static enemies
-			if (player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && !e->isDynamic() && !e->getSprite()->animating) {
+			if (!e->isDynamic() && !e->getSprite()->animating && checkCollision(*e->getSprite()->getSprite(), player.getSprite())) {
 				e->getSprite()->animateOnce();
 				player.takeDamage(e->getDamageDealt());
 				e->notInteractable();
@@ -516,7 +516,7 @@ void GameEngine::updateGame() {
 			}
 
 			// dynamic enemies
-			if (player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && e->isDynamic()) {
+			if (e->isDynamic() && checkCollision(*e->getSprite()->getSprite(), player.getSprite())) {
 				if (e->getSprite()->hasSpecial() && !e->getSprite()->animatingSpecial && !e->isInCooldown()) {
 					e->attack();
 					player.takeDamage(e->getDamageDealt());
@@ -525,6 +525,15 @@ void GameEngine::updateGame() {
 					e->attack();
 					player.takeDamage(e->getDamageDealt());
 				}
+			}
+
+			if (!levelManager.currentLevel.objects.empty()) {
+				for (auto obj : levelManager.currentLevel.objects)
+					if (obj->isBullet())
+						if (checkCollision(*e->getSprite()->getSprite(), *obj->getObject()->getSprite())) {
+							levelManager.removeObject(&levelManager.currentLevel, obj);
+							e->takeDamage();;
+						}
 			}
 		}
 	}
@@ -602,4 +611,46 @@ void GameEngine::updateHpBar() {
 
 void GameEngine::updateJetPackBar() {
 	jetPackInside.setSize(sf::Vector2f(FUEL_BAR_WIDTH, FUEL_BAR_HEIGHT * player.getJetPackFuel()/player.JETPACK_MAXIMUM));
+}
+
+bool GameEngine::checkCollision(const sf::Sprite & a, const sf::Sprite & b) {
+	sf::FloatRect intersection;
+
+	if (a.getGlobalBounds().intersects(b.getGlobalBounds(), intersection)) {
+		sf::Image imgA = a.getTexture()->copyToImage();
+		sf::Image imgB = b.getTexture()->copyToImage();
+
+		const sf::Transform& inverseA(a.getInverseTransform());
+		const sf::Transform& inverseB(b.getInverseTransform());
+
+		const sf::Vector2u& sizeA(imgA.getSize());
+		const sf::Vector2u& sizeB(imgB.getSize());
+
+		const sf::Uint8* pixA = imgA.getPixelsPtr();
+		const sf::Uint8* pixB = imgB.getPixelsPtr();
+
+		sf::Vector2f vecA, vecB;
+		int xMax = intersection.left + intersection.width;
+		int yMax = intersection.top + intersection.height;
+
+		for (int x = intersection.left; x < xMax; x++)
+			for (int y = intersection.top; y < yMax; y++) {
+				vecA = inverseA.transformPoint(x, y);
+				vecB = inverseB.transformPoint(x, y);
+
+				int idxA = ((int)vecA.x + ((int)vecA.y) * sizeA.x) * 4 + 3;
+				int idxB = ((int)vecB.x + ((int)vecB.y) * sizeB.x) * 4 + 3;
+
+				if (vecA.x > 0 && vecA.y > 0 &&
+					vecB.x > 0 && vecB.y > 0 &&
+					vecA.x < sizeA.x && vecA.y < sizeA.y &&
+					vecB.x < sizeB.x && vecB.y < sizeB.y &&
+					pixA[idxA] > 0 &&
+					pixB[idxB] > 0) {
+					return true;
+				}
+			}
+	}
+
+	return false;
 }
