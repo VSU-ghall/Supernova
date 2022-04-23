@@ -3,12 +3,12 @@
 #include <iostream>
 
 float playerJumpSpeed, playerSpeed, playerSize, animationPerFrame = 1.0f / 8.0f, jumpHeight = 0;
-int frameCount = 0, offset = 0;
-int frameCountJetPack = 0, offsetJetPack = 0;
-const float gravity = 1.f;
+int offset = 0, offsetJetPack = 0, offsetDrill = 0, offsetDeath = 0, offsetDash = 0;
+float gravity = 1.f;
 sf::Vector2f velocity(0, 0);
 bool grounded = true, jumping = false, ceilingBump = false, crouchPlayed = false;
 bool readyToTransition = false;
+
 float Player::getX() {
 	return x;
 }
@@ -17,21 +17,36 @@ float Player::getY() {
 	return y;
 }
 
+int Player::getJetPackFuel()
+{
+	return jetpackFuel;
+}
+
+float Player::getHp() {
+	return hp;
+}
+
 sf::FloatRect Player::getBoundingBox() {
 	return playerSprite.getGlobalBounds();
 }
 
-void Player::init() {
+void Player::init(bool* displayingText) {
+
+	this->displayingText = displayingText;
 
 	//this is how fast we want the player. If we want to change their speed this can be changed.
 	playerSpeed = 6.0f;
 	playerJumpSpeed = 9.0f;
 	playerSprite.setPosition(tileSize * startPosition.x, tileSize * startPosition.y);
-	playerSprite.setTextureRect(sf::IntRect(0, 0, 32, 64));
+	playerSprite.setTextureRect(frameStoppedLeft);
 	x = startPosition.x * tileSize;
 	y = startPosition.y * tileSize;
 
+	dashBoots = false;
+	dashCooldown = DASH_COOLDOWN;
+	
 	jetPack = false;
+	jetpackFuel = JETPACK_MAXIMUM;
 	//this is the Size of the player
 	//playerSize = 64/834.f;
 	playerSize = 2.f;
@@ -43,32 +58,57 @@ void Player::init() {
 		std::cout << "Could not load astronaut texture" << std::endl;
 	}
 	playerSprite.setTexture(texture);
+
+	// Set global bounds rectangle data for troubleshooting
+	rect.setOutlineColor(sf::Color::Red);
+	rect.setOutlineThickness(2.0f);
+	rect.setFillColor(sf::Color(0, 0, 0, 0));
 }
 
 void Player::animate() {
-	if (stoppedRight && !moving) {
-		if (jetPack && !grounded) playerSprite.setTextureRect(sf::IntRect(0, 322, 38, 64));
-		else playerSprite.setTextureRect(sf::IntRect(0, 0, 32, 64));
+	if (playingDeath) {
+		if (stoppedRight) playerSprite.setTextureRect(sf::IntRect(offsetDeath * 64, 513, 64, 64));
+		if (stoppedLeft) playerSprite.setTextureRect(sf::IntRect(offsetDeath * 64, 577, 64, 64));
+	}
+	else if (stoppedRight && !moving) {
+		if (jetPack && !grounded) playerSprite.setTextureRect(frameJetpackRight);
+		else playerSprite.setTextureRect(frameStoppedRight);
 	}
 	else if (stoppedLeft && !moving) {
-		if (jetPack && !grounded) playerSprite.setTextureRect(sf::IntRect(116, 322, 38, 64));
-		else playerSprite.setTextureRect(sf::IntRect(0, 32 * 2, 32, 64));
+		if (jetPack && !grounded) playerSprite.setTextureRect(frameJetpackLeft);
+		else playerSprite.setTextureRect(frameStoppedLeft);
 	}
 
-	frameCount++;
-	frameCountJetPack++;
-	if ((int)(frameCount * animationPerFrame) > offset) offset++;
-	if ((int)(frameCountJetPack * animationPerFrame) > offsetJetPack) offsetJetPack++;
+	if (walkTimer.getElapsedTime().asMilliseconds() >= 150 * offset) offset++;
+	if (jetTimer.getElapsedTime().asMilliseconds() >= 150 * offsetJetPack) offsetJetPack++;
+	if (drillTimer.getElapsedTime().asMilliseconds() >= 150 * offsetDrill) offsetDrill++;
+	if (playingDeath && deathTimer.getElapsedTime().asMilliseconds() >= 400 * offsetDeath) offsetDeath++;
+
 
 	//There are 8 frames for walking now, this allows each frame to cycle and then reset when the last frame is projected onto the screen
-	if (offset == 8) {
-		frameCount = 0;
+	if (offset == 8 || (!moving && grounded)) {
+		walkTimer.restart();
 		offset = 0;
 	}
 
-	if (offsetJetPack == 3) {
-		frameCountJetPack = 0;
+	if (offsetJetPack == 3 || grounded) {
+		jetTimer.restart();
 		offsetJetPack = 0;
+	}
+
+	if (offsetDrill == 7 || !drilling) {
+		drillTimer.restart();
+		offsetDrill = 0;
+	}
+	
+	if (offsetDash == 4 || !dashing) {
+		dashTimer.restart();
+		offsetDash = 0;
+	}
+
+	if (offsetDeath == 4) {
+		offsetDeath = 0;
+		dead = true;
 	}
 }
 
@@ -76,16 +116,38 @@ void Player::animate() {
 // Checks if A or D is pressed and moves left or right respectively
 // ( Movement is animated on a ratio (set by the variable animationPerFrame) )
 //
-void Player::checkMovement(LevelManager::Level currentLevel) {
+void Player::checkMovement(LevelManager::Level* currentLevel) {
+
+	// Shoot
+	if (shootCooldownTimer.getElapsedTime().asMilliseconds() > SHOOT_COOLDOWN_MILLISECONDS*2 && sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+		sf::Vector2f pos = playerSprite.getPosition();
+		if (stoppedRight) pos.x += playerSprite.getGlobalBounds().width;
+		pos.y += playerSprite.getGlobalBounds().height / 3;
+
+		currentLevel->levelManager->shootBullet(pos, stoppedRight);
+		shootCooldownTimer.restart();
+	}
+	else if (shootCooldownTimer.getElapsedTime().asMilliseconds() < SHOOT_COOLDOWN_MILLISECONDS) {
+		if (stoppedRight) playerSprite.setTextureRect(frameShootRight);
+		else playerSprite.setTextureRect(frameShootLeft);
+	}
 
 	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		crouchPlayed = false;
 
-	if (grounded &&
+	if (grounded && jetpackFuel < JETPACK_MAXIMUM && !sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+		jetpackFuel++;
+
+	if (dashCooldown < DASH_COOLDOWN)
+		dashCooldown++;
+
+
+	if (grounded && !dashing &&
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::D) &&
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::A) &&
 		!sf::Keyboard::isKeyPressed(sf::Keyboard::W) &&
-		!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		!sf::Keyboard::isKeyPressed(sf::Keyboard::S) &&
+		!sf::Keyboard::isKeyPressed(sf::Keyboard::F))
 		return;
 
 	bool checkLeft = checkCollision(-playerSpeed, currentLevel),
@@ -111,30 +173,52 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 	else {
 		velocity.x = 0;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)) {
-		jetPack = true;
-		playJetpackLaunch();
+	if (dashBoots && sf::Keyboard::isKeyPressed(sf::Keyboard::F) && dashCooldown == DASH_COOLDOWN) {
+		dashing = true;
+		dashDistance = 0;
+		dashCooldown = 0;
+		gravity = 0;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
-		jetPack = false;
+	if (dashing && dashDistance < DASH_TOTAL_DISTANCE && checkCollision(DASH_SPEED, currentLevel) && stoppedRight) {
+		playerSprite.setTextureRect(sf::IntRect(offsetDash * 48, 833, 48, 64));
+		velocity.x = DASH_SPEED;
+		velocity.y = 0;
+		dashDistance += DASH_SPEED;
+	}
+	else if (dashing && dashDistance > -DASH_TOTAL_DISTANCE && checkCollision(-DASH_SPEED, currentLevel) && stoppedLeft) {
+		playerSprite.setTextureRect(sf::IntRect(offsetDash * 48, 897, 48, 64));
+		velocity.x = -DASH_SPEED;
+		velocity.y = 1;
+		dashDistance -= DASH_SPEED;
+
+	}
+	else {
+		dashing = false;
+		gravity = 1.f;
 	}
 	if (jetPack) {
 		if (checkCollision(0, currentLevel))
 			if (!ceilingBump) {
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && jetpackFuel > 0) {
 					velocity.y = -playerJumpSpeed;
+					jetpackFuel--;
+					if (jetpackFuel != 0) playJetpackLaunch();
 				}
+
 				if (!grounded || velocity.y < 0) {
 					velocity.y = velocity.y * .9f + gravity;
 				}
 				else {
 					velocity.y = 0;
+					if (music.getStatus() != sf::SoundSource::Stopped) music.stop();
 				}
 			}
 			else {
 				velocity.y = 1;
 				ceilingBump = false;
 				jumping = false;
+				if (jetpackFuel > 0)
+					jetpackFuel--;
 			}
 	}
 	else {
@@ -152,11 +236,11 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 			else {
 				//if s key is pressed, the astronaut crouches and cannot move along the x-axis 
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && stoppedRight) {
-					playerSprite.setTextureRect(sf::IntRect(0, 192, 44, 64));
+					playerSprite.setTextureRect(frameSquatRight);
 					velocity.x = 0;
 				}
 				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && stoppedLeft) {
-					playerSprite.setTextureRect(sf::IntRect(44, 192, 44 * 2, 64));
+					playerSprite.setTextureRect(frameSquatLeft);
 					velocity.x = 0;
 				}
 
@@ -182,10 +266,10 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 	}
 	if (!jetPack && (!grounded || jumping)) {
 		if (stoppedRight) {
-			playerSprite.setTextureRect(sf::IntRect(0, 128, 44, 64));
+			playerSprite.setTextureRect(frameJumpRight);
 		}
 		else if (stoppedLeft) {
-			playerSprite.setTextureRect(sf::IntRect(44, 128, 44 * 2, 64));
+			playerSprite.setTextureRect(frameJumpLeft);
 		}
 	}
 	else if (jetPack && !grounded) {
@@ -193,7 +277,7 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 			playerSprite.setTextureRect(sf::IntRect(offsetJetPack * 38, 322, 38, 64));
 		}
 		else if (stoppedLeft) {
-			playerSprite.setTextureRect(sf::IntRect((offsetJetPack * 38)+114, 322, 38, 64));
+			playerSprite.setTextureRect(sf::IntRect((offsetJetPack * 38) + 114, 322, 38, 64));
 		}
 	}
 
@@ -213,6 +297,13 @@ void Player::checkMovement(LevelManager::Level currentLevel) {
 
 void Player::draw(sf::RenderWindow& window) {
 	window.draw(playerSprite);
+
+	// Set global bounds rectangle data for troubleshooting
+	/*sf::FloatRect bounds = playerSprite.getGlobalBounds();
+	rect.setSize(sf::Vector2f(bounds.width, bounds.height));
+
+	rect.setPosition(playerSprite.getPosition());
+	window.draw(rect);*/
 }
 
 void Player::respawn() {
@@ -221,13 +312,45 @@ void Player::respawn() {
 	y = startPosition.y * tileSize;
 }
 
-void Player::update(LevelManager::Level currentLevel) {
-	animate();
-	checkMovement(currentLevel);
+void Player::update(LevelManager::Level* currentLevel) {
+	if (!takingDamage) {
+		animate();
+		if (!playingDeath) checkMovement(currentLevel);
+	}
+	checkItems(currentLevel);
+
+	if (damageTimer.getElapsedTime().asSeconds() >= 0.1) takingDamage = false;
+}
+
+void Player::checkItems(LevelManager::Level* currentLevel) {
+	bool removed = false;
+	for (auto obj : currentLevel->objects) {
+		if (!obj->isHidden() && playerSprite.getGlobalBounds().intersects(obj->getObject()->getSprite()->getGlobalBounds())) {
+			if (obj->isCollectible()) obj->collect();
+
+			if (obj->isHealthPack()) {
+				heal(HEALTH_PACK_HEAL_VALUE);
+				playHPUpSound();
+			}
+		}
+
+		if (obj->isBullet()) {
+			sf::Vector2f pos = obj->getObject()->getSprite()->getPosition();
+
+			if (!removed && ((pos.x <= 5) || (pos.x >= currentLevel->width * 64 - 5) || checkTile(currentLevel, pos, currentLevel->collisionTile))) {
+					currentLevel->levelManager->removeObject(currentLevel, obj);
+					removed = true;
+			}
+
+			if (obj->isGoingRight()) pos.x += 10;
+			else pos.x -= 10;
+			obj->getObject()->getSprite()->setPosition(pos);
+		}
+	}
 }
 
 //returns false if movement will cause collision. returns true otherwise
-bool Player::checkCollision(float velo, LevelManager::Level currentLevel) {
+bool Player::checkCollision(float velo, LevelManager::Level* currentLevel) {
 
 	float bot = ceil(playerSprite.getGlobalBounds().top + 128);
 	float top = ceil(playerSprite.getGlobalBounds().top);
@@ -259,14 +382,41 @@ bool Player::checkCollision(float velo, LevelManager::Level currentLevel) {
 
 //Note: The values of collisionTile and transitionTile can be changed in TileMap.h
 
-bool Player::checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vector2f botLeftHigh, sf::Vector2f topRightHigh, sf::Vector2f topLeftHigh, LevelManager::Level currentLevel) {
-	bool blockTopLeftHigh = checkTile(currentLevel, topLeftHigh, currentLevel.collisionTile), blockBotLeftHigh = checkTile(currentLevel, botLeftHigh, currentLevel.collisionTile),
-		blockTopRightHigh = checkTile(currentLevel, topRightHigh, currentLevel.collisionTile), blockBotRightHigh = checkTile(currentLevel, botRightHigh, currentLevel.collisionTile);
+bool Player::checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vector2f botLeftHigh, sf::Vector2f topRightHigh, sf::Vector2f topLeftHigh, LevelManager::Level* currentLevel) {
+	bool blockTopLeftHigh = checkTile(currentLevel, topLeftHigh, currentLevel->collisionTile), blockBotLeftHigh = checkTile(currentLevel, botLeftHigh, currentLevel->collisionTile),
+		blockTopRightHigh = checkTile(currentLevel, topRightHigh, currentLevel->collisionTile), blockBotRightHigh = checkTile(currentLevel, botRightHigh, currentLevel->collisionTile);
 
-	if (((blockTopLeftHigh || blockBotLeftHigh) && velo < 0) || ((blockTopRightHigh || blockBotRightHigh)) && velo > 0) {
+	if (((blockTopLeftHigh || blockBotLeftHigh) && velo < 0) || ((blockTopRightHigh || blockBotRightHigh)) && velo > 0) {		
+		if (drilling) {
+			if (checkTile(currentLevel, botLeftHigh, 4)) {
+				playerSprite.setTextureRect(sf::IntRect(offsetDrill * 51, 449, 51, 64));
+
+				playDrillSound();
+				
+
+				int i = floor(botLeftHigh.y / tileSize) * currentLevel->width + floor(botLeftHigh.x / tileSize);
+
+				currentLevel->map[i - currentLevel->width] = 0;
+				currentLevel->map[i] = 0;
+
+				currentLevel->levelManager->setLevel(*currentLevel);
+
+			}
+			else if (checkTile(currentLevel, botRightHigh, 4)) {
+				playerSprite.setTextureRect(sf::IntRect(offsetDrill * 51, 386, 51, 64));
+
+				int i = floor(botRightHigh.y / tileSize) * currentLevel->width + floor(botRightHigh.x / tileSize);
+
+				playDrillSound();
+
+				currentLevel->map[i - currentLevel->width] = 0;
+				currentLevel->map[i] = 0;
+
+				currentLevel->levelManager->setLevel(*currentLevel);
+			}
+		}
 		return false;
 	}
-
 	return true;
 }
 
@@ -276,36 +426,34 @@ bool Player::checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vecto
 	if (blockBotRightHigh || blockTopRightHigh || blockBotLeftHigh || blockTopLeftHigh) {
 		readyToTransition = true;*/
 
-bool Player::checkTransitionCollision(float left, float right, float top, float bot, float velo, sf::Vector2f botRightHigh, sf::Vector2f botLeftHigh, sf::Vector2f topRightHigh, sf::Vector2f topLeftHigh, LevelManager::Level currentLevel) {
-	bool checkLeftEdge = left + velo <= 6;
-	bool checkRightEdge = right + velo >= (currentLevel.width * 64) - 6;
-	bool checkBotEdge = bot + velo >= (currentLevel.height * 64) - 12;
+bool Player::checkTransitionCollision(float left, float right, float top, float bot, float velo, sf::Vector2f botRightHigh, sf::Vector2f botLeftHigh, sf::Vector2f topRightHigh, sf::Vector2f topLeftHigh, LevelManager::Level* currentLevel) {
+	bool checkLeftEdge = left + velo <= 16;
+	bool checkRightEdge = right + velo >= (currentLevel->width * 64) - 16;
+	bool checkBotEdge = bot + velo >= (currentLevel->height * 64) - 12;
 	bool checkTopEdge = top - velo <= 63;
 	//std::cout << top - velo << std::endl;
 
 	if (checkLeftEdge || checkRightEdge || checkBotEdge || checkTopEdge) {
-		if (checkLeftEdge)
-			transitioningLeft = true;
-		if (checkRightEdge)
-			transitioningRight = true;
-		if (checkBotEdge)
-			transitioningBot = true;
-		if (checkTopEdge)
-			transitioningTop = true;
-		grounded = true;
-		velocity.y = 0;
+		if (!*displayingText) {
+			if (checkLeftEdge) transitioningLeft = true;
+			if (checkRightEdge) transitioningRight = true;
+			if (checkBotEdge) transitioningBot = true;
+			if (checkTopEdge) transitioningTop = true;
+
+			grounded = true;
+			velocity.y = 0;
+		}
+
 		return false;
 	}
-	else {
-		return checkSideCollision(velo, botRightHigh, botLeftHigh, topRightHigh, topLeftHigh, currentLevel);
-	}
+	else return checkSideCollision(velo, botRightHigh, botLeftHigh, topRightHigh, topLeftHigh, currentLevel);
 }
 
-void Player::checkTopBotCollision(sf::Vector2f topRight, sf::Vector2f botRightHigh, sf::Vector2f botRight, sf::Vector2f botMidRight, sf::Vector2f botMid, sf::Vector2f botMidLeft, sf::Vector2f topLeft, sf::Vector2f botLeftHigh, sf::Vector2f botLeft, LevelManager::Level currentLevel) {
+void Player::checkTopBotCollision(sf::Vector2f topRight, sf::Vector2f botRightHigh, sf::Vector2f botRight, sf::Vector2f botMidRight, sf::Vector2f botMid, sf::Vector2f botMidLeft, sf::Vector2f topLeft, sf::Vector2f botLeftHigh, sf::Vector2f botLeft, LevelManager::Level* currentLevel) {
 
-	bool blockTopLeft = checkTile(currentLevel, topLeft, currentLevel.collisionTile), blockBotLeftHigh = checkTile(currentLevel, botLeftHigh, currentLevel.collisionTile), blockBottomLeft = checkTile(currentLevel, botLeft, currentLevel.collisionTile),
-		blockBotMidLeft = checkTile(currentLevel, botMidLeft, currentLevel.collisionTile), blockBotMid = checkTile(currentLevel, botMid, currentLevel.collisionTile), blockBotMidRight = checkTile(currentLevel, botMidRight, currentLevel.collisionTile),
-		blockTopRight = checkTile(currentLevel, topRight, currentLevel.collisionTile), blockBotRightHigh = checkTile(currentLevel, botRightHigh, currentLevel.collisionTile), blockBottomRight = checkTile(currentLevel, botRight, currentLevel.collisionTile);
+	bool blockTopLeft = checkTile(currentLevel, topLeft, currentLevel->collisionTile), blockBotLeftHigh = checkTile(currentLevel, botLeftHigh, currentLevel->collisionTile), blockBottomLeft = checkTile(currentLevel, botLeft, currentLevel->collisionTile),
+		blockBotMidLeft = checkTile(currentLevel, botMidLeft, currentLevel->collisionTile), blockBotMid = checkTile(currentLevel, botMid, currentLevel->collisionTile), blockBotMidRight = checkTile(currentLevel, botMidRight, currentLevel->collisionTile),
+		blockTopRight = checkTile(currentLevel, topRight, currentLevel->collisionTile), blockBotRightHigh = checkTile(currentLevel, botRightHigh, currentLevel->collisionTile), blockBottomRight = checkTile(currentLevel, botRight, currentLevel->collisionTile);
 
 	if ((blockBottomLeft && !blockBotMidLeft) || (blockBottomRight && !blockBotMidRight)) {
 		grounded = false;
@@ -325,8 +473,38 @@ void Player::checkTopBotCollision(sf::Vector2f topRight, sf::Vector2f botRightHi
 	}
 }
 
-bool Player::checkTile(LevelManager::Level currentLevel, sf::Vector2f position, int remainder) {
-	return currentLevel.colMap.at(floor(position.y / tileSize)).at(floor(position.x / tileSize)) == remainder;
+void Player::DrillCollision(float velo, LevelManager::Level* currentLevel) {
+
+	float bot = ceil(playerSprite.getGlobalBounds().top + 128);
+	float top = ceil(playerSprite.getGlobalBounds().top);
+	float left = ceil(playerSprite.getGlobalBounds().left);
+	float mid = ceil(playerSprite.getGlobalBounds().left + 32);
+	float right = ceil(playerSprite.getGlobalBounds().left + 64);
+
+
+
+	sf::Vector2f botLeftHigh(left + (-std::abs(velo)), bot - 32);
+	sf::Vector2f botRightHigh(right + velo, bot - 32);
+
+
+	if (checkTile(currentLevel, botLeftHigh, 4)) {
+		int i = floor(botLeftHigh.y / tileSize) * currentLevel->width + floor(botLeftHigh.x / tileSize);
+		
+		currentLevel->map[i- currentLevel->width] = 0;
+		currentLevel->map[i] = 0;
+
+	}
+	else if (checkTile(currentLevel, botRightHigh, 4)) {
+		int i = floor(botRightHigh.y / tileSize) * currentLevel->width + floor(botRightHigh.x / tileSize);
+
+		currentLevel->map[i - currentLevel->width] = 0;
+		currentLevel->map[i] = 0;
+	}
+
+}
+
+bool Player::checkTile(LevelManager::Level* currentLevel, sf::Vector2f position, int remainder) {
+	return currentLevel->colMap.at(floor(position.y / tileSize)).at(floor(position.x / tileSize)) >= remainder;
 }
 
 void Player::playCrouchSound()
@@ -347,6 +525,34 @@ void Player::playCrouchSound()
 	}
 }
 
+void Player::playJetpackLaunch()
+{
+	//sound for jetpack
+	if (music.getStatus() == sf::SoundSource::Stopped) {
+		if (!music.openFromFile("src/resources/sounds/jetpack_sound.wav"))
+		{
+			std::cout << "Could not load jetpack_sound" << std::endl;
+			return;
+		}
+		music.setVolume(10);
+
+		music.play();
+	}
+}
+
+void Player::playDrillSound() {
+	//sound for drilling
+	//needs to be much shorter
+	if (!music.openFromFile("src/resources/sounds/drill_sound.wav")) {
+
+		std::cout << "Could not load drill sound" << std::endl;
+		return;
+	}
+	
+	music.setVolume(5);
+	music.play();
+}
+
 void Player::playJumpSound() {
 	//sound for jump
 	if (!music.openFromFile("src/resources/sounds/astronaut_jump.wav"))
@@ -355,14 +561,13 @@ void Player::playJumpSound() {
 		return;
 	}
 
-	music.setVolume(5);
+	music.setVolume(15);
 
 	music.play();
 }
 
 void Player::playWalkSound()
 {
-	//sound for jump
 	if (music.getStatus() == sf::SoundSource::Stopped) {
 		if (!music.openFromFile("src/resources/sounds/astronaut_walking.wav"))
 		{
@@ -375,17 +580,77 @@ void Player::playWalkSound()
 	}
 }
 
-void Player::playJetpackLaunch()
-{
-	//sound for jetpack
-	if (jetPack) {
-		if (!music.openFromFile("src/resources/sounds/jetpack_sound.wav"))
-		{
-			std::cout << "Could not load jetpack_sound" << std::endl;
+void Player::playHPUpSound(){
+	if (music.getStatus() == sf::SoundSource::Stopped) {
+		if (!music.openFromFile("src/resources/sounds/power_up_sound.flac")){
+			std::cout << "Could not load astronaut pickup sound" << std::endl;
 			return;
 		}
 		music.setVolume(10);
 
 		music.play();
 	}
+}
+
+void Player::playDeathSound() {
+	if (music.getStatus() == sf::SoundSource::Stopped) {
+		if (!music.openFromFile("src/resources/sounds/death-01.wav")) {
+			std::cout << "Could not load astronaut death sound" << std::endl;
+			return;
+		}
+		music.setVolume(15);
+
+		music.play();
+	}
+}
+
+void Player::playDamageSound() {
+	if (music.getStatus() == sf::SoundSource::Stopped) {
+		if (!music.openFromFile("src/resources/sounds/damage_sound.wav")) {
+			std::cout << "Could not load astronaut death sound" << std::endl;
+			return;
+		}
+		music.setVolume(20);
+
+		music.play();
+	}
+}
+
+
+
+
+float Player::takeDamage(float damage) {
+	//death frames are 64x64
+	takingDamage = true; damageTimer.restart();
+	hp -= damage;
+
+	playDamageSound();
+
+	if(stoppedRight) playerSprite.setTextureRect(frameDamagedRight);
+	else if(stoppedLeft) playerSprite.setTextureRect(frameDamagedLeft);
+
+	if (hp <= 0) {
+		hp = 0;
+
+		music.stop();
+		//if we wanted the death sound
+		playDeathSound();
+
+		deathTimer.restart();
+		playingDeath = true;
+	}
+	return hp;
+}
+
+float Player::heal(float health) {
+	hp += health;
+
+	if (hp >= 1) {
+		hp = 1;
+	}
+	return hp;
+}
+
+sf::Sprite Player::getSprite() {
+	return playerSprite;
 }

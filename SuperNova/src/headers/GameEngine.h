@@ -31,15 +31,42 @@ private:
 		*btnOptions = new Sprite("src/resources/MenuOptionsButton.png"),
 		*btnExit = new Sprite("src/resources/MenuExitButton.png");
 	sf::Texture backgroundTexture;
-	sf::RectangleShape gameBar, chatBar, blackRect, jetpackIcon;
-	sf::Texture texture;
+	sf::RectangleShape gameBar, chatBar, blackRect, hpBarBack, hpBarInside, jetPackInside, jetPackBack, gameOverBackground, gameOver;
+	sf::Texture gameOverText;
 	sf::Vector2f pixiLocation;
+
 
 	enum Mode {menu, game, paused};
 	Mode gameMode;
 
 	EntityManager enemies;
 
+	float const HP_BAR_HEIGHT = 50;
+	float const HP_BAR_WIDTH = 300;
+	float const FUEL_BAR_HEIGHT = 300;
+	float const FUEL_BAR_WIDTH = 50;
+	float const HEALTH_PACK_HEAL_VALUE = 0.25;
+
+	void initGame();
+	void initMenu();
+	void drawGame();
+	void drawGrid();
+	void drawMenu();
+	sf::View getViewport(float width, float height);
+	void handleEvent(sf::Event event);
+	void loadLevel(LevelManager::Level level, Vector2 startp);
+	void playMusic();
+	void playSoundEffect(const std::string& filePath);
+	void setWindowView(sf::RenderWindow& window, float width, float height);
+	void updateGame();
+	void updateMenu();
+
+	void addEntities();
+	void updateComponentView();
+	void updateHpBar();
+	void updateJetPackBar();
+	void initJetPackBar();
+	bool checkCollision(const sf::Sprite& a, const sf::Sprite& b);
 public:
 	GameEngine();
 
@@ -48,21 +75,4 @@ public:
 	sf::RenderWindow* getWindow() { return &gameWindow; }
 
 	void run();
-	void init();
-	void initGame();
-	void initMenu();
-	void drawGame();
-	void drawGrid();
-	void drawMenu();
-	sf::View getViewport(float width, float height);
-	void handleEvent(sf::Event event);
-	void loadLevel(LevelManager::Level level);
-	void playMusic();
-	void playSoundEffect(const std::string& filePath);
-	void setWindowView(sf::RenderWindow &window, float width, float height);
-	void updateGame();
-	void updateMenu();
-	sf::Vector2f updatePixi();
-
-	void addEntities();
 };

@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "Components.h"
 #include <headers/Sprite.h>
 
 /*
@@ -10,66 +9,51 @@
 
 class Entity
 {
-
-private:
-
-	//Since the constructor is private EntityManager class needs this to create Entities
-	friend class EntityManager;
-
-	size_t id = 0; //unique id of the entity
-	std::string tag = "default"; //tag to allow similar entities to be gathered
-	bool isActive = true; //true if the entity is alive false if entity is dead
-	Sprite *sprite;
-	std::vector<Component> components;
-	sf::Vector2f position;
-	bool isInteractable = true;
-
-	
-
 public:
 
-	Entity(const size_t& id, const std::string& tag); //constructor requries a unique unsigned int as id and tag
-	Entity(const size_t& id, const std::string& tag, Sprite* s, sf::Vector2f pos);
+	enum Direction { right, left };
+	sf::Clock cooldownTimer;
+
+	Entity(const std::string& tag); //constructor requries a unique unsigned int as id and tag
+	Entity(const std::string& tag, Sprite* s, sf::Vector2f pos); //constructor for static entity
+	Entity(const std::string& tag, Sprite* s, sf::Vector2f pos, sf::Vector2f pos2); //constructor for dynamic entity
 	
+	void attack();
 	bool getIsActive();
 	std::string& getTag();
-	size_t getId();
+	bool isInCooldown();
+	void isInCooldown(bool cooldown);
+	bool isDynamic();
 	void destroy(); //sets isActive to false
+	sf::Time getCooldown();
+	float getDamageDealt();
+	Direction getDirection();
+	void reverseDirection();
+	void takeDamage();
+
 	Sprite* getSprite();
+	float getSpeed();
+	sf::Vector2f getCurrentPosition();
 	sf::Vector2f getPosition();
+	sf::Vector2f getPosition2();
 	void notInteractable();
 	bool getIsInteractable();
 
-	//template <typename T>
-	//bool hasComponent() {
-	//	return getComponent<T>().has;
-	//}
+	void setCooldown(sf::Time time);
 
-//	template<typename T>
-//	T & getComponent() {
-//		//return std::get<T>(components);
-//		//return std::get<T>(components);
-//		for (auto& c : components) {
-//			if (c == std::forward<T>) {
-//				return c;
-//			}
-//		}
-//		//return nullptr;
-//	}
-//
-//	//template<typename T>
-//	template <typename T, typename...TArgs>
-////	T & addComponent(TArgs&&... mArgs){
-//	void addComponent(TArgs&&...mArgs){
-//	//void addComponent(Component c){
-////		auto & component = getComponent<T>();
-////		component = T(std::forward<TArgs>(mArgs)...);
-////		component.has = true;
-//		components.push_back(std::forward<TArgs>(mArgs)...);
-////		return TArgs;
-//	}
-	
+private:
 
+	bool dynamic = false; //dynamic or static enemy
+	std::string tag = "default"; //tag to allow similar entities to be gathered
+	bool isActive = true; //true if the entity is alive false if entity is dead
+	Sprite* sprite;
+	sf::Vector2f position, position2;
+	bool isInteractable = true, cooldown = false;
+	float speed = 0; 
+	float damageDealt = 0, health = 1.0f;
+
+	sf::Time cooldownTime;
+	Direction direction = right;
 
 };
 
