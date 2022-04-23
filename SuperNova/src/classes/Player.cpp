@@ -3,7 +3,7 @@
 #include <iostream>
 
 float playerJumpSpeed, playerSpeed, playerSize, animationPerFrame = 1.0f / 8.0f, jumpHeight = 0;
-int offset = 0, offsetJetPack = 0, offsetDrill = 0, offsetDeath = 0;
+int offset = 0, offsetJetPack = 0, offsetDrill = 0, offsetDeath = 0, offsetDash = 0;
 float gravity = 1.f;
 sf::Vector2f velocity(0, 0);
 bool grounded = true, jumping = false, ceilingBump = false, crouchPlayed = false;
@@ -100,6 +100,11 @@ void Player::animate() {
 		drillTimer.restart();
 		offsetDrill = 0;
 	}
+	
+	if (offsetDash == 4 || !dashing) {
+		dashTimer.restart();
+		offsetDash = 0;
+	}
 
 	if (offsetDeath == 4) {
 		offsetDeath = 0;
@@ -175,11 +180,13 @@ void Player::checkMovement(LevelManager::Level* currentLevel) {
 		gravity = 0;
 	}
 	if (dashing && dashDistance < DASH_TOTAL_DISTANCE && checkCollision(DASH_SPEED, currentLevel) && stoppedRight) {
+		playerSprite.setTextureRect(sf::IntRect(offsetDash * 48, 833, 48, 64));
 		velocity.x = DASH_SPEED;
 		velocity.y = 0;
 		dashDistance += DASH_SPEED;
 	}
 	else if (dashing && dashDistance > -DASH_TOTAL_DISTANCE && checkCollision(-DASH_SPEED, currentLevel) && stoppedLeft) {
+		playerSprite.setTextureRect(sf::IntRect(offsetDash * 48, 897, 48, 64));
 		velocity.x = -DASH_SPEED;
 		velocity.y = 1;
 		dashDistance -= DASH_SPEED;
@@ -385,10 +392,6 @@ bool Player::checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vecto
 				playerSprite.setTextureRect(sf::IntRect(offsetDrill * 51, 449, 51, 64));
 
 				playDrillSound();
-
-				if (drillSoundTimer.getElapsedTime().asMilliseconds() == 150 && music.getStatus() != sf::SoundSource::Stopped) {
-					music.stop();
-				}
 				
 
 				int i = floor(botLeftHigh.y / tileSize) * currentLevel->width + floor(botLeftHigh.x / tileSize);
@@ -621,7 +624,6 @@ float Player::takeDamage(float damage) {
 	takingDamage = true; damageTimer.restart();
 	hp -= damage;
 
-	//This sound needs to be shorter
 	playDamageSound();
 
 	if(stoppedRight) playerSprite.setTextureRect(frameDamagedRight);
@@ -630,7 +632,7 @@ float Player::takeDamage(float damage) {
 	if (hp <= 0) {
 		hp = 0;
 
-		//music.stop();
+		music.stop();
 		//if we wanted the death sound
 		playDeathSound();
 
