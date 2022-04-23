@@ -13,7 +13,7 @@ class Player
 		float hp = 1.f;
 		int jetpackFuel, dashCooldown, dashDistance;
 		sf::Clock walkTimer, jetTimer, drillTimer, damageTimer, deathTimer, dashTimer,
-			shootCooldownTimer;
+			shootCooldownTimer, drillSoundTimer;
 		sf::RectangleShape rect;
 
 		sf::IntRect
@@ -65,8 +65,13 @@ class Player
 		void update(LevelManager::Level* currentLevel);
 		void playCrouchSound();
 		void playJetpackLaunch();
+		void playDrillSound();
 		void playJumpSound();
 		void playWalkSound();
+		void playHPUpSound();
+		void playDeathSound(); 
+		void playDamageSound();
+		
 
 		int getJetPackFuel();
 		float getHp();
