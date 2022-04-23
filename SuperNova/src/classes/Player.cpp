@@ -124,7 +124,7 @@ void Player::checkMovement(LevelManager::Level* currentLevel) {
 	}
 	else if (shootCooldownTimer.getElapsedTime().asMilliseconds() < SHOOT_COOLDOWN_MILLISECONDS) {
 		if (stoppedRight) playerSprite.setTextureRect(frameShootRight);
-		//else playerSprite.setTextureRect(frameShootLeft);
+		else playerSprite.setTextureRect(frameShootLeft);
 	}
 
 	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
@@ -321,7 +321,10 @@ void Player::checkItems(LevelManager::Level* currentLevel) {
 		if (!obj->isHidden() && playerSprite.getGlobalBounds().intersects(obj->getObject()->getSprite()->getGlobalBounds())) {
 			if (obj->isCollectible()) obj->collect();
 
-			if (obj->isHealthPack()) heal(HEALTH_PACK_HEAL_VALUE);
+			if (obj->isHealthPack()) {
+				heal(HEALTH_PACK_HEAL_VALUE);
+				playHPUpSound();
+			}
 		}
 
 		if (obj->isBullet()) {
@@ -381,6 +384,13 @@ bool Player::checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vecto
 			if (checkTile(currentLevel, botLeftHigh, 4)) {
 				playerSprite.setTextureRect(sf::IntRect(offsetDrill * 51, 449, 51, 64));
 
+				playDrillSound();
+
+				if (drillSoundTimer.getElapsedTime().asMilliseconds() == 150 && music.getStatus() != sf::SoundSource::Stopped) {
+					music.stop();
+				}
+				
+
 				int i = floor(botLeftHigh.y / tileSize) * currentLevel->width + floor(botLeftHigh.x / tileSize);
 
 				currentLevel->map[i - currentLevel->width] = 0;
@@ -394,16 +404,16 @@ bool Player::checkSideCollision(float velo, sf::Vector2f botRightHigh, sf::Vecto
 
 				int i = floor(botRightHigh.y / tileSize) * currentLevel->width + floor(botRightHigh.x / tileSize);
 
+				playDrillSound();
+
 				currentLevel->map[i - currentLevel->width] = 0;
 				currentLevel->map[i] = 0;
 
 				currentLevel->levelManager->setLevel(*currentLevel);
 			}
 		}
-
 		return false;
 	}
-
 	return true;
 }
 
@@ -527,6 +537,19 @@ void Player::playJetpackLaunch()
 	}
 }
 
+void Player::playDrillSound() {
+	//sound for drilling
+	//needs to be much shorter
+	if (!music.openFromFile("src/resources/sounds/drill_sound.wav")) {
+
+		std::cout << "Could not load drill sound" << std::endl;
+		return;
+	}
+	
+	music.setVolume(5);
+	music.play();
+}
+
 void Player::playJumpSound() {
 	//sound for jump
 	if (!music.openFromFile("src/resources/sounds/astronaut_jump.wav"))
@@ -535,14 +558,13 @@ void Player::playJumpSound() {
 		return;
 	}
 
-	music.setVolume(5);
+	music.setVolume(15);
 
 	music.play();
 }
 
 void Player::playWalkSound()
 {
-	//sound for jump
 	if (music.getStatus() == sf::SoundSource::Stopped) {
 		if (!music.openFromFile("src/resources/sounds/astronaut_walking.wav"))
 		{
@@ -555,16 +577,62 @@ void Player::playWalkSound()
 	}
 }
 
+void Player::playHPUpSound(){
+	if (music.getStatus() == sf::SoundSource::Stopped) {
+		if (!music.openFromFile("src/resources/sounds/power_up_sound.flac")){
+			std::cout << "Could not load astronaut pickup sound" << std::endl;
+			return;
+		}
+		music.setVolume(10);
+
+		music.play();
+	}
+}
+
+void Player::playDeathSound() {
+	if (music.getStatus() == sf::SoundSource::Stopped) {
+		if (!music.openFromFile("src/resources/sounds/death-01.wav")) {
+			std::cout << "Could not load astronaut death sound" << std::endl;
+			return;
+		}
+		music.setVolume(15);
+
+		music.play();
+	}
+}
+
+void Player::playDamageSound() {
+	if (music.getStatus() == sf::SoundSource::Stopped) {
+		if (!music.openFromFile("src/resources/sounds/damage_sound.wav")) {
+			std::cout << "Could not load astronaut death sound" << std::endl;
+			return;
+		}
+		music.setVolume(20);
+
+		music.play();
+	}
+}
+
+
+
+
 float Player::takeDamage(float damage) {
 	//death frames are 64x64
 	takingDamage = true; damageTimer.restart();
 	hp -= damage;
+
+	//This sound needs to be shorter
+	playDamageSound();
 
 	if(stoppedRight) playerSprite.setTextureRect(frameDamagedRight);
 	else if(stoppedLeft) playerSprite.setTextureRect(frameDamagedLeft);
 
 	if (hp <= 0) {
 		hp = 0;
+
+		//music.stop();
+		//if we wanted the death sound
+		playDeathSound();
 
 		deathTimer.restart();
 		playingDeath = true;
