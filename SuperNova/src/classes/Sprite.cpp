@@ -12,7 +12,7 @@ Sprite::Sprite(const std::string& filePath) {
 	this->filePath = filePath;
 
 	sprites.push_back(this);
-	image = texture.copyToImage();
+	//image = texture.copyToImage();
 }
 
 Sprite::Sprite(const std::string& filePath, bool animated, bool random, int numFrames, int width, int height, float scale, int frequency)
@@ -31,7 +31,7 @@ Sprite::Sprite(const std::string& filePath, bool animated, bool random, int numF
 
 	if (!animated) sprite.setTextureRect(sf::IntRect(0,0, width, height));
 
-	image = texture.copyToImage();
+	//image = texture.copyToImage();
 }
 
 void Sprite::animate() {

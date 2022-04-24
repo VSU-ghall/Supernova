@@ -81,8 +81,8 @@ static class LevelManager
 		void init();
 		void loadLevel(Level* level);
 
-		void addEntity(Sprite* sprite, Level* level, sf::Vector2f position);
-		void addEntity(Sprite* sprite, Level* level, sf::Vector2f position, sf::Vector2f position2);
+		void addEntity(Sprite* sprite, Level* level, sf::Vector2f position, std::string type);
+		void addEntity(Sprite* sprite, Level* level, sf::Vector2f position, sf::Vector2f position2, std::string type);
 
 		void addBullet(Level* level, sf::Vector2f position, bool goingRight);
 		void addHealthPack(Level* level, sf::Vector2f position);

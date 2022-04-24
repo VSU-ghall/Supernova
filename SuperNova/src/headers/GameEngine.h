@@ -35,7 +35,11 @@ private:
 	sf::Texture gameOverText;
 	sf::Vector2f pixiLocation;
 	sf::Image bulletImage;
-
+	sf::Image flowerImage;
+	sf::Image scorpionImage;
+	sf::Image ratImage;
+	sf::Image robotImage;
+	sf::Image getImage(std::string type);
 
 	enum Mode {menu, game, paused};
 	Mode gameMode;

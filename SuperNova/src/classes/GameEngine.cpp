@@ -82,6 +82,10 @@ void GameEngine::initGame() {
 	playMusic();
 
 	bulletImage.loadFromFile("src/resources/drill_icon.png");
+	scorpionImage.loadFromFile("src/resources/alien_scorpion.png");
+	ratImage.loadFromFile("src/resources/alien_rat.png");
+	flowerImage.loadFromFile("src/resources/spicy_flower.png");
+	robotImage.loadFromFile("src/resources/mining_bot.png");
 }
 
 void GameEngine::initMenu() {
@@ -510,7 +514,7 @@ void GameEngine::updateGame() {
 	if (!enemies.getInteractableEntities(levelManager.currentLevel.levelName).empty()) {
 		for (auto& e : enemies.getInteractableEntities(levelManager.currentLevel.levelName)) {
 			// static enemies
-			if (!e->isDynamic() && !e->getSprite()->animating && checkCollision(*e->getSprite()->getSprite(), player.getSprite(), e->getSprite()->getImage(), player.getImage())) {
+			if (!e->isDynamic() && !e->getSprite()->animating && player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && checkCollision(*e->getSprite()->getSprite(), player.getSprite(), getImage(e->getType()), player.getImage())) {
 				e->getSprite()->animateOnce();
 				player.takeDamage(e->getDamageDealt());
 				e->notInteractable();
@@ -518,7 +522,7 @@ void GameEngine::updateGame() {
 			}
 
 			// dynamic enemies
-			if (e->isDynamic() && checkCollision(*e->getSprite()->getSprite(), player.getSprite(), e->getSprite()->getImage(), player.getImage())) {
+			if (e->isDynamic() && player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && checkCollision(*e->getSprite()->getSprite(), player.getSprite(), getImage(e->getType()), player.getImage())) {
 				if (e->getSprite()->hasSpecial() && !e->getSprite()->animatingSpecial && !e->isInCooldown()) {
 					e->attack();
 					player.takeDamage(e->getDamageDealt());
@@ -532,7 +536,7 @@ void GameEngine::updateGame() {
 			if (!levelManager.currentLevel.objects.empty()) {
 				for (auto obj : levelManager.currentLevel.objects)
 					if (obj->isBullet())
-						if (checkCollision(*e->getSprite()->getSprite(), *obj->getObject()->getSprite(), e->getSprite()->getImage(), bulletImage)) {
+						if (obj->getObject()->getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && checkCollision(*e->getSprite()->getSprite(), *obj->getObject()->getSprite(), getImage(e->getType()), bulletImage)) {
 							levelManager.removeObject(&levelManager.currentLevel, obj);
 							e->takeDamage();;
 						}
@@ -619,10 +623,10 @@ bool GameEngine::checkCollision(const sf::Sprite & a, const sf::Sprite & b, sf::
 	sf::FloatRect intersection;
 
 	if (a.getGlobalBounds().intersects(b.getGlobalBounds(), intersection)) {
-		if (a.getTextureRect().width < 0) imgA.flipHorizontally();
+		/*if (a.getTextureRect().width < 0) imgA.flipHorizontally();
 		if (a.getTextureRect().height < 0) imgA.flipVertically();
 		if (b.getTextureRect().width < 0) imgB.flipHorizontally();
-		if (b.getTextureRect().height < 0) imgB.flipVertically();
+		if (b.getTextureRect().height < 0) imgB.flipVertically();*/
 
 		if (a.getTextureRect().width < 0) imgA.flipHorizontally();
 		if (a.getTextureRect().height < 0) imgA.flipVertically();
@@ -662,4 +666,19 @@ bool GameEngine::checkCollision(const sf::Sprite & a, const sf::Sprite & b, sf::
 	}
 
 	return false;
+}
+
+sf::Image GameEngine::getImage(std::string type) {
+	if (type == "flower") {
+		return flowerImage;
+	}
+	else if (type == "scorpion") {
+		return scorpionImage;
+	}
+	else if (type == "robot") {
+		return robotImage;
+	}
+	else {
+		return ratImage;
+	}
 }
