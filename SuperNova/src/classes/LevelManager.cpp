@@ -552,7 +552,7 @@ Sprite* LevelManager::getBigScorpion() {
 }
 
 Sprite* LevelManager::getBullet() {
-	return new Sprite("src/resources/drill_icon.png", false, false, 1, 32, 32, 1.f, 0);
+	return new Sprite("src/resources/bullet_animation.png", false, false, 1, 15, 11, 1.f, 0);
 }
 
 Sprite* LevelManager::getDashBoots() {
