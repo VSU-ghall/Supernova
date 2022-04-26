@@ -182,6 +182,10 @@ bool Sprite::hasSpecial() { return special; }
 
 bool Sprite::isAnimated() { return animated; }
 
+bool Sprite::isFlippedHorizontal() { return flippedHorizontal; }
+
+bool Sprite::isFlippedVertical() { return flippedVertical; }
+
 bool Sprite::isRandom() { return random; }
 
 // Adapted code from: https://stackoverflow.com/questions/27306086/c-remove-object-from-vector

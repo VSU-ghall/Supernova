@@ -72,6 +72,7 @@ private:
 	void updateJetPackBar();
 	void initJetPackBar();
 	bool checkCollision(const sf::Sprite& a, const sf::Sprite& b, sf::Image imgA, sf::Image imgB);
+
 public:
 	GameEngine();
 
