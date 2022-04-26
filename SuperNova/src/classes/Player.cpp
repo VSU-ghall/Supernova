@@ -124,13 +124,13 @@ void Player::checkMovement(LevelManager::Level* currentLevel) {
 		crouchPlayed = false;
 
 	// Shoot
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !moving && !jumping) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !moving && !jumping && grounded) {
 
 		if (stoppedRight) playerSprite.setTextureRect(frameShootRight);
 		else {
 			sf::Vector2f pos = playerSprite.getPosition();
 			if (!shooting) pos.x -= 64;
-			playerSprite.setPosition(pos);
+			if (!crouchPlayed) playerSprite.setPosition(pos);
 
 			playerSprite.setTextureRect(frameShootLeft);
 		}
@@ -141,17 +141,17 @@ void Player::checkMovement(LevelManager::Level* currentLevel) {
 			sf::Vector2f pos = playerSprite.getPosition();
 			if (stoppedRight) pos.x += playerSprite.getGlobalBounds().width;
 			if (!crouchPlayed) pos.y += playerSprite.getGlobalBounds().height / 4;
-			else pos.y += playerSprite.getGlobalBounds().height / 4 + 45;
+			else pos.y += playerSprite.getGlobalBounds().height / 4 + 55;
 
 			currentLevel->levelManager->shootBullet(pos, stoppedRight);
 			shootCooldownTimer.restart();
 		}
 	}
-	else if (!moving && !jumping) {
+	else if (!moving && !jumping && grounded) {
 		if (shooting && stoppedLeft) {
 			sf::Vector2f pos = playerSprite.getPosition();
 			pos.x += 64;
-			playerSprite.setPosition(pos);
+			if (!crouchPlayed) playerSprite.setPosition(pos);
 		}
 
 		shooting = false;
