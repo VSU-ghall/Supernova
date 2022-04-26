@@ -15,6 +15,7 @@ class Player
 		sf::Clock walkTimer, jetTimer, drillTimer, damageTimer, deathTimer, dashTimer,
 			shootCooldownTimer, drillSoundTimer;
 		sf::RectangleShape rect;
+		sf::Image playerImage;
 
 		sf::IntRect
 			frameDamagedRight = sf::IntRect(0, 257, 36, 64),
@@ -77,6 +78,7 @@ class Player
 		float getHp();
 		float takeDamage(float damage);
 		float heal(float health);
+		sf::Image getImage();
 
 		int const JETPACK_MAXIMUM = 75,
 			DASH_COOLDOWN = 120, DASH_TOTAL_DISTANCE = 320, DASH_SPEED = 16,

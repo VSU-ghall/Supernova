@@ -14,9 +14,9 @@ public:
 	enum Direction { right, left };
 	sf::Clock cooldownTimer;
 
-	Entity(const std::string& tag); //constructor requries a unique unsigned int as id and tag
-	Entity(const std::string& tag, Sprite* s, sf::Vector2f pos); //constructor for static entity
-	Entity(const std::string& tag, Sprite* s, sf::Vector2f pos, sf::Vector2f pos2); //constructor for dynamic entity
+	Entity(const std::string& tag, const std::string& type); //constructor requries a unique unsigned int as id and tag
+	Entity(const std::string& tag, Sprite* s, sf::Vector2f pos, const std::string& type); //constructor for static entity
+	Entity(const std::string& tag, Sprite* s, sf::Vector2f pos, sf::Vector2f pos2, const std::string& type); //constructor for dynamic entity
 	
 	void attack();
 	bool getIsActive();
@@ -30,6 +30,7 @@ public:
 	Direction getDirection();
 	void reverseDirection();
 	void takeDamage();
+	std::string getType();
 
 	Sprite* getSprite();
 	float getSpeed();
@@ -51,6 +52,7 @@ private:
 	bool isInteractable = true, cooldown = false;
 	float speed = 0; 
 	float damageDealt = 0, health = 1.0f;
+	std::string type = "default";
 
 	sf::Time cooldownTime;
 	Direction direction = right;

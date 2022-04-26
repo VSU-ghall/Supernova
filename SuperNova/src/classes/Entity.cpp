@@ -1,11 +1,11 @@
 #include "headers/Entity.h"
 #include <headers/Sprite.h>
 
-Entity::Entity(const std::string& tag) 
-	: tag(tag) {}
+Entity::Entity(const std::string& tag, const std::string& type)
+	: tag(tag), type(type) {}
 
-Entity::Entity(const std::string& tag, Sprite *s, sf::Vector2f pos)
-	: Entity(tag) 
+Entity::Entity(const std::string& tag, Sprite *s, sf::Vector2f pos, const std::string& type)
+	: Entity(tag, type) 
 {
 	sprite = s; position = pos;
 
@@ -16,8 +16,8 @@ Entity::Entity(const std::string& tag, Sprite *s, sf::Vector2f pos)
 	damageDealt = area * 0.125 + 0.2; //remove the "+ 0.2" on easy difficulty
 }
 
-Entity::Entity(const std::string& tag, Sprite* s, sf::Vector2f pos, sf::Vector2f pos2)
-	: Entity(tag, s, pos)
+Entity::Entity(const std::string& tag, Sprite* s, sf::Vector2f pos, sf::Vector2f pos2, const std::string& type)
+	: Entity(tag, s, pos, type)
 {
 	dynamic = true;
 	position2 = pos2;
@@ -61,7 +61,6 @@ void Entity::takeDamage() {
 	float area = (sprite->getScaledSize().x * sprite->getScaledSize().y) / (64 * 64); // gives # squares it takes up
 
 	float damage = 1 - (area * 0.125 + 0.3); //remove the "+ 0.3" on easy difficulty
-	std::cout << damage << std::endl;
 
 	health -= damage;
 
@@ -127,4 +126,8 @@ bool Entity::getIsInteractable() {
 
 void Entity::setCooldown(sf::Time time) {
 	cooldownTime = time;
+}
+
+std::string Entity::getType() {
+	return type;
 }

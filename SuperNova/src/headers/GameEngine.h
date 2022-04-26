@@ -34,7 +34,12 @@ private:
 	sf::RectangleShape gameBar, chatBar, blackRect, hpBarBack, hpBarInside, jetPackInside, jetPackBack, gameOverBackground, gameOver;
 	sf::Texture gameOverText;
 	sf::Vector2f pixiLocation;
-
+	sf::Image bulletImage;
+	sf::Image flowerImage;
+	sf::Image scorpionImage;
+	sf::Image ratImage;
+	sf::Image robotImage;
+	sf::Image getImage(std::string type);
 
 	enum Mode {menu, game, paused};
 	Mode gameMode;
@@ -66,7 +71,8 @@ private:
 	void updateHpBar();
 	void updateJetPackBar();
 	void initJetPackBar();
-	bool checkCollision(const sf::Sprite& a, const sf::Sprite& b);
+	bool checkCollision(const sf::Sprite& a, const sf::Sprite& b, sf::Image imgA, sf::Image imgB);
+
 public:
 	GameEngine();
 
