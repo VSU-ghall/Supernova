@@ -207,6 +207,13 @@ void Sprite::setDamaged(int left, int top, int width, int height) {
 	damaged = true;
 }
 
+void Sprite::setFrame(int frame) {
+	animating = false;
+	animated = false;
+
+	sprite.setTextureRect(sf::IntRect((frame-1) * abs(width) + left, top, width - boundWidth, height - boundHeight));
+}
+
 void Sprite::setScale(float scale) {
 	this->scale = scale;
 
