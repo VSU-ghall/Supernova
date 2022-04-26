@@ -66,6 +66,12 @@ void GameEngine::initGame() {
 		gameOver.setTexture(&gameOverText);
 		gameOverBackground.setFillColor(sf::Color(255, 0, 0, 100));
 
+		if (!gameWinText.loadFromFile("src/resources/Game_Win_Screen.png"))
+			std::cout << "couldn't load game win display" << std::endl;
+
+		gameWin.setTexture(&gameWinText);
+		gameWinBackground.setFillColor(sf::Color(0, 255, 0, 150));
+
 		//storyManager.playLogoIntro();
 		//storyManager.playTextIntro();
 		addEntities();
@@ -90,21 +96,21 @@ void GameEngine::initGame() {
 
 void GameEngine::initMenu() {
 	menuWindow.setFramerateLimit(60);
-	setWindowView(menuWindow, static_cast<float>(tileSize * 20), static_cast<float>(tileSize * 20));
+	setWindowView(menuWindow, menuBackground->getWidth() * menuBackground->getScale(), menuBackground->getHeight() * menuBackground->getScale());//static_cast<float>(tileSize * 20), static_cast<float>(tileSize * 20));
 
 	if (gameMode != paused) {
-		blackRect.setFillColor(sf::Color(0, 10, 0, 255));
+		blackRect.setFillColor(sf::Color(0, 0, 0, 75)); // (0, 10, 0, 255)
 		blackRect.setSize(sf::Vector2f(menuWindow.getSize()));
 
 		// All menu buttons are centered and linked together, so if you vertically move the first, the others with it.
 		btnPlay->getSprite()->setTextureRect(sf::IntRect(0, 0, 256, 75));
-		btnPlay->getSprite()->setPosition((menuWindow.getSize().x - static_cast<float>(256)) / 2, (menuWindow.getSize().y - static_cast<float>(74 * 5)) / 2);
+		btnPlay->getSprite()->setPosition((menuWindow.getSize().x - static_cast<float>(256)) / 2, (menuWindow.getSize().y - static_cast<float>(74 * 5)) / 1.5);
 
 		btnOptions->getSprite()->setTextureRect(sf::IntRect(0, 0, 448, 75));
 		btnOptions->getSprite()->setPosition((menuWindow.getSize().x - static_cast<float>(448)) / 2, btnPlay->getSprite()->getPosition().y + (74 * 2));
 
 		btnExit->getSprite()->setTextureRect(sf::IntRect(0, 0, 254, 75));
-		btnExit->getSprite()->setPosition((menuWindow.getSize().x - static_cast<float>(254)) / 2, btnOptions->getSprite()->getPosition().y + (74 * 2));
+		btnExit->getSprite()->setPosition((menuWindow.getSize().x - static_cast<float>(254)) / 2, btnOptions->getSprite()->getPosition().y);// +(74 * 2));
 
 		gameMode = menu;
 		gameWindow.setVisible(false);
@@ -132,7 +138,7 @@ void GameEngine::drawGame() {
 	//drawGrid();
 
 	if (!scenePlaying) player.draw(gameWindow);
-	gameWindow.draw(*pixiguide->getSprite());
+	if (levelManager.getCurrentLevel()->levelName != "surface") gameWindow.draw(*pixiguide->getSprite());
 
 	gameWindow.draw(gameBar);
 	for (auto obj : levelManager.icons) gameWindow.draw(*obj->getIcon()->getSprite());
@@ -167,6 +173,10 @@ void GameEngine::drawGame() {
 	if (player.dead) {
 		gameWindow.draw(gameOverBackground);
 		gameWindow.draw(gameOver);
+	}
+	else if (gameWon) {
+		gameWindow.draw(gameWinBackground);
+		gameWindow.draw(gameWin);
 	}
 
 	gameWindow.display();
@@ -204,10 +214,11 @@ void GameEngine::drawMenu() {
 	menuWindow.clear();
 	menuWindow.setView(view);
 	
+	menuWindow.draw(*menuBackground->getSprite());
 	menuWindow.draw(blackRect);
 
 	menuWindow.draw(*btnPlay->getSprite());
-	menuWindow.draw(*btnOptions->getSprite());
+	//menuWindow.draw(*btnOptions->getSprite());
 	menuWindow.draw(*btnExit->getSprite());
 
 	menuWindow.display();
@@ -290,6 +301,10 @@ void GameEngine::handleEvent(sf::Event event) {
 		loadLevel(levelManager.getLevel10(), levelManager.getLevel10().rightStartPosition);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Hyphen))
 		loadLevel(levelManager.getLevel11(), levelManager.getLevel11().leftStartPosition);
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Equal))
+		loadLevel(levelManager.getLevel12(), levelManager.getLevel12().leftStartPosition);
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
+		loadLevel(levelManager.getSurface(), levelManager.getSurface().botStartPosition);
 
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(gameWindow);
 	sf::Vector2f worldPos = gameWindow.mapPixelToCoords(pixelPos);
@@ -320,7 +335,8 @@ void GameEngine::handleEvent(sf::Event event) {
 						obj->getIcon()->getSprite()->setColor(sf::Color(255, 255, 255, 255));
 					}
 				}
-				//boots
+
+				// Boots
 				if (obj->getIconIndex() == 2) {
 					if (player.dashBoots) {
 						player.dashBoots = false;
@@ -453,7 +469,8 @@ void GameEngine::setWindowView(sf::RenderWindow& window, float width, float heig
 	viewHeight = height;
 
 	if (window.getSize().x != desktop.width) { // if window is not full screen
-		view.setSize(viewWidth, viewHeight + gameBar.getSize().y);
+		if (gameMode != paused) view.setSize(viewWidth, viewHeight + gameBar.getSize().y);
+		else view.setSize(viewWidth, viewHeight);
 		view = getViewport(viewWidth, viewHeight);
 		view.setCenter(view.getSize().x / 2, (view.getSize().y / 2));
 
@@ -477,6 +494,7 @@ void GameEngine::updateGame() {
 		player.update(levelManager.getCurrentLevel());
 		return;
 	}
+	else if (gameWon) return;
 
 	Sprite::animateAll();
 
@@ -513,8 +531,15 @@ void GameEngine::updateGame() {
 	enemies.update();
 	if (!enemies.getInteractableEntities(levelManager.currentLevel.levelName).empty()) {
 		for (auto& e : enemies.getInteractableEntities(levelManager.currentLevel.levelName)) {
+			// check rocket collision
+			if (e->getType() == "rocket" && player.getBoundingBox().intersects(e->getSprite()->getBoundingBox())) {
+				if (!gameWon) gameWon = true;
+				continue;
+			}
+
 			// static enemies
 			if (!e->isDynamic() && !e->getSprite()->animating && player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && checkCollision(*e->getSprite()->getSprite(), player.getSprite(), getImage(e->getType()), player.getImage())) {
+
 				e->getSprite()->animateOnce();
 				player.takeDamage(e->getDamageDealt());
 				if (e->getType() != "spikes") e->notInteractable();
@@ -552,6 +577,7 @@ void GameEngine::updateGame() {
 //
 void GameEngine::updateMenu() {
 	//blackRect.setSize(sf::Vector2f(menuWindow.getSize()));
+	Sprite::animateAll();
 }
 
 void GameEngine::addEntities() {
@@ -599,10 +625,15 @@ void GameEngine::updateComponentView() {
 
 	gameOverBackground.setSize(sf::Vector2f(view.getSize().x, view.getSize().y - gameBar.getSize().y));
 	gameOverBackground.setPosition(0, gameBar.getSize().y);
+	gameWinBackground.setSize(sf::Vector2f(view.getSize().x, view.getSize().y - gameBar.getSize().y));
+	gameWinBackground.setPosition(0, gameBar.getSize().y);
 
 	float scale = (view.getSize().x / 2) / gameOverText.getSize().x;
 	gameOver.setSize(sf::Vector2f(gameOverText.getSize().x * scale, gameOverText.getSize().y * scale));
 	gameOver.setPosition(sf::Vector2f(view.getSize().x / 2 - gameOver.getSize().x / 2, view.getSize().y / 2 - gameOver.getSize().y / 2));
+
+	gameWin.setSize(sf::Vector2f(gameWinText.getSize().x * scale, gameWinText.getSize().y * scale));
+	gameWin.setPosition(sf::Vector2f(view.getSize().x / 2 - gameWin.getSize().x / 2, view.getSize().y / 2 - gameWin.getSize().y / 2));
 }
 
 void GameEngine::updateHpBar() {
@@ -624,10 +655,10 @@ bool GameEngine::checkCollision(const sf::Sprite & a, const sf::Sprite & b, sf::
 
 	if (a.getGlobalBounds().intersects(b.getGlobalBounds(), intersection)) {
 
-		/*if (a.getTextureRect().width < 0) imgA.flipHorizontally();
+		if (a.getTextureRect().width < 0) imgA.flipHorizontally();
 		if (a.getTextureRect().height < 0) imgA.flipVertically();
 		if (b.getTextureRect().width < 0) imgB.flipHorizontally();
-		if (b.getTextureRect().height < 0) imgB.flipVertically();*/
+		if (b.getTextureRect().height < 0) imgB.flipVertically();
 
 		const sf::Transform& inverseA(a.getInverseTransform());
 		const sf::Transform& inverseB(b.getInverseTransform());

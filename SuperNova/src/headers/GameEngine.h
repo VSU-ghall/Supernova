@@ -19,7 +19,7 @@ private:
 	StoryManager storyManager;
 	const int tileSize = 64;
 	float viewWidth, viewHeight;
-	bool scenePlaying = false, displayingText = false;
+	bool scenePlaying = false, displayingText = false, gameWon = false;
 
 	// creates global window
 	sf::RenderWindow gameWindow, menuWindow;
@@ -29,10 +29,11 @@ private:
 		*pixiguide = new Sprite("src/resources/pixiguide.png", true, false, 6, 32, 48, 1.0f, 150),
 		*btnPlay = new Sprite("src/resources/MenuPlayButton.png"),
 		*btnOptions = new Sprite("src/resources/MenuOptionsButton.png"),
-		*btnExit = new Sprite("src/resources/MenuExitButton.png");
+		*btnExit = new Sprite("src/resources/MenuExitButton.png"),
+		*menuBackground = new Sprite("src/resources/comet_space_background.png", true, false, 17, 436, 259, 3.f, 500);
 	sf::Texture backgroundTexture;
-	sf::RectangleShape gameBar, chatBar, blackRect, hpBarBack, hpBarInside, jetPackInside, jetPackBack, gameOverBackground, gameOver;
-	sf::Texture gameOverText;
+	sf::RectangleShape gameBar, chatBar, blackRect, hpBarBack, hpBarInside, jetPackInside, jetPackBack, gameOverBackground, gameOver, gameWinBackground, gameWin;
+	sf::Texture gameOverText, gameWinText;
 	sf::Vector2f pixiLocation;
 	sf::Image bulletImage, flowerImage, scorpionImage, ratImage, robotImage;
 
