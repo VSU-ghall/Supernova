@@ -120,11 +120,15 @@ void Player::animate() {
 //
 void Player::checkMovement(LevelManager::Level* currentLevel) {
 
+	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		crouchPlayed = false;
+
 	// Shoot
-	if (shootCooldownTimer.getElapsedTime().asMilliseconds() > SHOOT_COOLDOWN_MILLISECONDS*2 && sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+	if (shootCooldownTimer.getElapsedTime().asMilliseconds() > SHOOT_COOLDOWN_MILLISECONDS*2 && sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !moving) {
 		sf::Vector2f pos = playerSprite.getPosition();
 		if (stoppedRight) pos.x += playerSprite.getGlobalBounds().width;
-		pos.y += playerSprite.getGlobalBounds().height / 3;
+		if (!crouchPlayed) pos.y += playerSprite.getGlobalBounds().height / 3;
+		else pos.y += playerSprite.getGlobalBounds().height / 3 + 45;
 
 		currentLevel->levelManager->shootBullet(pos, stoppedRight);
 		shootCooldownTimer.restart();
@@ -133,9 +137,6 @@ void Player::checkMovement(LevelManager::Level* currentLevel) {
 		if (stoppedRight) playerSprite.setTextureRect(frameShootRight);
 		else playerSprite.setTextureRect(frameShootLeft);
 	}
-
-	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		crouchPlayed = false;
 
 	if (grounded && jetpackFuel < JETPACK_MAXIMUM && !sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		jetpackFuel++;
@@ -245,7 +246,6 @@ void Player::checkMovement(LevelManager::Level* currentLevel) {
 					playerSprite.setTextureRect(frameSquatLeft);
 					velocity.x = 0;
 				}
-
 				playCrouchSound();
 				velocity.y = 0;
 			}
