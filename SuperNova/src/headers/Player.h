@@ -15,6 +15,7 @@ class Player
 		sf::Clock walkTimer, jetTimer, drillTimer, damageTimer, deathTimer, dashTimer,
 			shootCooldownTimer, drillSoundTimer;
 		sf::RectangleShape rect;
+		sf::Image playerImage;
 
 		sf::IntRect
 			frameDamagedRight = sf::IntRect(0, 257, 36, 64),
@@ -23,8 +24,8 @@ class Player
 			frameJetpackRight = sf::IntRect(0, 322, 38, 64),
 			frameJumpLeft = sf::IntRect(44, 128, 44, 64),
 			frameJumpRight = sf::IntRect(0, 128, 44, 64),
-			frameShootRight = sf::IntRect(0, 642, 64, 63),
-			frameShootLeft = sf::IntRect(63, 642, 64, 63),
+			frameShootRight = sf::IntRect(0, 641, 64, 64),
+			frameShootLeft = sf::IntRect(63, 641, 64, 64),
 			frameSquatLeft = sf::IntRect(44, 192, 44, 64),
 			frameSquatRight = sf::IntRect(0, 192, 44, 64),
 			frameStoppedLeft = sf::IntRect(0, 64, 32, 64),
@@ -37,7 +38,8 @@ class Player
 		sf::Music music;
 
 		bool stoppedLeft = false, stoppedRight = true, moving = false, jetPack = false, drilling = false, playingDeath = false, dead = false,
-			takingDamage = false, dashing = false, dashBoots = false;
+			takingDamage = false, dashing = false, dashBoots = false,
+			shooting = false;
 		bool transitioningLeft, transitioningRight, transitioningTop, transitioningBot;
 
 
@@ -77,6 +79,7 @@ class Player
 		float getHp();
 		float takeDamage(float damage);
 		float heal(float health);
+		sf::Image getImage();
 
 		int const JETPACK_MAXIMUM = 75,
 			DASH_COOLDOWN = 120, DASH_TOTAL_DISTANCE = 320, DASH_SPEED = 16,

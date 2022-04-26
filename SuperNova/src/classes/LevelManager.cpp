@@ -44,8 +44,8 @@ void LevelManager::init() {
 		level1.right = &level2;
 		level1.left = &level1;
 
-		addEntity(getSpicyFlower(), &level1, sf::Vector2f(11, 8));
-		addEntity(getSpicyFlower(), &level1, sf::Vector2f(14, 8));
+		addEntity(getSpicyFlower(), &level1, sf::Vector2f(11, 8), "flower");
+		addEntity(getSpicyFlower(), &level1, sf::Vector2f(14, 8), "flower");
 
 		addHealthPack(&level1, sf::Vector2f(13, 8));
 
@@ -80,8 +80,8 @@ void LevelManager::init() {
 		level2.left = &level1;
 		level2.right = &level3;
 
-		addEntity(getSpicyFlower(), &level2, sf::Vector2f(1, 6));
-		addEntity(getScorpion(), &level2, sf::Vector2f(14, 12), sf::Vector2f(20, 12));
+		addEntity(getSpicyFlower(), &level2, sf::Vector2f(1, 6), "flower");
+		addEntity(getScorpion(), &level2, sf::Vector2f(14, 12), sf::Vector2f(20, 12), "flower");
 
 		addHealthPack(&level2, sf::Vector2f(22, 4));
 
@@ -119,9 +119,9 @@ void LevelManager::init() {
 
 		addHealthPack(&level3, sf::Vector2f(21, 11));
 
-		addEntity(getSpicyFlower(), &level3, sf::Vector2f(23, 11));
-		addEntity(getSpicyFlower(), &level3, sf::Vector2f(25, 11));
-		addEntity(getSpicyFlower(), &level3, sf::Vector2f(27, 11));
+		addEntity(getSpicyFlower(), &level3, sf::Vector2f(23, 11), "flower");
+		addEntity(getSpicyFlower(), &level3, sf::Vector2f(25, 11), "flower");
+		addEntity(getSpicyFlower(), &level3, sf::Vector2f(27, 11), "flower");
 
 		allLevels.push_back(level3);
 
@@ -147,7 +147,7 @@ void LevelManager::init() {
 
 		level4.top = &level3;
 
-		addEntity(getBigScorpion(), &level4, sf::Vector2f(5, 8), sf::Vector2f(12, 8));
+		addEntity(getBigScorpion(), &level4, sf::Vector2f(5, 8), sf::Vector2f(12, 8), "scorpion");
 
 		addIconObject(getJetpack(), &level4, sf::Vector2f(15, 8));
 
@@ -267,10 +267,10 @@ void LevelManager::init() {
 		level7.top = &level6;
 		level7.bot = &level8;
 
-		addEntity(getMiningBot(), &level7, sf::Vector2f(4, 5), sf::Vector2f(8, 5));
-		addEntity(getMiningBot(), &level7, sf::Vector2f(3, 14), sf::Vector2f(9, 14));
-		addEntity(getMiningBot(), &level7, sf::Vector2f(2, 19), sf::Vector2f(7, 19));
-		addEntity(getMiningBot(), &level7, sf::Vector2f(1, 27), sf::Vector2f(7, 27));
+		addEntity(getMiningBot(), &level7, sf::Vector2f(4, 5), sf::Vector2f(8, 5), "robot");
+		addEntity(getMiningBot(), &level7, sf::Vector2f(3, 14), sf::Vector2f(9, 14), "robot");
+		addEntity(getMiningBot(), &level7, sf::Vector2f(2, 19), sf::Vector2f(7, 19), "robot");
+		addEntity(getMiningBot(), &level7, sf::Vector2f(1, 27), sf::Vector2f(7, 27), "robot");
 
 		allLevels.push_back(level7);
 
@@ -322,7 +322,7 @@ void LevelManager::init() {
 
 		level9.left = &level8;
 
-		addEntity(getRat(), &level9, sf::Vector2f(18, 8), sf::Vector2f(25, 8));
+		addEntity(getRat(), &level9, sf::Vector2f(18, 8), sf::Vector2f(25, 8), "rat");
 
 		addIconObject(getDrill(), &level9, sf::Vector2f(27, 7));
 
@@ -382,17 +382,17 @@ void LevelManager::init() {
 		level11.background->setBounds(64 * level11.width, 64 * level11.height);
 
 		level11.left = &level6;
-		level11.right = &level11;
+		level11.right = &level12;
 		
-		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(25, 9));
-		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(26, 9));
-		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(27, 9));
-		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(28, 9));
+		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(25, 9), "spikes");
+		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(26, 9), "spikes");
+		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(27, 9), "spikes");
+		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(28, 9), "spikes");
 
-		addEntity(getSpikes(), &level11, sf::Vector2f(25, 12));
-		addEntity(getSpikes(), &level11, sf::Vector2f(26, 12));
-		addEntity(getSpikes(), &level11, sf::Vector2f(27, 12));
-		addEntity(getSpikes(), &level11, sf::Vector2f(28, 12));
+		addEntity(getSpikes(), &level11, sf::Vector2f(25, 12), "spikes");
+		addEntity(getSpikes(), &level11, sf::Vector2f(26, 12), "spikes");
+		addEntity(getSpikes(), &level11, sf::Vector2f(27, 12), "spikes");
+		addEntity(getSpikes(), &level11, sf::Vector2f(28, 12), "spikes");
 
 		/*addEntity(getSpicyFlower(), &level11, sf::Vector2f(25, 12));
 		addEntity(getSpicyFlower(), &level11, sf::Vector2f(25.5, 12));
@@ -415,6 +415,76 @@ void LevelManager::init() {
 		addIconObject(getDashBoots(), &level11, sf::Vector2f(26, 6));
 
 		allLevels.push_back(level11);
+
+
+	level12.map = new int[level12.width * level12.height]
+	{
+			1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,
+		    5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  0,  0,  0,  0,  0,  0,  0,  0,  0,  5,  5,  5,  5,  5,
+
+		    2,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  0,  0,  0,  0,  0,  0,  0,  0,  0,  7,  7,  7,  2,  2,
+			2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,
+			2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,
+			2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,
+			2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,
+			2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,
+			2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,
+			2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  0,  0,  2,  2,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  3,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  3,  0,  2,  2,
+			3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  3,  2,  2,
+			2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,
+
+		    4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,
+			1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
+	};
+		level12.levelName = "level12";
+		level12.leftStartPosition = Vector2(2, 10);
+		level12.rightStartPosition = Vector2(28, 5);
+		level12.background->setBounds(64 * level12.width, 64 * level12.height);
+
+		level12.left = &level11;
+		level12.top = &surface;
+
+
+		allLevels.push_back(level12);
+
+
+	surface.map = new int[surface.width * surface.height]
+	{
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		   28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28,
+	};
+		surface.levelName = "surface";
+		surface.leftStartPosition = Vector2(2, 11);
+		surface.topStartPosition = Vector2(2, 11);
+		surface.botStartPosition = Vector2(2, 11);
+		surface.rightStartPosition = Vector2(2, 11);
+		surface.background->setBounds(64 * surface.width, 64 * surface.height);
+
+		surface.left = &surface;
+		surface.right = &surface;
+		surface.bot = &surface;
+		surface.top = &surface;
+
+		addEntity(getRocket(), &surface, sf::Vector2f(20, 7), "rocket");
+
+
+		allLevels.push_back(surface);
 }
 
 Sprite LevelManager::getCurrentBackground() {
@@ -458,6 +528,12 @@ LevelManager::Level LevelManager::getLevel10() {
 }
 LevelManager::Level LevelManager::getLevel11() {
 	return LevelManager::level11;
+}
+LevelManager::Level LevelManager::getLevel12() {
+	return LevelManager::level12;
+}
+LevelManager::Level LevelManager::getSurface() {
+	return LevelManager::surface;
 }
 LevelManager::Level LevelManager::getTestLevel() {
 	return LevelManager::testLevel;
@@ -510,12 +586,12 @@ std::vector<LevelManager::Level> LevelManager::getAllLevels() {
 // Helper Methods Below
 //****************************************
 
-void LevelManager::addEntity(Sprite* sprite, Level* level, sf::Vector2f position, sf::Vector2f position2) {
-	level->enemies.push_back(Entity(level->levelName, sprite, (position * 64.f), (position2 * 64.f)));
+void LevelManager::addEntity(Sprite* sprite, Level* level, sf::Vector2f position, sf::Vector2f position2, std::string type) {
+	level->enemies.push_back(Entity(level->levelName, sprite, (position * 64.f), (position2 * 64.f), type));
 }
 
-void LevelManager::addEntity(Sprite* sprite, Level* level,	sf::Vector2f position) {
-	level->enemies.push_back(Entity(level->levelName, sprite, (position * 64.f)));
+void LevelManager::addEntity(Sprite* sprite, Level* level,	sf::Vector2f position, std::string type) {
+	level->enemies.push_back(Entity(level->levelName, sprite, (position * 64.f), type));
 }
 
 void LevelManager::addBullet(Level* level, sf::Vector2f position, bool goingRight) {
@@ -584,6 +660,13 @@ Sprite* LevelManager::getRat() {
 	sprite->setDamaged(0, 32, 63, 32);
 
 	return sprite;
+}
+
+Sprite* LevelManager::getRocket() {
+	Sprite* spr = new Sprite("src/resources/rocket_v2.png", true, false, 4, 64, 96, 4.0f, 100);
+	spr->setFrame(4);
+
+	return spr;
 }
 
 Sprite* LevelManager::getScorpion() {

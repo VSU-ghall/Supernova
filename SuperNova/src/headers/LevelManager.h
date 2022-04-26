@@ -51,6 +51,8 @@ static class LevelManager
 			level9  = { this, new Sprite("src/resources/mining_background_3.png", true, false, 5, 200, 120, 9.6f, 500), true, 30, 12 },
 			level10 = { this, new Sprite("src/resources/mining_background_3.png", true, false, 5, 200, 120, 9.6f, 500), true, 30, 12 },
 			level11 = { this, new Sprite("src/resources/waterfall_background.png", true, false, 16, 350, 210, 5.49f, 500), true, 30, 16 },
+			level12 = { this, new Sprite("src/resources/end_background.png", false, false, 1, 200, 120, 9.6f, 1), true, 30, 16 },
+			surface = { this, new Sprite("src/resources/planet_surface.png", false, false, 1, 200, 120, 8.96f, 1), true, 28, 14 },
 			currentLevel = {this};
 
 		Level* currentLevelPtr;
@@ -68,6 +70,8 @@ static class LevelManager
 		Level getLevel9();
 		Level getLevel10();
 		Level getLevel11();
+		Level getLevel12();
+		Level getSurface();
 		Level getTestLevel();
 		TileMap getMap();
 		void removeObject(Level* level, Object* obj);
@@ -81,8 +85,8 @@ static class LevelManager
 		void init();
 		void loadLevel(Level* level);
 
-		void addEntity(Sprite* sprite, Level* level, sf::Vector2f position);
-		void addEntity(Sprite* sprite, Level* level, sf::Vector2f position, sf::Vector2f position2);
+		void addEntity(Sprite* sprite, Level* level, sf::Vector2f position, std::string type);
+		void addEntity(Sprite* sprite, Level* level, sf::Vector2f position, sf::Vector2f position2, std::string type);
 
 		void addBullet(Level* level, sf::Vector2f position, bool goingRight);
 		void addHealthPack(Level* level, sf::Vector2f position);
@@ -96,6 +100,7 @@ static class LevelManager
 		Sprite* getJetpack();
 		Sprite* getMiningBot();
 		Sprite* getRat();
+		Sprite* getRocket();
 		Sprite* getScorpion();
 		Sprite* getSpicyFlower();
 		Sprite* getSpikes();

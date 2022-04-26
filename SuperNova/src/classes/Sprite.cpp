@@ -12,6 +12,7 @@ Sprite::Sprite(const std::string& filePath) {
 	this->filePath = filePath;
 
 	sprites.push_back(this);
+	//image = texture.copyToImage();
 }
 
 Sprite::Sprite(const std::string& filePath, bool animated, bool random, int numFrames, int width, int height, float scale, int frequency)
@@ -29,6 +30,8 @@ Sprite::Sprite(const std::string& filePath, bool animated, bool random, int numF
 	if (animated) animating = true;
 
 	if (!animated) sprite.setTextureRect(sf::IntRect(0,0, width, height));
+
+	//image = texture.copyToImage();
 }
 
 void Sprite::animate() {
@@ -179,6 +182,10 @@ bool Sprite::hasSpecial() { return special; }
 
 bool Sprite::isAnimated() { return animated; }
 
+bool Sprite::isFlippedHorizontal() { return flippedHorizontal; }
+
+bool Sprite::isFlippedVertical() { return flippedVertical; }
+
 bool Sprite::isRandom() { return random; }
 
 // Adapted code from: https://stackoverflow.com/questions/27306086/c-remove-object-from-vector
@@ -200,6 +207,13 @@ void Sprite::setDamaged(int left, int top, int width, int height) {
 	damaged = true;
 }
 
+void Sprite::setFrame(int frame) {
+	animating = false;
+	animated = false;
+
+	sprite.setTextureRect(sf::IntRect((frame-1) * abs(width) + left, top, width - boundWidth, height - boundHeight));
+}
+
 void Sprite::setScale(float scale) {
 	this->scale = scale;
 
@@ -214,4 +228,8 @@ void Sprite::setSpecial(int numFrames, int left, int top, int width, int height)
 	specialHeight = height;
 
 	special = true;
+}
+
+sf::Image Sprite::getImage() {
+	return image;
 }
