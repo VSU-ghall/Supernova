@@ -517,7 +517,7 @@ void GameEngine::updateGame() {
 			if (!e->isDynamic() && !e->getSprite()->animating && player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && checkCollision(*e->getSprite()->getSprite(), player.getSprite(), getImage(e->getType()), player.getImage())) {
 				e->getSprite()->animateOnce();
 				player.takeDamage(e->getDamageDealt());
-				e->notInteractable();
+				if (e->getType() != "spikes") e->notInteractable();
 				//std::cout << player.getHp() << " hp\n";
 			}
 
@@ -624,10 +624,10 @@ bool GameEngine::checkCollision(const sf::Sprite & a, const sf::Sprite & b, sf::
 
 	if (a.getGlobalBounds().intersects(b.getGlobalBounds(), intersection)) {
 
-		if (a.getTextureRect().width < 0) imgA.flipHorizontally();
+		/*if (a.getTextureRect().width < 0) imgA.flipHorizontally();
 		if (a.getTextureRect().height < 0) imgA.flipVertically();
 		if (b.getTextureRect().width < 0) imgB.flipHorizontally();
-		if (b.getTextureRect().height < 0) imgB.flipVertically();
+		if (b.getTextureRect().height < 0) imgB.flipVertically();*/
 
 		if (a.getTextureRect().width < 0) imgA.flipHorizontally();
 		if (a.getTextureRect().height < 0) imgA.flipVertically();

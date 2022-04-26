@@ -384,15 +384,15 @@ void LevelManager::init() {
 		level11.left = &level6;
 		level11.right = &level11;
 		
-		/*addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(25, 9));
-		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(26, 9));
-		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(27, 9));
-		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(28, 9));
+		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(25, 9), "spikes");
+		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(26, 9), "spikes");
+		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(27, 9), "spikes");
+		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(28, 9), "spikes");
 
-		addEntity(getSpikes(), &level11, sf::Vector2f(25, 12));
-		addEntity(getSpikes(), &level11, sf::Vector2f(26, 12));
-		addEntity(getSpikes(), &level11, sf::Vector2f(27, 12));
-		addEntity(getSpikes(), &level11, sf::Vector2f(28, 12));*/
+		addEntity(getSpikes(), &level11, sf::Vector2f(25, 12), "spikes");
+		addEntity(getSpikes(), &level11, sf::Vector2f(26, 12), "spikes");
+		addEntity(getSpikes(), &level11, sf::Vector2f(27, 12), "spikes");
+		addEntity(getSpikes(), &level11, sf::Vector2f(28, 12), "spikes");
 
 		/*addEntity(getSpicyFlower(), &level11, sf::Vector2f(25, 12));
 		addEntity(getSpicyFlower(), &level11, sf::Vector2f(25.5, 12));
