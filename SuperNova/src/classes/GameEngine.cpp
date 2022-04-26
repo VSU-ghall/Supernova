@@ -517,7 +517,7 @@ void GameEngine::updateGame() {
 			if (!e->isDynamic() && !e->getSprite()->animating && player.getBoundingBox().intersects(e->getSprite()->getBoundingBox()) && checkCollision(*e->getSprite()->getSprite(), player.getSprite(), getImage(e->getType()), player.getImage())) {
 				e->getSprite()->animateOnce();
 				player.takeDamage(e->getDamageDealt());
-				e->notInteractable();
+				if (e->getType() != "spikes") e->notInteractable();
 				//std::cout << player.getHp() << " hp\n";
 			}
 
