@@ -659,6 +659,10 @@ float Player::takeDamage(float damage) {
 
 		deathTimer.restart();
 		playingDeath = true;
+
+		sf::Vector2f pos = playerSprite.getPosition();
+		pos.x -= 64;
+		playerSprite.setPosition(pos);
 	}
 	return hp;
 }
