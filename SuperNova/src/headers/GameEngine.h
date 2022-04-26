@@ -34,12 +34,7 @@ private:
 	sf::RectangleShape gameBar, chatBar, blackRect, hpBarBack, hpBarInside, jetPackInside, jetPackBack, gameOverBackground, gameOver;
 	sf::Texture gameOverText;
 	sf::Vector2f pixiLocation;
-	sf::Image bulletImage;
-	sf::Image flowerImage;
-	sf::Image scorpionImage;
-	sf::Image ratImage;
-	sf::Image robotImage;
-	sf::Image getImage(std::string type);
+	sf::Image bulletImage, flowerImage, scorpionImage, ratImage, robotImage;
 
 	enum Mode {menu, game, paused};
 	Mode gameMode;
@@ -65,6 +60,7 @@ private:
 	void setWindowView(sf::RenderWindow& window, float width, float height);
 	void updateGame();
 	void updateMenu();
+	sf::Image getImage(std::string type);
 
 	void addEntities();
 	void updateComponentView();

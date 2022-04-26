@@ -624,10 +624,10 @@ bool GameEngine::checkCollision(const sf::Sprite & a, const sf::Sprite & b, sf::
 
 	if (a.getGlobalBounds().intersects(b.getGlobalBounds(), intersection)) {
 
-		if (a.getTextureRect().width < 0) imgA.flipHorizontally();
+		/*if (a.getTextureRect().width < 0) imgA.flipHorizontally();
 		if (a.getTextureRect().height < 0) imgA.flipVertically();
 		if (b.getTextureRect().width < 0) imgB.flipHorizontally();
-		if (b.getTextureRect().height < 0) imgB.flipVertically();
+		if (b.getTextureRect().height < 0) imgB.flipVertically();*/
 
 		const sf::Transform& inverseA(a.getInverseTransform());
 		const sf::Transform& inverseB(b.getInverseTransform());
