@@ -124,18 +124,37 @@ void Player::checkMovement(LevelManager::Level* currentLevel) {
 		crouchPlayed = false;
 
 	// Shoot
-	if (shootCooldownTimer.getElapsedTime().asMilliseconds() > SHOOT_COOLDOWN_MILLISECONDS*2 && sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !moving) {
-		sf::Vector2f pos = playerSprite.getPosition();
-		if (stoppedRight) pos.x += playerSprite.getGlobalBounds().width;
-		if (!crouchPlayed) pos.y += playerSprite.getGlobalBounds().height / 3;
-		else pos.y += playerSprite.getGlobalBounds().height / 3 + 45;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !moving && !jumping) {
 
-		currentLevel->levelManager->shootBullet(pos, stoppedRight);
-		shootCooldownTimer.restart();
-	}
-	else if (shootCooldownTimer.getElapsedTime().asMilliseconds() < SHOOT_COOLDOWN_MILLISECONDS) {
 		if (stoppedRight) playerSprite.setTextureRect(frameShootRight);
-		else playerSprite.setTextureRect(frameShootLeft);
+		else {
+			sf::Vector2f pos = playerSprite.getPosition();
+			if (!shooting) pos.x -= 64;
+			playerSprite.setPosition(pos);
+
+			playerSprite.setTextureRect(frameShootLeft);
+		}
+
+		shooting = true;
+
+		if (shootCooldownTimer.getElapsedTime().asMilliseconds() > SHOOT_COOLDOWN_MILLISECONDS * 2) {
+			sf::Vector2f pos = playerSprite.getPosition();
+			if (stoppedRight) pos.x += playerSprite.getGlobalBounds().width;
+			if (!crouchPlayed) pos.y += playerSprite.getGlobalBounds().height / 4;
+			else pos.y += playerSprite.getGlobalBounds().height / 4 + 45;
+
+			currentLevel->levelManager->shootBullet(pos, stoppedRight);
+			shootCooldownTimer.restart();
+		}
+	}
+	else if (!moving && !jumping) {
+		if (shooting && stoppedLeft) {
+			sf::Vector2f pos = playerSprite.getPosition();
+			pos.x += 64;
+			playerSprite.setPosition(pos);
+		}
+
+		shooting = false;
 	}
 
 	if (grounded && jetpackFuel < JETPACK_MAXIMUM && !sf::Keyboard::isKeyPressed(sf::Keyboard::W))
