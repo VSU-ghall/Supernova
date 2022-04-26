@@ -45,6 +45,7 @@ extern class Sprite
 		static void remove(Sprite* spr);
 		void setBounds(int width, int height);
 		void setDamaged(int left, int top, int width, int height);
+		void setFrame(int frame);
 		void setScale(float scale);
 		void setSpecial(int numFrames, int left, int top, int width, int height);
 		

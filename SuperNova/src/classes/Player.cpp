@@ -397,8 +397,9 @@ bool Player::checkCollision(float velo, LevelManager::Level* currentLevel) {
 	//If out of level bounds
 
 	//if (left + velo <= 6 || right + velo >= (currentLevel.width * tileSize) - 6) return false;
-	checkTopBotCollision(topRight, botRightHigh, botRight, botMidRight, botMid, botMidLeft, topLeft, botLeftHigh, botLeft, currentLevel);
-	return checkTransitionCollision(left, right, top, bot, velo, botRightHigh, botLeftHigh, topRightHigh, topLeftHigh, currentLevel);
+	bool temp = checkTransitionCollision(left, right, top, bot, velo, botRightHigh, botLeftHigh, topRightHigh, topLeftHigh, currentLevel);
+	if (temp) checkTopBotCollision(topRight, botRightHigh, botRight, botMidRight, botMid, botMidLeft, topLeft, botLeftHigh, botLeft, currentLevel);
+	return temp;
 }
 
 //Note: The values of collisionTile and transitionTile can be changed in TileMap.h
@@ -659,6 +660,10 @@ float Player::takeDamage(float damage) {
 
 		deathTimer.restart();
 		playingDeath = true;
+
+		sf::Vector2f pos = playerSprite.getPosition();
+		pos.x -= 64;
+		playerSprite.setPosition(pos);
 	}
 	return hp;
 }
