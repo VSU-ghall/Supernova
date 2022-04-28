@@ -24,8 +24,8 @@ class Player
 			frameJetpackRight = sf::IntRect(0, 322, 38, 64),
 			frameJumpLeft = sf::IntRect(44, 128, 44, 64),
 			frameJumpRight = sf::IntRect(0, 128, 44, 64),
-			frameShootRight = sf::IntRect(0, 642, 64, 63),
-			frameShootLeft = sf::IntRect(63, 642, 64, 63),
+			frameShootRight = sf::IntRect(0, 641, 64, 64),
+			frameShootLeft = sf::IntRect(63, 641, 64, 64),
 			frameSquatLeft = sf::IntRect(44, 192, 44, 64),
 			frameSquatRight = sf::IntRect(0, 192, 44, 64),
 			frameStoppedLeft = sf::IntRect(0, 64, 32, 64),
@@ -38,7 +38,8 @@ class Player
 		sf::Music music;
 
 		bool stoppedLeft = false, stoppedRight = true, moving = false, jetPack = false, drilling = false, playingDeath = false, dead = false,
-			takingDamage = false, dashing = false, dashBoots = false;
+			takingDamage = false, dashing = false, dashBoots = false,
+			shooting = false;
 		bool transitioningLeft, transitioningRight, transitioningTop, transitioningBot;
 
 

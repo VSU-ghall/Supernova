@@ -382,17 +382,17 @@ void LevelManager::init() {
 		level11.background->setBounds(64 * level11.width, 64 * level11.height);
 
 		level11.left = &level6;
-		level11.right = &level11;
+		level11.right = &level12;
 		
-		/*addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(25, 9));
-		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(26, 9));
-		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(27, 9));
-		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(28, 9));
+		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(25, 9), "spikes");
+		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(26, 9), "spikes");
+		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(27, 9), "spikes");
+		addEntity(getSpikesUpsideDown(), &level11, sf::Vector2f(28, 9), "spikes");
 
-		addEntity(getSpikes(), &level11, sf::Vector2f(25, 12));
-		addEntity(getSpikes(), &level11, sf::Vector2f(26, 12));
-		addEntity(getSpikes(), &level11, sf::Vector2f(27, 12));
-		addEntity(getSpikes(), &level11, sf::Vector2f(28, 12));*/
+		addEntity(getSpikes(), &level11, sf::Vector2f(25, 12), "spikes");
+		addEntity(getSpikes(), &level11, sf::Vector2f(26, 12), "spikes");
+		addEntity(getSpikes(), &level11, sf::Vector2f(27, 12), "spikes");
+		addEntity(getSpikes(), &level11, sf::Vector2f(28, 12), "spikes");
 
 		/*addEntity(getSpicyFlower(), &level11, sf::Vector2f(25, 12));
 		addEntity(getSpicyFlower(), &level11, sf::Vector2f(25.5, 12));
@@ -415,6 +415,76 @@ void LevelManager::init() {
 		addIconObject(getDashBoots(), &level11, sf::Vector2f(26, 6));
 
 		allLevels.push_back(level11);
+
+
+	level12.map = new int[level12.width * level12.height]
+	{
+			1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,
+		    5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  0,  0,  0,  0,  0,  0,  0,  0,  0,  5,  5,  5,  5,  5,
+
+		    2,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  0,  0,  0,  0,  0,  0,  0,  0,  0,  7,  7,  7,  2,  2,
+			2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,
+			2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,
+			2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,
+			2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,
+			2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,
+			2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,
+			2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  2,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  0,  0,  2,  2,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  3,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  3,  0,  2,  2,
+			3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  3,  2,  2,
+			2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,
+
+		    4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,
+			1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
+	};
+		level12.levelName = "level12";
+		level12.leftStartPosition = Vector2(2, 10);
+		level12.rightStartPosition = Vector2(28, 5);
+		level12.background->setBounds(64 * level12.width, 64 * level12.height);
+
+		level12.left = &level11;
+		level12.top = &surface;
+
+
+		allLevels.push_back(level12);
+
+
+	surface.map = new int[surface.width * surface.height]
+	{
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		   28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28,
+	};
+		surface.levelName = "surface";
+		surface.leftStartPosition = Vector2(2, 11);
+		surface.topStartPosition = Vector2(2, 11);
+		surface.botStartPosition = Vector2(2, 11);
+		surface.rightStartPosition = Vector2(2, 11);
+		surface.background->setBounds(64 * surface.width, 64 * surface.height);
+
+		surface.left = &surface;
+		surface.right = &surface;
+		surface.bot = &surface;
+		surface.top = &surface;
+
+		addEntity(getRocket(), &surface, sf::Vector2f(20, 7), "rocket");
+
+
+		allLevels.push_back(surface);
 }
 
 Sprite LevelManager::getCurrentBackground() {
@@ -458,6 +528,12 @@ LevelManager::Level LevelManager::getLevel10() {
 }
 LevelManager::Level LevelManager::getLevel11() {
 	return LevelManager::level11;
+}
+LevelManager::Level LevelManager::getLevel12() {
+	return LevelManager::level12;
+}
+LevelManager::Level LevelManager::getSurface() {
+	return LevelManager::surface;
 }
 LevelManager::Level LevelManager::getTestLevel() {
 	return LevelManager::testLevel;
@@ -584,6 +660,13 @@ Sprite* LevelManager::getRat() {
 	sprite->setDamaged(0, 32, 63, 32);
 
 	return sprite;
+}
+
+Sprite* LevelManager::getRocket() {
+	Sprite* spr = new Sprite("src/resources/rocket_v2.png", true, false, 4, 64, 96, 4.0f, 100);
+	spr->setFrame(4);
+
+	return spr;
 }
 
 Sprite* LevelManager::getScorpion() {

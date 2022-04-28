@@ -124,18 +124,37 @@ void Player::checkMovement(LevelManager::Level* currentLevel) {
 		crouchPlayed = false;
 
 	// Shoot
-	if (shootCooldownTimer.getElapsedTime().asMilliseconds() > SHOOT_COOLDOWN_MILLISECONDS*2 && sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !moving) {
-		sf::Vector2f pos = playerSprite.getPosition();
-		if (stoppedRight) pos.x += playerSprite.getGlobalBounds().width;
-		if (!crouchPlayed) pos.y += playerSprite.getGlobalBounds().height / 3;
-		else pos.y += playerSprite.getGlobalBounds().height / 3 + 45;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !moving && !jumping && grounded) {
 
-		currentLevel->levelManager->shootBullet(pos, stoppedRight);
-		shootCooldownTimer.restart();
-	}
-	else if (shootCooldownTimer.getElapsedTime().asMilliseconds() < SHOOT_COOLDOWN_MILLISECONDS) {
 		if (stoppedRight) playerSprite.setTextureRect(frameShootRight);
-		else playerSprite.setTextureRect(frameShootLeft);
+		else {
+			sf::Vector2f pos = playerSprite.getPosition();
+			if (!shooting) pos.x -= 64;
+			if (!crouchPlayed) playerSprite.setPosition(pos);
+
+			playerSprite.setTextureRect(frameShootLeft);
+		}
+
+		shooting = true;
+
+		if (shootCooldownTimer.getElapsedTime().asMilliseconds() > SHOOT_COOLDOWN_MILLISECONDS * 2) {
+			sf::Vector2f pos = playerSprite.getPosition();
+			if (stoppedRight) pos.x += playerSprite.getGlobalBounds().width;
+			if (!crouchPlayed) pos.y += playerSprite.getGlobalBounds().height / 4;
+			else pos.y += playerSprite.getGlobalBounds().height / 4 + 55;
+
+			currentLevel->levelManager->shootBullet(pos, stoppedRight);
+			shootCooldownTimer.restart();
+		}
+	}
+	else if (!moving && !jumping && grounded) {
+		if (shooting && stoppedLeft) {
+			sf::Vector2f pos = playerSprite.getPosition();
+			pos.x += 64;
+			if (!crouchPlayed) playerSprite.setPosition(pos);
+		}
+
+		shooting = false;
 	}
 
 	if (grounded && jetpackFuel < JETPACK_MAXIMUM && !sf::Keyboard::isKeyPressed(sf::Keyboard::W))
@@ -378,8 +397,9 @@ bool Player::checkCollision(float velo, LevelManager::Level* currentLevel) {
 	//If out of level bounds
 
 	//if (left + velo <= 6 || right + velo >= (currentLevel.width * tileSize) - 6) return false;
-	checkTopBotCollision(topRight, botRightHigh, botRight, botMidRight, botMid, botMidLeft, topLeft, botLeftHigh, botLeft, currentLevel);
-	return checkTransitionCollision(left, right, top, bot, velo, botRightHigh, botLeftHigh, topRightHigh, topLeftHigh, currentLevel);
+	bool temp = checkTransitionCollision(left, right, top, bot, velo, botRightHigh, botLeftHigh, topRightHigh, topLeftHigh, currentLevel);
+	if (temp) checkTopBotCollision(topRight, botRightHigh, botRight, botMidRight, botMid, botMidLeft, topLeft, botLeftHigh, botLeft, currentLevel);
+	return temp;
 }
 
 //Note: The values of collisionTile and transitionTile can be changed in TileMap.h
@@ -640,6 +660,10 @@ float Player::takeDamage(float damage) {
 
 		deathTimer.restart();
 		playingDeath = true;
+
+		sf::Vector2f pos = playerSprite.getPosition();
+		pos.x -= 64;
+		playerSprite.setPosition(pos);
 	}
 	return hp;
 }
